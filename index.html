@@ -13,228 +13,170 @@
       background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
       color: #e2e8f0;
       font-family: "Source Sans Pro", system-ui, sans-serif;
-      padding: 24px;
+      padding: 20px;
     }
     
-    header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+    header { text-align: center; margin-bottom: 20px; }
     
     h1 {
       font-family: "Cinzel", serif;
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       font-weight: 700;
       background: linear-gradient(135deg, #60a5fa, #c084fc, #fb923c);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 8px;
       letter-spacing: 2px;
     }
     
-    .subtitle {
-      color: rgba(200, 200, 210, 0.6);
-      font-size: 14px;
-      letter-spacing: 4px;
-    }
+    .subtitle { color: rgba(200, 200, 210, 0.5); font-size: 12px; letter-spacing: 3px; }
 
     /* Tabs */
-    .tab-nav {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
+    .tab-nav { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
     
     .tab-btn {
-      padding: 12px 32px;
+      padding: 10px 24px;
       font-family: "Cinzel", serif;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       background: rgba(30, 30, 40, 0.8);
       border: 2px solid rgba(100, 100, 120, 0.3);
       border-radius: 8px;
-      color: rgba(200, 200, 210, 0.7);
+      color: rgba(200, 200, 210, 0.6);
       cursor: pointer;
       transition: all 0.2s ease;
     }
     
     .tab-btn:hover { background: rgba(50, 50, 60, 0.8); }
-    .tab-btn.active {
-      background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(192, 132, 252, 0.2));
-      border-color: #c084fc;
-      color: #e2e8f0;
-    }
+    .tab-btn.active { background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(192, 132, 252, 0.2)); border-color: #c084fc; color: #e2e8f0; }
     
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Main Layout */
-    .builder-layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
+    /* Layout */
+    .builder-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1400px; margin: 0 auto; }
+    .theorycraft-layout { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; max-width: 1600px; margin: 0 auto; }
+    
+    @media (max-width: 1200px) { .theorycraft-layout { grid-template-columns: 1fr 320px; } .current-build-sidebar { display: none; } }
+    @media (max-width: 900px) { .builder-layout, .theorycraft-layout { grid-template-columns: 1fr; } }
+
+    /* Current Build Sidebar */
+    .current-build-sidebar {
+      background: rgba(20, 20, 30, 0.95);
+      border-radius: 12px;
+      border: 2px solid rgba(74, 222, 128, 0.3);
+      padding: 16px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
     }
     
-    @media (max-width: 1100px) {
-      .builder-layout { grid-template-columns: 1fr; }
+    .sidebar-title {
+      font-family: "Cinzel", serif;
+      font-size: 12px;
+      color: #86efac;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    
+    .sidebar-build-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 11px;
+      border-bottom: 1px solid rgba(100,100,120,0.1);
+    }
+    
+    .sidebar-build-item:last-child { border-bottom: none; }
+    .sidebar-label { color: rgba(200,200,210,0.4); font-size: 9px; }
+    .sidebar-skill { color: #e2e8f0; }
+    .sidebar-rune { color: #c084fc; font-size: 10px; }
+    
+    .sidebar-stats {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(100,100,120,0.2);
+    }
+    
+    .sidebar-stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      padding: 3px 0;
+    }
+    
+    .sidebar-stat-label { color: rgba(200,200,210,0.5); }
+    .sidebar-stat-value { color: #fb923c; font-weight: 600; }
+    
+    .no-build-msg {
+      text-align: center;
+      color: rgba(200,200,210,0.4);
+      font-size: 11px;
+      padding: 20px 0;
     }
 
     /* Core Section */
     .core-section {
       background: rgba(20, 20, 30, 0.9);
-      border-radius: 16px;
+      border-radius: 12px;
       border: 2px solid rgba(192, 132, 252, 0.3);
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 20px;
+      margin-bottom: 20px;
       text-align: center;
     }
     
-    .core-title {
-      font-family: "Cinzel", serif;
-      font-size: 14px;
-      color: rgba(200, 200, 210, 0.6);
-      letter-spacing: 3px;
-      margin-bottom: 16px;
-    }
-    
-    .core-grid {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+    .core-title { font-family: "Cinzel", serif; font-size: 12px; color: rgba(200, 200, 210, 0.5); letter-spacing: 2px; margin-bottom: 12px; }
+    .core-grid { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
     
     .core-card {
-      width: 160px;
-      padding: 20px 16px;
+      width: 140px;
+      padding: 16px 12px;
       background: rgba(30, 30, 40, 0.8);
       border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
     }
     
-    .core-card:hover {
-      transform: translateY(-4px);
-      filter: brightness(1.1);
-    }
+    .core-card:hover { transform: translateY(-3px); filter: brightness(1.1); }
+    .core-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 25px rgba(251, 146, 60, 0.4); }
+    .core-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); }
+    .core-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 25px rgba(96, 165, 250, 0.4); }
     
-    .core-card.selected-fire {
-      background: rgba(251, 146, 60, 0.15);
-      border-color: #fb923c;
-      box-shadow: 0 0 30px rgba(251, 146, 60, 0.4);
-    }
-    
-    .core-card.selected-lightning {
-      background: rgba(192, 132, 252, 0.15);
-      border-color: #c084fc;
-      box-shadow: 0 0 30px rgba(192, 132, 252, 0.4);
-    }
-    
-    .core-card.selected-ice {
-      background: rgba(96, 165, 250, 0.15);
-      border-color: #60a5fa;
-      box-shadow: 0 0 30px rgba(96, 165, 250, 0.4);
-    }
-    
-    .core-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-    
-    .core-name {
-      font-family: "Cinzel", serif;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    
+    .core-icon { font-size: 28px; margin-bottom: 6px; }
+    .core-name { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
     .core-name.fire { color: #fdba74; }
     .core-name.lightning { color: #d8b4fe; }
     .core-name.ice { color: #93c5fd; }
-    
-    .core-desc {
-      font-size: 11px;
-      color: rgba(200, 200, 210, 0.6);
-    }
-    
-    .core-damage {
-      font-size: 14px;
-      color: #fb923c;
-      font-weight: 700;
-      margin-top: 8px;
-    }
+    .core-desc { font-size: 10px; color: rgba(200, 200, 210, 0.5); }
+    .core-damage { font-size: 13px; color: #fb923c; font-weight: 700; margin-top: 6px; }
 
     /* Rune Selector */
-    .rune-section {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(100, 100, 120, 0.2);
-    }
-    
+    .rune-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
     .rune-section.hidden { display: none; }
-    
-    .rune-title {
-      font-size: 11px;
-      color: rgba(200, 200, 210, 0.5);
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-    
-    .rune-options {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    .rune-title { font-size: 10px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 10px; }
+    .rune-options { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
     
     .rune-option {
-      padding: 12px 20px;
+      padding: 10px 16px;
       background: rgba(0, 0, 0, 0.3);
       border: 2px solid rgba(100, 100, 120, 0.3);
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
-      min-width: 140px;
+      min-width: 120px;
     }
     
-    .rune-option:hover {
-      background: rgba(100, 100, 120, 0.2);
-    }
-    
-    .rune-option.selected {
-      background: rgba(192, 132, 252, 0.2);
-      border-color: #c084fc;
-      box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
-    }
-    
-    .rune-option-name {
-      font-weight: 600;
-      color: #c084fc;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-    
-    .rune-option-effect {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.6);
-    }
-    
-    .rune-element-change {
-      display: inline-block;
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-top: 6px;
-    }
-    
+    .rune-option:hover { background: rgba(100, 100, 120, 0.2); }
+    .rune-option.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
+    .rune-option-name { font-weight: 600; color: #c084fc; font-size: 12px; margin-bottom: 2px; }
+    .rune-option-effect { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
+    .rune-element-change { display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
     .rune-element-change.ice { background: rgba(96, 165, 250, 0.2); color: #93c5fd; }
     .rune-element-change.fire { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
     .rune-element-change.lightning { background: rgba(192, 132, 252, 0.2); color: #d8b4fe; }
@@ -244,282 +186,135 @@
       background: rgba(20, 20, 30, 0.9);
       border-radius: 12px;
       border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 20px;
-      margin-bottom: 24px;
+      padding: 16px;
+      margin-bottom: 20px;
     }
     
-    .build-around-title {
-      font-family: "Cinzel", serif;
-      font-size: 12px;
-      color: rgba(200, 200, 210, 0.5);
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
+    .build-around-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
+    .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 600px) { .build-grid { grid-template-columns: 1fr; } }
     
-    .build-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    
-    @media (max-width: 700px) {
-      .build-grid { grid-template-columns: 1fr; }
-    }
-    
-    .build-column {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .column-label {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.4);
-      letter-spacing: 2px;
-      text-align: center;
-      margin-bottom: 4px;
-    }
+    .build-column { display: flex; flex-direction: column; gap: 6px; }
+    .column-label { font-size: 9px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
 
     /* Skill Cards */
     .skill-card {
       background: rgba(30, 30, 40, 0.8);
       border: 2px solid rgba(100, 100, 120, 0.3);
       border-radius: 8px;
-      padding: 12px;
+      padding: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
-    }
-    
-    .skill-card:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
-    
-    .skill-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 20px rgba(96, 165, 250, 0.4); }
-    .skill-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 20px rgba(251, 146, 60, 0.4); }
-    .skill-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 20px rgba(192, 132, 252, 0.4); }
-    .skill-card.selected-neutral { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; box-shadow: 0 0 20px rgba(148, 163, 184, 0.3); }
-    
-    /* Recommendation Halo */
-    .skill-card.recommended {
-      box-shadow: 0 0 15px rgba(74, 222, 128, 0.3), 0 0 30px rgba(74, 222, 128, 0.1);
-      border-color: rgba(74, 222, 128, 0.4);
-    }
-    
-    .skill-card.recommended::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), transparent);
-      z-index: -1;
-    }
-    
-    .skill-card {
       position: relative;
     }
     
-    .skill-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
+    .skill-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .skill-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 15px rgba(96, 165, 250, 0.4); }
+    .skill-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 15px rgba(251, 146, 60, 0.4); }
+    .skill-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+    .skill-card.selected-neutral { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; box-shadow: 0 0 15px rgba(148, 163, 184, 0.3); }
+    .skill-card.recommended { box-shadow: 0 0 12px rgba(74, 222, 128, 0.25); border-color: rgba(74, 222, 128, 0.4); }
     
-    .skill-name {
-      font-weight: 600;
-      font-size: 13px;
-      font-family: "Cinzel", serif;
-    }
-    
+    .skill-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+    .skill-name { font-weight: 600; font-size: 12px; font-family: "Cinzel", serif; }
     .skill-name.ice { color: #93c5fd; }
     .skill-name.fire { color: #fdba74; }
     .skill-name.lightning { color: #d8b4fe; }
     .skill-name.neutral { color: #94a3b8; }
     
-    .element-tag {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    
+    .element-tag { font-size: 8px; padding: 2px 5px; border-radius: 4px; }
     .element-tag.ice { background: rgba(96, 165, 250, 0.15); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.4); }
     .element-tag.fire { background: rgba(251, 146, 60, 0.15); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
     .element-tag.lightning { background: rgba(192, 132, 252, 0.15); color: #d8b4fe; border: 1px solid rgba(192, 132, 252, 0.4); }
     
-    .skill-desc {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.6);
-      line-height: 1.4;
-    }
-    
-    .skill-damage {
-      font-size: 11px;
-      color: #fb923c;
-      font-weight: 600;
-      margin-top: 4px;
-    }
+    .skill-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
 
-    /* Rune selector in skill card */
-    .skill-rune-selector {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(100, 100, 120, 0.2);
-    }
-    
-    .skill-rune-buttons {
-      display: flex;
-      gap: 4px;
-    }
-    
+    /* Skill Rune Buttons */
+    .skill-rune-selector { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
+    .skill-rune-buttons { display: flex; gap: 3px; }
     .skill-rune-btn {
       flex: 1;
-      padding: 5px 6px;
-      font-size: 10px;
+      padding: 4px 5px;
+      font-size: 9px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(100, 100, 120, 0.3);
       border-radius: 4px;
-      color: rgba(200, 200, 210, 0.7);
+      color: rgba(200, 200, 210, 0.6);
       cursor: pointer;
-      transition: all 0.2s ease;
       font-family: inherit;
     }
-    
     .skill-rune-btn:hover { background: rgba(100, 100, 120, 0.2); }
     .skill-rune-btn.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #d8b4fe; }
 
-    /* Passives Section */
+    /* Passives */
     .passives-section {
       background: rgba(20, 20, 30, 0.9);
       border-radius: 12px;
       border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 20px;
+      padding: 16px;
     }
     
-    .passives-title {
-      font-family: "Cinzel", serif;
-      font-size: 12px;
-      color: rgba(200, 200, 210, 0.5);
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    
-    .passives-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-    
-    @media (max-width: 700px) {
-      .passives-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    .passives-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
+    .passives-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    @media (max-width: 600px) { .passives-grid { grid-template-columns: repeat(2, 1fr); } }
     
     .passive-card {
       background: rgba(30, 30, 40, 0.8);
       border: 2px solid rgba(100, 100, 120, 0.3);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       cursor: pointer;
       transition: all 0.2s ease;
-      position: relative;
     }
     
     .passive-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .passive-card.selected { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
-    .passive-card.selected-danger { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+    .passive-card.selected { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; box-shadow: 0 0 12px rgba(74, 222, 128, 0.3); }
+    .passive-card.selected-danger { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
+    .passive-card.recommended { box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); border-color: rgba(74, 222, 128, 0.3); }
     
-    .passive-card.recommended {
-      box-shadow: 0 0 15px rgba(74, 222, 128, 0.3), 0 0 30px rgba(74, 222, 128, 0.1);
-      border-color: rgba(74, 222, 128, 0.4);
-    }
-    
-    .passive-name {
-      font-weight: 600;
-      font-size: 12px;
-      font-family: "Cinzel", serif;
-      margin-bottom: 4px;
-      color: #e2e8f0;
-    }
-    
+    .passive-name { font-weight: 600; font-size: 11px; font-family: "Cinzel", serif; color: #e2e8f0; margin-bottom: 2px; }
     .passive-card.selected .passive-name { color: #86efac; }
     .passive-card.selected-danger .passive-name { color: #fca5a5; }
-    
-    .passive-desc {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.6);
-    }
+    .passive-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
 
     /* Analysis Panel */
     .analysis-panel {
       background: rgba(20, 20, 30, 0.9);
       border-radius: 12px;
       border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 20px;
+      padding: 16px;
       position: sticky;
-      top: 24px;
+      top: 20px;
       height: fit-content;
-      max-height: calc(100vh - 48px);
+      max-height: calc(100vh - 40px);
       overflow-y: auto;
     }
     
-    .analysis-title {
-      font-family: "Cinzel", serif;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #e2e8f0;
-      letter-spacing: 1px;
-      text-align: center;
-    }
+    .analysis-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; letter-spacing: 1px; text-align: center; }
     
-    .build-summary {
-      background: rgba(0,0,0,0.2);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
-    }
-    
-    .build-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 0;
-      font-size: 11px;
-      border-bottom: 1px solid rgba(100,100,120,0.1);
-    }
-    
+    .build-summary { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+    .build-item { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 10px; border-bottom: 1px solid rgba(100,100,120,0.1); }
     .build-item:last-child { border-bottom: none; }
     .build-item-label { color: rgba(200,200,210,0.4); font-size: 9px; }
     .build-item-skill { color: #e2e8f0; }
-    .build-item-rune { color: #c084fc; font-size: 10px; }
+    .build-item-rune { color: #c084fc; font-size: 9px; }
     
-    .damage-calc {
-      background: rgba(251, 146, 60, 0.1);
-      border: 1px solid rgba(251, 146, 60, 0.3);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
+    .damage-calc { background: rgba(251, 146, 60, 0.1); border: 1px solid rgba(251, 146, 60, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 12px; text-align: center; }
+    .damage-calc-title { font-size: 9px; color: rgba(200,200,210,0.5); letter-spacing: 1px; margin-bottom: 2px; }
+    .damage-calc-value { font-size: 24px; font-weight: 700; color: #fb923c; }
+    .damage-calc-breakdown { font-size: 9px; color: rgba(200,200,210,0.4); margin-top: 2px; }
     
-    .damage-calc-title { font-size: 10px; color: rgba(200,200,210,0.5); letter-spacing: 1px; margin-bottom: 4px; }
-    .damage-calc-value { font-size: 28px; font-weight: 700; color: #fb923c; }
-    .damage-calc-breakdown { font-size: 10px; color: rgba(200,200,210,0.5); margin-top: 4px; }
+    /* Comparison indicator */
+    .comparison-indicator { font-size: 11px; margin-top: 4px; }
+    .comparison-indicator.better { color: #86efac; }
+    .comparison-indicator.worse { color: #fca5a5; }
+    .comparison-indicator.same { color: rgba(200,200,210,0.5); }
     
-    .status-section { margin-bottom: 16px; }
-    .section-label { font-size: 10px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 8px; }
+    .status-section { margin-bottom: 12px; }
+    .section-label { font-size: 9px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 6px; }
+    .status-badges { display: flex; gap: 4px; flex-wrap: wrap; }
     
-    .status-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-    
-    .status-badge {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 10px;
-      font-weight: 600;
-    }
-    
+    .status-badge { padding: 3px 6px; border-radius: 10px; font-size: 9px; font-weight: 600; }
     .status-badge.chill { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
     .status-badge.burning { background: rgba(251, 146, 60, 0.2); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.4); }
     .status-badge.shock { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
@@ -528,330 +323,120 @@
     .status-badge.freeze { background: rgba(96, 165, 250, 0.3); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.5); }
     .status-badge.vulnerable { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
     
-    .quick-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+    .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .quick-stat { background: rgba(0,0,0,0.2); border-radius: 6px; padding: 6px; text-align: center; }
+    .quick-stat-label { font-size: 8px; color: rgba(200,200,210,0.4); }
+    .quick-stat-value { font-size: 14px; font-weight: 700; color: #fb923c; }
     
-    .quick-stat {
-      background: rgba(0,0,0,0.2);
-      border-radius: 6px;
-      padding: 8px;
-      text-align: center;
-    }
-    
-    .quick-stat-label { font-size: 9px; color: rgba(200,200,210,0.4); }
-    .quick-stat-value { font-size: 16px; font-weight: 700; color: #fb923c; }
-    
-    .element-dots { display: flex; gap: 4px; justify-content: center; margin-top: 4px; }
-    .element-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .element-dots { display: flex; gap: 3px; justify-content: center; margin-top: 2px; }
+    .element-dot { width: 8px; height: 8px; border-radius: 50%; }
     .element-dot.ice { background: #60a5fa; }
     .element-dot.fire { background: #fb923c; }
     .element-dot.lightning { background: #c084fc; }
     
-    .synergy-item {
-      padding: 8px 10px;
-      margin-bottom: 6px;
-      background: rgba(74, 222, 128, 0.08);
-      border-radius: 6px;
-      font-size: 11px;
-      color: #86efac;
-      border-left: 3px solid #4ade80;
-    }
-    
+    .synergy-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(74, 222, 128, 0.08); border-radius: 6px; font-size: 10px; color: #86efac; border-left: 3px solid #4ade80; }
     .synergy-item.rune { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.08); color: #d8b4fe; }
     .synergy-item.info { border-left-color: #94a3b8; color: #cbd5e1; }
+    .conflict-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; font-size: 10px; color: #fca5a5; border-left: 3px solid #ef4444; }
+    .tip-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(96, 165, 250, 0.08); border-radius: 6px; font-size: 10px; color: #93c5fd; border-left: 3px solid #60a5fa; }
     
-    .conflict-item {
-      padding: 8px 10px;
-      margin-bottom: 6px;
-      background: rgba(239, 68, 68, 0.1);
-      border-radius: 6px;
-      font-size: 11px;
-      color: #fca5a5;
-      border-left: 3px solid #ef4444;
+    .none-text { font-size: 10px; color: rgba(200,200,210,0.4); }
+    
+    /* Save Button */
+    .save-build-btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 12px;
+      background: linear-gradient(135deg, #4ade80, #22c55e);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: "Cinzel", serif;
+      letter-spacing: 1px;
     }
     
-    .tip-item {
-      padding: 8px 10px;
-      margin-bottom: 6px;
-      background: rgba(96, 165, 250, 0.08);
-      border-radius: 6px;
-      font-size: 11px;
-      color: #93c5fd;
-      border-left: 3px solid #60a5fa;
-    }
+    .save-build-btn:hover { filter: brightness(1.1); }
+    .save-build-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
-    .none-text { font-size: 11px; color: rgba(200,200,210,0.4); }
+    .saved-indicator {
+      text-align: center;
+      font-size: 10px;
+      color: #86efac;
+      margin-top: 6px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .saved-indicator.show { opacity: 1; }
 
     /* Profile Styles */
     .profile-container { max-width: 1000px; margin: 0 auto; }
+    .profile-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; margin-bottom: 20px; }
+    .profile-section-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; display: flex; align-items: center; gap: 8px; }
     
-    .profile-section {
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    
-    .profile-section-title {
-      font-family: "Cinzel", serif;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #e2e8f0;
-      letter-spacing: 1px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-    }
-    
-    .stat-input-group {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      padding: 12px;
-    }
-    
-    .stat-input-label {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.5);
-      margin-bottom: 4px;
-      letter-spacing: 1px;
-    }
-    
-    .stat-input {
-      width: 100%;
-      padding: 8px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(100, 100, 120, 0.3);
-      border-radius: 4px;
-      color: #fb923c;
-      font-size: 16px;
-      font-weight: 700;
-      text-align: center;
-    }
-    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .stat-input-group { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; }
+    .stat-input-label { font-size: 9px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
+    .stat-input { width: 100%; padding: 6px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: #fb923c; font-size: 14px; font-weight: 700; text-align: center; }
     .stat-input:focus { outline: none; border-color: #fb923c; }
     
-    .profile-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    
-    .profile-btn {
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      font-size: 13px;
-    }
-    
+    .profile-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .profile-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; }
     .profile-btn.primary { background: linear-gradient(135deg, #60a5fa, #c084fc); color: white; }
     .profile-btn.secondary { background: rgba(100, 100, 120, 0.3); color: #e2e8f0; border: 1px solid rgba(100, 100, 120, 0.3); }
     .profile-btn:hover { filter: brightness(1.1); }
     
-    .save-indicator {
-      font-size: 12px;
-      color: #86efac;
-      margin-left: auto;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
+    .save-indicator { font-size: 11px; color: #86efac; margin-left: auto; opacity: 0; transition: opacity 0.3s; }
     .save-indicator.show { opacity: 1; }
 
     /* Rune Unlocks */
-    .rune-skill-section {
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(100, 100, 120, 0.15);
-    }
-    
+    .rune-skill-section { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(100, 100, 120, 0.15); }
     .rune-skill-section:last-child { border-bottom: none; }
+    .rune-skill-name { font-family: "Cinzel", serif; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .skill-row-label { font-size: 8px; padding: 2px 5px; border-radius: 4px; background: rgba(100, 100, 120, 0.2); color: rgba(200, 200, 210, 0.5); }
     
-    .rune-skill-name {
-      font-family: "Cinzel", serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: #e2e8f0;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .rune-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .rune-card { flex: 1; min-width: 260px; background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(100, 100, 120, 0.15); }
+    .rune-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .rune-card-name { font-weight: 600; color: #c084fc; font-size: 12px; }
     
-    .skill-row-label {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(100, 100, 120, 0.2);
-      color: rgba(200, 200, 210, 0.5);
-    }
+    .tier-pill { display: flex; gap: 2px; margin-bottom: 8px; }
+    .tier-pill-btn { flex: 1; padding: 5px 3px; font-size: 8px; font-weight: 700; border: none; cursor: pointer; transition: all 0.15s ease; letter-spacing: 0.5px; }
+    .tier-pill-btn:first-child { border-radius: 5px 0 0 5px; }
+    .tier-pill-btn:last-child { border-radius: 0 5px 5px 0; }
+    .tier-pill-btn.blue { background: rgba(96, 165, 250, 0.15); color: rgba(96, 165, 250, 0.5); }
+    .tier-pill-btn.blue.active { background: rgba(96, 165, 250, 0.4); color: #93c5fd; box-shadow: 0 0 8px rgba(96, 165, 250, 0.3); }
+    .tier-pill-btn.purple { background: rgba(192, 132, 252, 0.15); color: rgba(192, 132, 252, 0.5); }
+    .tier-pill-btn.purple.active { background: rgba(192, 132, 252, 0.4); color: #d8b4fe; box-shadow: 0 0 8px rgba(192, 132, 252, 0.3); }
+    .tier-pill-btn.yellow { background: rgba(250, 204, 21, 0.15); color: rgba(250, 204, 21, 0.5); }
+    .tier-pill-btn.yellow.active { background: rgba(250, 204, 21, 0.4); color: #fde047; box-shadow: 0 0 8px rgba(250, 204, 21, 0.3); }
+    .tier-pill-btn.orange { background: rgba(251, 146, 60, 0.15); color: rgba(251, 146, 60, 0.5); }
+    .tier-pill-btn.orange.active { background: rgba(251, 146, 60, 0.4); color: #fdba74; box-shadow: 0 0 8px rgba(251, 146, 60, 0.3); }
+    .tier-pill-btn:hover:not(.active) { filter: brightness(1.3); }
     
-    .rune-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    
-    .rune-card {
-      flex: 1;
-      min-width: 280px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 8px;
-      padding: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.15);
-    }
-    
-    .rune-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    
-    .rune-card-name { font-weight: 600; color: #c084fc; font-size: 13px; }
-    
-    .rune-effects {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    
-    .tier-badge {
-      font-size: 8px;
-      padding: 1px 4px;
-      border-radius: 3px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    
+    .rune-effects { display: flex; flex-direction: column; gap: 3px; }
+    .rune-effect-row { display: flex; align-items: flex-start; gap: 5px; font-size: 9px; padding: 2px 0; }
+    .rune-effect-row.locked { opacity: 0.3; }
+    .tier-badge { font-size: 7px; padding: 1px 4px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
     .tier-badge.blue { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
     .tier-badge.purple { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
     .tier-badge.yellow { background: rgba(250, 204, 21, 0.2); color: #fbbf24; }
     .tier-badge.orange { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
-    
-    /* Segmented Pill Selector */
-    .tier-pill {
-      display: flex;
-      gap: 2px;
-      margin-bottom: 10px;
-    }
-    
-    .tier-pill-btn {
-      flex: 1;
-      padding: 6px 4px;
-      font-size: 9px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .tier-pill-btn:first-child { border-radius: 6px 0 0 6px; }
-    .tier-pill-btn:last-child { border-radius: 0 6px 6px 0; }
-    
-    .tier-pill-btn.blue { background: rgba(96, 165, 250, 0.15); color: rgba(96, 165, 250, 0.5); }
-    .tier-pill-btn.blue.active { background: rgba(96, 165, 250, 0.4); color: #93c5fd; box-shadow: 0 0 10px rgba(96, 165, 250, 0.3); }
-    
-    .tier-pill-btn.purple { background: rgba(192, 132, 252, 0.15); color: rgba(192, 132, 252, 0.5); }
-    .tier-pill-btn.purple.active { background: rgba(192, 132, 252, 0.4); color: #d8b4fe; box-shadow: 0 0 10px rgba(192, 132, 252, 0.3); }
-    
-    .tier-pill-btn.yellow { background: rgba(250, 204, 21, 0.15); color: rgba(250, 204, 21, 0.5); }
-    .tier-pill-btn.yellow.active { background: rgba(250, 204, 21, 0.4); color: #fde047; box-shadow: 0 0 10px rgba(250, 204, 21, 0.3); }
-    
-    .tier-pill-btn.orange { background: rgba(251, 146, 60, 0.15); color: rgba(251, 146, 60, 0.5); }
-    .tier-pill-btn.orange.active { background: rgba(251, 146, 60, 0.4); color: #fdba74; box-shadow: 0 0 10px rgba(251, 146, 60, 0.3); }
-    
-    .tier-pill-btn:hover:not(.active) { filter: brightness(1.3); }
-    
-    .rune-effect-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-      font-size: 10px;
-      padding: 3px 0;
-    }
-    
-    .rune-effect-row.locked {
-      opacity: 0.35;
-    }
-    
-    .rune-effect-text {
-      flex: 1;
-      color: rgba(200, 200, 210, 0.7);
-      line-height: 1.3;
-    }
-    
-    .rune-effect-row.locked .rune-effect-text {
-      color: rgba(200, 200, 210, 0.4);
-    }
+    .rune-effect-text { flex: 1; color: rgba(200, 200, 210, 0.6); line-height: 1.3; }
 
     /* Data Tab */
-    .config-panel {
-      max-width: 600px;
-      margin: 0 auto;
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 20px;
-    }
-    
-    .config-title {
-      font-family: "Cinzel", serif;
-      font-size: 14px;
-      color: rgba(200, 200, 210, 0.7);
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-    
-    .config-row { margin-bottom: 12px; }
-    .config-label { font-size: 11px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
-    
-    .config-input {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(100, 100, 120, 0.3);
-      border-radius: 6px;
-      color: #e2e8f0;
-      font-family: monospace;
-      font-size: 13px;
-    }
-    
+    .config-panel { max-width: 500px; margin: 0 auto; background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
+    .config-title { font-family: "Cinzel", serif; font-size: 13px; color: rgba(200, 200, 210, 0.7); letter-spacing: 1px; margin-bottom: 12px; }
+    .config-row { margin-bottom: 10px; }
+    .config-label { font-size: 10px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
+    .config-input { width: 100%; padding: 8px 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 6px; color: #e2e8f0; font-family: monospace; font-size: 12px; }
     .config-input:focus { outline: none; border-color: #60a5fa; }
-    .config-help { font-size: 11px; color: rgba(200, 200, 210, 0.4); margin-top: 4px; }
-    
-    .config-button {
-      background: linear-gradient(135deg, #60a5fa, #c084fc);
-      border: none;
-      padding: 12px 24px;
-      border-radius: 6px;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    
+    .config-help { font-size: 10px; color: rgba(200, 200, 210, 0.4); margin-top: 3px; }
+    .config-button { background: linear-gradient(135deg, #60a5fa, #c084fc); border: none; padding: 10px 20px; border-radius: 6px; color: white; font-weight: 600; cursor: pointer; margin-top: 6px; }
     .config-button:hover { filter: brightness(1.1); }
-    
-    .config-status {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      display: none;
-    }
-    
+    .config-status { margin-top: 10px; padding: 8px 10px; border-radius: 6px; font-size: 11px; display: none; }
     .config-status.success { background: rgba(74, 222, 128, 0.1); color: #86efac; border: 1px solid rgba(74, 222, 128, 0.3); display: block; }
     .config-status.error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); display: block; }
     .config-status.loading { background: rgba(96, 165, 250, 0.1); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.3); display: block; }
@@ -864,85 +449,26 @@
   </header>
 
   <div class="tab-nav">
-    <button class="tab-btn active" data-tab="builder">BUILDER</button>
+    <button class="tab-btn active" data-tab="current">MY BUILD</button>
+    <button class="tab-btn" data-tab="theorycraft">THEORYCRAFT</button>
     <button class="tab-btn" data-tab="profile">PROFILE</button>
     <button class="tab-btn" data-tab="data">DATA</button>
   </div>
 
-  <!-- BUILDER TAB -->
-  <div class="tab-content active" id="tab-builder">
+  <!-- MY BUILD TAB -->
+  <div class="tab-content active" id="tab-current">
     <div class="builder-layout">
-      <div class="builder-main">
-        <!-- Core Selection -->
-        <div class="core-section">
-          <div class="core-title">🎯 CHOOSE YOUR CORE</div>
-          <div class="core-grid" id="core-grid"></div>
-          <div class="rune-section hidden" id="core-rune-section">
-            <div class="rune-title">RUNE</div>
-            <div class="rune-options" id="core-rune-options"></div>
-          </div>
-        </div>
+      <div class="builder-main" id="current-builder"></div>
+      <div class="analysis-panel" id="current-analysis"></div>
+    </div>
+  </div>
 
-        <!-- Build Around -->
-        <div class="build-around">
-          <div class="build-around-title">⬇️ BUILD AROUND IT</div>
-          <div class="build-grid">
-            <div class="build-column">
-              <div class="column-label">BASIC</div>
-              <div id="basic-skills"></div>
-            </div>
-            <div class="build-column">
-              <div class="column-label">CONTROLS</div>
-              <div id="control-skills"></div>
-            </div>
-            <div class="build-column">
-              <div class="column-label">ULTIMATE</div>
-              <div id="ultimate-skills"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Passives -->
-        <div class="passives-section">
-          <div class="passives-title">PASSIVES (SELECT 3)</div>
-          <div class="passives-grid" id="passives-grid"></div>
-        </div>
-      </div>
-
-      <!-- Analysis Panel -->
-      <div class="analysis-panel">
-        <h2 class="analysis-title">BUILD ANALYSIS</h2>
-        
-        <div class="build-summary" id="build-summary"></div>
-        
-        <div class="damage-calc">
-          <div class="damage-calc-title">TOTAL DAMAGE</div>
-          <div class="damage-calc-value" id="total-damage">0</div>
-          <div class="damage-calc-breakdown" id="damage-breakdown">Pick a Core to start</div>
-        </div>
-        
-        <div class="status-section">
-          <div class="section-label">STATUS EFFECTS</div>
-          <div class="status-badges" id="status-badges">
-            <span class="none-text">None yet</span>
-          </div>
-        </div>
-
-        <div class="quick-stats">
-          <div class="quick-stat">
-            <div class="quick-stat-label">ATK%</div>
-            <div class="quick-stat-value" id="total-atk">0%</div>
-          </div>
-          <div class="quick-stat">
-            <div class="quick-stat-label">ELEMENTS</div>
-            <div class="element-dots" id="elements"></div>
-          </div>
-        </div>
-
-        <div id="synergies-container"></div>
-        <div id="conflicts-container"></div>
-        <div id="tips-container"></div>
-      </div>
+  <!-- THEORYCRAFT TAB -->
+  <div class="tab-content" id="tab-theorycraft">
+    <div class="theorycraft-layout">
+      <div class="current-build-sidebar" id="current-sidebar"></div>
+      <div class="builder-main" id="theory-builder"></div>
+      <div class="analysis-panel" id="theory-analysis"></div>
     </div>
   </div>
 
@@ -950,27 +476,17 @@
   <div class="tab-content" id="tab-profile">
     <div class="profile-container">
       <div class="profile-section">
-        <div class="profile-section-title">
-          📊 CHARACTER STATS
-          <span class="save-indicator" id="stats-saved">✓ Saved</span>
-        </div>
+        <div class="profile-section-title">📊 CHARACTER STATS <span class="save-indicator" id="stats-saved">✓ Saved</span></div>
         <div class="stats-grid" id="stats-inputs"></div>
-        <div class="profile-actions" style="margin-top: 16px;">
+        <div class="profile-actions" style="margin-top: 12px;">
           <button class="profile-btn secondary" onclick="loadStatsFromSheet()">Load from Sheet</button>
         </div>
       </div>
-
       <div class="profile-section">
-        <div class="profile-section-title">
-          🔮 RUNE UNLOCKS
-          <span class="save-indicator" id="runes-saved">✓ Saved</span>
-        </div>
-        <p style="font-size: 11px; color: rgba(200,200,210,0.4); margin-bottom: 16px;">
-          Check the tiers you've unlocked. Only unlocked runes show in Builder.
-        </p>
+        <div class="profile-section-title">🔮 RUNE UNLOCKS <span class="save-indicator" id="runes-saved">✓ Saved</span></div>
+        <p style="font-size: 10px; color: rgba(200,200,210,0.4); margin-bottom: 12px;">Click tier to set your highest unlock.</p>
         <div id="rune-unlocks"></div>
       </div>
-
       <div class="profile-actions">
         <button class="profile-btn secondary" onclick="resetProfile()">Reset All</button>
       </div>
@@ -980,20 +496,14 @@
   <!-- DATA TAB -->
   <div class="tab-content" id="tab-data">
     <div class="config-panel">
-      <div class="config-title">📁 GOOGLE SHEETS CONNECTION</div>
+      <div class="config-title">📁 GOOGLE SHEETS</div>
       <div class="config-row">
-        <div class="config-label">GOOGLE SHEET ID</div>
-        <input type="text" class="config-input" id="sheet-id" placeholder="Paste the ID from your Google Sheet URL">
-        <div class="config-help">From: docs.google.com/spreadsheets/d/<strong>THIS_PART</strong>/edit</div>
+        <div class="config-label">SHEET ID</div>
+        <input type="text" class="config-input" id="sheet-id" placeholder="From URL">
+        <div class="config-help">docs.google.com/spreadsheets/d/<strong>THIS</strong>/edit</div>
       </div>
-      <button class="config-button" onclick="loadFromSheets()">Load Game Data</button>
+      <button class="config-button" onclick="loadFromSheets()">Load Data</button>
       <div class="config-status" id="config-status"></div>
-      <div style="margin-top: 20px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-        <div class="config-label" style="margin-bottom: 8px;">REQUIRED TABS</div>
-        <div style="font-size: 12px; color: rgba(200,200,210,0.6);">
-          Skills, Passives, Runes, CharacterStats
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1001,49 +511,50 @@
     // ============ DATA ============
     let SKILLS = {
       basic: [
-        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', stacks: 0, area: 'Small', desc: '60% ATK, Chill' },
-        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', stacks: 1, area: 'Frontal', desc: '30% ATK, Burning' },
-        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', stacks: 1, area: 'Frontal', desc: '50% ATK, Shock' },
+        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', desc: '60% ATK, Chill' },
+        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', desc: '30% ATK, Burning' },
+        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', desc: '50% ATK, Shock' },
       ],
       core: [
-        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', stacks: 2, mpCost: 20, area: 'Large', desc: '70% ATK, 2 Burning' },
-        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', stacks: 2, mpCost: 30, area: 'Area', desc: '160% ATK, 2 Shock' },
-        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', stacks: 0, mpCost: 40, area: 'Small', desc: '70% ATK, Chill' },
+        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', mpCost: 20, desc: '70% ATK, Burning' },
+        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', mpCost: 30, desc: '160% ATK, Shock' },
+        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', mpCost: 40, desc: '70% ATK, Chill' },
       ],
       basicControl: [
-        { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, area: 'Nearby', desc: 'Knockback + stun' },
-        { id: 'flash', name: 'Flash', element: null, atk: 0, cd: 12, hpRecovery: 15, area: 'Self', desc: 'Dodge, 15% HP' },
-        { id: 'gravity_field', name: 'Gravity Field', element: null, atk: 0, cd: 20, area: 'Frontal', desc: 'Slow zone' },
+        { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, desc: 'Knockback + stun' },
+        { id: 'flash', name: 'Flash', element: null, atk: 0, cd: 12, hpRecovery: 15, desc: 'Dodge, 15% HP' },
+        { id: 'gravity_field', name: 'Gravity Field', element: null, atk: 0, cd: 20, desc: 'Slow zone' },
       ],
       elemControl: [
-        { id: 'lightning_orb', name: 'Lightning Orb', element: 'Lightning', atk: 35, status: 'Shock', stacks: 1, cd: 12, area: 'Nearby', desc: 'Shock orb' },
-        { id: 'frost_shield', name: 'Frost Shield', element: 'Ice', atk: 0, cd: 15, shield: 35, area: 'Self', desc: '35% HP shield' },
-        { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, area: 'Summon', desc: 'Fire turret' },
+        { id: 'lightning_orb', name: 'Lightning Orb', element: 'Lightning', atk: 35, status: 'Shock', cd: 12, desc: 'Shock orb' },
+        { id: 'frost_shield', name: 'Frost Shield', element: 'Ice', atk: 0, cd: 15, shield: 35, desc: '35% HP shield' },
+        { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, desc: 'Fire turret' },
       ],
       ultimate: [
-        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, area: 'Frontal', desc: 'Ice storm' },
-        { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, area: 'Summon', desc: 'Clone' },
-        { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, area: 'Self', desc: 'Transform' },
+        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, desc: 'Ice storm' },
+        { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, desc: 'Clone' },
+        { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, desc: 'Transform' },
       ],
     };
 
     let PASSIVES = [
-      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% dmg per status on target' },
-      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30% threshold' },
+      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% per status' },
+      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30%' },
       { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen' },
-      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion after hit' },
-      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg when HP > 80%' },
-      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 Mana, +2% HP on kill' },
+      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion' },
+      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg >80% HP' },
+      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 MP/HP on kill' },
       { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg, +30% taken', downside: true },
-      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s safe' },
-      { id: 'conjuration', name: 'Conjuration', desc: '-10% all cooldowns' },
+      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s' },
+      { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns' },
     ];
 
     let RUNES = [];
 
     let PROFILE = {
       stats: { atk: 2730, crit: 4.6, critDmg: 122.8, finalDmgUp: 45, haste: 0, eleDmg: 0, dot: 0, hoh: 0 },
-      runeUnlocks: {} // Format: { "Frost Projectile|Ice Armor": 2 } where 0=none, 1=blue, 2=purple, 3=yellow, 4=orange
+      runeUnlocks: {},
+      currentBuild: { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] }
     };
 
     const STAT_CONFIG = [
@@ -1054,18 +565,14 @@
       { key: 'haste', label: 'Haste %', default: 0 },
       { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
       { key: 'dot', label: 'DoT %', default: 0 },
-      { key: 'hoh', label: 'Heal on Hit %', default: 0 },
+      { key: 'hoh', label: 'HoH %', default: 0 },
     ];
 
-    const build = {
-      core: null,
-      basic: null,
-      basicControl: null,
-      elemControl: null,
-      ultimate: null,
-      runes: {},
-      passives: [null, null, null],
-    };
+    // Two build states
+    const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
+    const theoryBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
+
+    let activeTab = 'current';
 
     // ============ TABS ============
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1074,21 +581,59 @@
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-        if (btn.dataset.tab === 'profile') renderProfile();
-        if (btn.dataset.tab === 'builder') renderBuilder();
+        activeTab = btn.dataset.tab;
+        if (activeTab === 'current') renderCurrentBuild();
+        if (activeTab === 'theorycraft') renderTheorycraft();
+        if (activeTab === 'profile') renderProfile();
       });
     });
 
     // ============ PROFILE ============
     function loadProfile() {
-      const saved = localStorage.getItem('lootfiend-profile');
+      const saved = localStorage.getItem('lootfiend-profile-v2');
       if (saved) {
-        try { PROFILE = { ...PROFILE, ...JSON.parse(saved) }; } catch (e) {}
+        try { 
+          const parsed = JSON.parse(saved);
+          PROFILE = { ...PROFILE, ...parsed };
+          // Restore current build
+          if (PROFILE.currentBuild) {
+            Object.assign(currentBuild, PROFILE.currentBuild);
+            restoreBuildReferences(currentBuild);
+          }
+        } catch (e) {}
       }
     }
 
+    function restoreBuildReferences(build) {
+      // Restore skill object references from IDs
+      if (build.core && typeof build.core === 'string') {
+        build.core = SKILLS.core.find(s => s.id === build.core) || null;
+      }
+      ['basic', 'basicControl', 'elemControl', 'ultimate'].forEach(key => {
+        if (build[key] && typeof build[key] === 'string') {
+          const allSkills = [...(SKILLS[key] || []), ...SKILLS.basicControl, ...SKILLS.elemControl, ...SKILLS.ultimate, ...SKILLS.basic];
+          build[key] = allSkills.find(s => s.id === build[key]) || null;
+        }
+      });
+      build.passives = (build.passives || [null, null, null]).map(p => {
+        if (p && typeof p === 'string') return PASSIVES.find(ps => ps.id === p) || null;
+        return p;
+      });
+    }
+
     function saveProfile() {
-      localStorage.setItem('lootfiend-profile', JSON.stringify(PROFILE));
+      // Store IDs instead of full objects
+      const buildToSave = {
+        core: currentBuild.core?.id || null,
+        basic: currentBuild.basic?.id || null,
+        basicControl: currentBuild.basicControl?.id || null,
+        elemControl: currentBuild.elemControl?.id || null,
+        ultimate: currentBuild.ultimate?.id || null,
+        runes: { ...currentBuild.runes },
+        passives: currentBuild.passives.map(p => p?.id || null)
+      };
+      PROFILE.currentBuild = buildToSave;
+      localStorage.setItem('lootfiend-profile-v2', JSON.stringify(PROFILE));
     }
 
     function showSaveIndicator(id) {
@@ -1097,12 +642,10 @@
     }
 
     function renderProfile() {
-      const statsContainer = document.getElementById('stats-inputs');
-      statsContainer.innerHTML = STAT_CONFIG.map(stat => `
+      document.getElementById('stats-inputs').innerHTML = STAT_CONFIG.map(stat => `
         <div class="stat-input-group">
           <div class="stat-input-label">${stat.label}</div>
-          <input type="number" class="stat-input" value="${PROFILE.stats[stat.key]}" 
-                 onchange="updateStat('${stat.key}', this.value)">
+          <input type="number" class="stat-input" value="${PROFILE.stats[stat.key]}" onchange="updateStat('${stat.key}', this.value)">
         </div>
       `).join('');
       renderRuneUnlocks();
@@ -1115,61 +658,43 @@
 
       const skillRows = {};
       Object.entries(SKILLS).forEach(([row, skills]) => skills.forEach(s => skillRows[s.name] = row));
-      const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Control', elemControl: 'Elem', ultimate: 'Ultimate' };
+      const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Ctrl', elemControl: 'Elem', ultimate: 'Ult' };
 
       let html = '';
       Object.entries(skillRunes).forEach(([skillName, runes]) => {
         const row = skillRows[skillName];
-        html += `
-          <div class="rune-skill-section">
-            <div class="rune-skill-name">${skillName} <span class="skill-row-label">${rowLabels[row] || ''}</span></div>
-            <div class="rune-row">${runes.map(r => renderRuneCard(skillName, r)).join('')}</div>
-          </div>
-        `;
+        html += `<div class="rune-skill-section"><div class="rune-skill-name">${skillName} <span class="skill-row-label">${rowLabels[row] || ''}</span></div><div class="rune-row">${runes.map(r => renderRuneCard(skillName, r)).join('')}</div></div>`;
       });
-      container.innerHTML = html || '<div class="none-text">Load data from Data tab first</div>';
+      container.innerHTML = html || '<div class="none-text">Load data first</div>';
     }
 
     function renderRuneCard(skillName, rune) {
       const key = `${skillName}|${rune.name}`;
-      const tierLevel = PROFILE.runeUnlocks[key] ?? 1; // Default to blue unlocked
+      const tierLevel = PROFILE.runeUnlocks[key] ?? 1;
 
       if (rune.blueEffect === 'Locked') {
-        return `<div class="rune-card" style="opacity: 0.4;"><div class="rune-card-name">${rune.name}</div><div style="font-size:10px;color:rgba(200,200,210,0.3);">LOCKED</div></div>`;
+        return `<div class="rune-card" style="opacity: 0.4;"><div class="rune-card-name">${rune.name}</div><div style="font-size:9px;color:rgba(200,200,210,0.3);">LOCKED</div></div>`;
       }
 
       const tiers = [
         { key: 'blue', label: 'BLU', effect: rune.blueEffect },
         { key: 'purple', label: 'PUR', effect: rune.purpleEffect },
-        { key: 'yellow', label: 'YEL', effect: rune.yellow || rune.orange1Effect },
-        { key: 'orange', label: 'ORA', effect: rune.orange || rune.orange2Effect },
+        { key: 'yellow', label: 'YEL', effect: rune.orange1Effect },
+        { key: 'orange', label: 'ORA', effect: rune.orange2Effect },
       ];
 
       return `
         <div class="rune-card">
-          <div class="rune-card-header">
-            <span class="rune-card-name">${rune.name}</span>
-            ${rune.newElement ? `<span class="element-tag ${rune.newElement.toLowerCase()}">${rune.newElement}</span>` : ''}
-          </div>
-          <div class="tier-pill">
-            ${tiers.map((t, i) => `<button class="tier-pill-btn ${t.key} ${tierLevel >= i + 1 ? 'active' : ''}" onclick="setRuneTier('${key}', ${i + 1})">${t.label}</button>`).join('')}
-          </div>
-          <div class="rune-effects">
-            ${tiers.map((t, i) => `
-              <div class="rune-effect-row ${tierLevel >= i + 1 ? '' : 'locked'}">
-                <span class="tier-badge ${t.key}">${t.label}</span>
-                <span class="rune-effect-text">${t.effect}</span>
-              </div>
-            `).join('')}
-          </div>
+          <div class="rune-card-header"><span class="rune-card-name">${rune.name}</span>${rune.newElement ? `<span class="element-tag ${rune.newElement.toLowerCase()}">${rune.newElement}</span>` : ''}</div>
+          <div class="tier-pill">${tiers.map((t, i) => `<button class="tier-pill-btn ${t.key} ${tierLevel >= i + 1 ? 'active' : ''}" onclick="setRuneTier('${key}', ${i + 1})">${t.label}</button>`).join('')}</div>
+          <div class="rune-effects">${tiers.map((t, i) => `<div class="rune-effect-row ${tierLevel >= i + 1 ? '' : 'locked'}"><span class="tier-badge ${t.key}">${t.label}</span><span class="rune-effect-text">${t.effect}</span></div>`).join('')}</div>
         </div>
       `;
     }
 
     function setRuneTier(key, level) {
-      const currentLevel = PROFILE.runeUnlocks[key] ?? 1;
-      // Click same level = toggle down to previous, click different = set to that level
-      PROFILE.runeUnlocks[key] = (currentLevel === level && level > 0) ? level - 1 : level;
+      const current = PROFILE.runeUnlocks[key] ?? 1;
+      PROFILE.runeUnlocks[key] = (current === level && level > 0) ? level - 1 : level;
       saveProfile();
       showSaveIndicator('runes-saved');
       renderRuneUnlocks();
@@ -1181,15 +706,11 @@
       showSaveIndicator('stats-saved');
     }
 
-    function getRuneTierLevel(skill, rune) {
-      const key = `${skill}|${rune}`;
-      return PROFILE.runeUnlocks[key] ?? 1; // Default to blue
-    }
-
     function resetProfile() {
-      if (confirm('Reset all stats and rune unlocks?')) {
-        PROFILE = { stats: {}, runeUnlocks: {} };
+      if (confirm('Reset all?')) {
+        PROFILE = { stats: {}, runeUnlocks: {}, currentBuild: null };
         STAT_CONFIG.forEach(s => PROFILE.stats[s.key] = s.default);
+        Object.keys(currentBuild).forEach(k => currentBuild[k] = k === 'passives' ? [null, null, null] : (k === 'runes' ? {} : null));
         saveProfile();
         renderProfile();
       }
@@ -1197,29 +718,20 @@
 
     async function loadStatsFromSheet() {
       const sheetId = localStorage.getItem('lootfiend-sheet-id');
-      if (!sheetId) { alert('Set up Google Sheet in Data tab first'); return; }
-      
+      if (!sheetId) { alert('Set Sheet ID in Data tab first'); return; }
       try {
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Could not fetch');
-        const text = await response.text();
-        
-        const data = parseCSV(text);
-        const statsMap = { 'ATK': 'atk', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Final Dmg Up': 'finalDmgUp', 'Haste': 'haste', 'Elemental Dmg': 'eleDmg', 'DoT': 'dot', 'Heal on Hit': 'hoh' };
-        data.forEach(row => {
-          const key = statsMap[row['Stat']];
-          if (key) PROFILE.stats[key] = parseFloat(row['Value']) || 0;
-        });
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`);
+        if (!res.ok) throw new Error('Failed');
+        const data = parseCSV(await res.text());
+        const map = { 'ATK': 'atk', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Final Dmg Up': 'finalDmgUp', 'Haste': 'haste', 'Elemental Dmg': 'eleDmg', 'DoT': 'dot', 'Heal on Hit': 'hoh' };
+        data.forEach(row => { const k = map[row['Stat']]; if (k) PROFILE.stats[k] = parseFloat(row['Value']) || 0; });
         saveProfile();
         renderProfile();
         showSaveIndicator('stats-saved');
-      } catch (e) {
-        alert('Error loading stats: ' + e.message);
-      }
+      } catch (e) { alert('Error: ' + e.message); }
     }
 
-    // ============ DATA LOADING ============
+    // ============ DATA ============
     function showStatus(msg, type) {
       const el = document.getElementById('config-status');
       el.className = 'config-status ' + type;
@@ -1228,28 +740,22 @@
 
     async function loadFromSheets() {
       const sheetId = document.getElementById('sheet-id').value.trim();
-      if (!sheetId) { showStatus('Enter a Sheet ID', 'error'); return; }
-
+      if (!sheetId) { showStatus('Enter Sheet ID', 'error'); return; }
       localStorage.setItem('lootfiend-sheet-id', sheetId);
       showStatus('Loading...', 'loading');
-
       try {
         const [skillsRes, passivesRes, runesRes] = await Promise.all([
           fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Skills`),
           fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Passives`),
           fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Runes`),
         ]);
-
         if (skillsRes.ok) parseSkillsCSV(await skillsRes.text());
         if (passivesRes.ok) parsePassivesCSV(await passivesRes.text());
         if (runesRes.ok) parseRunesCSV(await runesRes.text());
-
+        restoreBuildReferences(currentBuild);
         showStatus('✓ Loaded!', 'success');
-        renderBuilder();
-        renderProfile();
-      } catch (e) {
-        showStatus('Error: ' + e.message, 'error');
-      }
+        renderCurrentBuild();
+      } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
 
     function parseCSV(text) {
@@ -1286,12 +792,10 @@
           element: row['Element'] || null,
           atk: parseFloat(row['ATK%']) || 0,
           status: row['Status Effect'] || null,
-          stacks: parseInt(row['Stacks']) || 0,
           mpCost: parseInt(row['MP Cost']) || 0,
           cd: parseInt(row['CD']) || 0,
           shield: parseFloat(row['Shield %']) || 0,
           hpRecovery: parseFloat(row['HP Recovery %']) || 0,
-          area: row['Area'] || '',
           desc: row['Special'] || `${row['ATK%'] || 0}% ATK`,
         });
       });
@@ -1320,75 +824,26 @@
       }));
     }
 
-    // ============ BUILDER ============
-    function getRunesForSkill(name) {
-      return RUNES.filter(r => r.skill === name && r.blueEffect !== 'Locked' && getRuneTierLevel(name, r.name) >= 1);
-    }
-
-    function isRuneUnlocked(skill, rune) {
-      return getRuneTierLevel(skill, rune) >= 1;
-    }
-
-    function getSelectedRune(skill) {
-      const name = build.runes[skill];
-      return name ? RUNES.find(r => r.skill === skill && r.name === name) : null;
-    }
-
-    function getEffectiveElement(skill) {
+    // ============ BUILD HELPERS ============
+    function getRuneTierLevel(skill, rune) { return PROFILE.runeUnlocks[`${skill}|${rune}`] ?? 1; }
+    function getRunesForSkill(name) { return RUNES.filter(r => r.skill === name && r.blueEffect !== 'Locked' && getRuneTierLevel(name, r.name) >= 1); }
+    function getSelectedRune(build, skill) { const name = build.runes[skill]; return name ? RUNES.find(r => r.skill === skill && r.name === name) : null; }
+    
+    function getEffectiveElement(build, skill) {
       if (!skill) return null;
-      const rune = getSelectedRune(skill.name);
+      const rune = getSelectedRune(build, skill.name);
       if (!rune) return skill.element;
-      // Element change is typically at Purple tier (tier 2)
-      const tierLevel = getRuneTierLevel(skill.name, rune.name);
-      return (rune.newElement && tierLevel >= 2) ? rune.newElement : skill.element;
+      return (rune.newElement && getRuneTierLevel(skill.name, rune.name) >= 2) ? rune.newElement : skill.element;
     }
 
-    function getEffectiveStatuses(skill) {
+    function getEffectiveStatuses(build, skill) {
       if (!skill) return [];
       const statuses = skill.status ? [skill.status] : [];
-      const rune = getSelectedRune(skill.name);
-      if (rune?.addsStatus) {
-        // Status effects typically come from Purple tier (tier 2)
-        const tierLevel = getRuneTierLevel(skill.name, rune.name);
-        if (tierLevel >= 2) {
-          rune.addsStatus.split(',').forEach(s => { 
-            if (s.trim() && !statuses.includes(s.trim())) statuses.push(s.trim()); 
-          });
-        }
+      const rune = getSelectedRune(build, skill.name);
+      if (rune?.addsStatus && getRuneTierLevel(skill.name, rune.name) >= 2) {
+        rune.addsStatus.split(',').forEach(s => { if (s.trim() && !statuses.includes(s.trim())) statuses.push(s.trim()); });
       }
       return statuses;
-    }
-
-    function getRecommendations() {
-      const recs = { basic: [], control: [], ultimate: [], passives: [] };
-      if (!build.core) return recs;
-
-      const coreElement = getEffectiveElement(build.core);
-      const coreStatuses = getEffectiveStatuses(build.core);
-
-      // Basic: match element or add different status
-      SKILLS.basic.forEach(s => {
-        if (s.element === coreElement) recs.basic.push(s.id);
-        else if (s.status && !coreStatuses.includes(s.status)) recs.basic.push(s.id);
-      });
-
-      // Controls: element match or utility
-      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
-        if (s.element === coreElement) recs.control.push(s.id);
-        if (s.shield || s.hpRecovery) recs.control.push(s.id);
-      });
-
-      // Ultimate: Doppelganger always good, element match
-      SKILLS.ultimate.forEach(s => {
-        if (s.id === 'doppelganger') recs.ultimate.push(s.id);
-        if (s.element === coreElement) recs.ultimate.push(s.id);
-      });
-
-      // Passives: Elemental Resonance if multi-status potential
-      if (coreStatuses.length > 0) recs.passives.push('elemental_resonance');
-      recs.passives.push('flourish', 'conjuration');
-
-      return recs;
     }
 
     function calcDamage(skill) {
@@ -1396,268 +851,375 @@
       return Math.round(PROFILE.stats.atk * (skill.atk / 100) * (1 + PROFILE.stats.finalDmgUp / 100));
     }
 
-    function renderBuilder() {
-      renderCoreSection();
-      renderBuildAround();
-      renderPassives();
-      renderAnalysis();
-    }
-
-    function renderCoreSection() {
-      const grid = document.getElementById('core-grid');
-      grid.innerHTML = SKILLS.core.map(skill => {
-        const isSelected = build.core?.id === skill.id;
-        const element = skill.element?.toLowerCase() || 'neutral';
-        const damage = calcDamage(skill);
-        return `
-          <div class="core-card ${isSelected ? 'selected-' + element : ''}" onclick="selectCore('${skill.id}')">
-            <div class="core-icon">${skill.element === 'Fire' ? '🔥' : skill.element === 'Lightning' ? '⚡' : '❄️'}</div>
-            <div class="core-name ${element}">${skill.name}</div>
-            <div class="core-desc">${skill.desc}</div>
-            <div class="core-damage">${damage.toLocaleString()} dmg</div>
-          </div>
-        `;
-      }).join('');
-
-      renderCoreRunes();
-    }
-
-    function selectCore(id) {
-      const skill = SKILLS.core.find(s => s.id === id);
-      build.core = build.core?.id === id ? null : skill;
-      if (skill) {
-        const runes = getRunesForSkill(skill.name);
-        if (runes.length && !build.runes[skill.name]) build.runes[skill.name] = runes[0].name;
-      }
-      renderBuilder();
-    }
-
-    function renderCoreRunes() {
-      const section = document.getElementById('core-rune-section');
-      const options = document.getElementById('core-rune-options');
-
-      if (!build.core) { section.classList.add('hidden'); return; }
-
-      const runes = getRunesForSkill(build.core.name);
-      if (!runes.length) { section.classList.add('hidden'); return; }
-
-      section.classList.remove('hidden');
-      const selected = build.runes[build.core.name];
-
-      options.innerHTML = runes.map(r => {
-        const tierLevel = getRuneTierLevel(build.core.name, r.name);
-        const tierColors = ['', 'blue', 'purple', 'yellow', 'orange'];
-        const tierLabels = ['', 'BLU', 'PUR', 'YEL', 'ORA'];
-        return `
-          <div class="rune-option ${selected === r.name ? 'selected' : ''}" onclick="selectCoreRune('${r.name}')">
-            <div class="rune-option-name">${r.name}</div>
-            <div class="rune-option-effect">${r.keyStats}</div>
-            ${r.newElement && tierLevel >= 2 ? `<div class="rune-element-change ${r.newElement.toLowerCase()}">→ ${r.newElement}</div>` : ''}
-            <div style="margin-top:6px;"><span class="tier-badge ${tierColors[tierLevel]}" style="font-size:8px;">${tierLabels[tierLevel]}</span></div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function selectCoreRune(name) {
-      if (build.core) build.runes[build.core.name] = name;
-      renderBuilder();
-    }
-
-    function renderBuildAround() {
-      const recs = getRecommendations();
-
-      // Basic
-      document.getElementById('basic-skills').innerHTML = SKILLS.basic.map(s => renderSkillCard(s, 'basic', recs.basic.includes(s.id))).join('');
-
-      // Controls (both rows)
-      const controls = [...SKILLS.basicControl, ...SKILLS.elemControl];
-      document.getElementById('control-skills').innerHTML = controls.map(s => {
-        const row = SKILLS.basicControl.includes(s) ? 'basicControl' : 'elemControl';
-        return renderSkillCard(s, row, recs.control.includes(s.id));
-      }).join('');
-
-      // Ultimate
-      document.getElementById('ultimate-skills').innerHTML = SKILLS.ultimate.map(s => renderSkillCard(s, 'ultimate', recs.ultimate.includes(s.id))).join('');
-    }
-
-    function renderSkillCard(skill, row, recommended) {
-      const isSelected = build[row]?.id === skill.id;
-      const element = getEffectiveElement(skill)?.toLowerCase() || 'neutral';
-      const runes = getRunesForSkill(skill.name);
-      const selectedRune = getSelectedRune(skill.name);
-
-      let runeHtml = '';
-      if (isSelected && runes.length) {
-        runeHtml = `<div class="skill-rune-selector"><div class="skill-rune-buttons">
-          ${runes.map(r => {
-            const tierLevel = getRuneTierLevel(skill.name, r.name);
-            const tierColors = ['', 'blue', 'purple', 'yellow', 'orange'];
-            const tierLabels = ['', 'B', 'P', 'Y', 'O'];
-            return `<button class="skill-rune-btn ${selectedRune?.name === r.name ? 'selected' : ''}" onclick="event.stopPropagation(); selectSkillRune('${skill.name}', '${r.name}')" title="Tier: ${tierLabels[tierLevel]}">${r.name} <span style="font-size:8px;opacity:0.6;">${tierLabels[tierLevel]}</span></button>`;
-          }).join('')}
-        </div></div>`;
-      }
-
-      return `
-        <div class="skill-card ${isSelected ? 'selected-' + element : ''} ${recommended && !isSelected ? 'recommended' : ''}" onclick="selectSkill('${row}', '${skill.id}')">
-          <div class="skill-header">
-            <span class="skill-name ${element}">${skill.name}</span>
-            ${skill.element ? `<span class="element-tag ${skill.element.toLowerCase()}">${skill.element}</span>` : ''}
-          </div>
-          <div class="skill-desc">${skill.desc}</div>
-          ${runeHtml}
-        </div>
-      `;
-    }
-
-    function selectSkill(row, id) {
-      const skills = row === 'basicControl' || row === 'elemControl' ? [...SKILLS.basicControl, ...SKILLS.elemControl] : SKILLS[row];
-      const skill = skills.find(s => s.id === id);
-      
-      // Handle control slots
-      if (row === 'basicControl' || row === 'elemControl') {
-        const actualRow = SKILLS.basicControl.find(s => s.id === id) ? 'basicControl' : 'elemControl';
-        build[actualRow] = build[actualRow]?.id === id ? null : skill;
-      } else {
-        build[row] = build[row]?.id === id ? null : skill;
-      }
-
-      if (skill) {
-        const runes = getRunesForSkill(skill.name);
-        if (runes.length && !build.runes[skill.name]) build.runes[skill.name] = runes[0].name;
-      }
-      renderBuilder();
-    }
-
-    function selectSkillRune(skill, rune) {
-      build.runes[skill] = rune;
-      renderBuilder();
-    }
-
-    function renderPassives() {
-      const recs = getRecommendations();
-      document.getElementById('passives-grid').innerHTML = PASSIVES.map(p => {
-        const isSelected = build.passives.some(bp => bp?.id === p.id);
-        const recommended = recs.passives.includes(p.id);
-        return `
-          <div class="passive-card ${isSelected ? (p.downside ? 'selected-danger' : 'selected') : ''} ${recommended && !isSelected ? 'recommended' : ''}" onclick="selectPassive('${p.id}')">
-            <div class="passive-name">${p.name}</div>
-            <div class="passive-desc">${p.desc}</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function selectPassive(id) {
-      const passive = PASSIVES.find(p => p.id === id);
-      const idx = build.passives.findIndex(p => p?.id === id);
-      if (idx !== -1) build.passives[idx] = null;
-      else {
-        const empty = build.passives.findIndex(p => !p);
-        if (empty !== -1) build.passives[empty] = passive;
-        else build.passives[2] = passive;
-      }
-      renderBuilder();
-    }
-
-    function renderAnalysis() {
+    function analyzeBuild(build) {
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const passives = build.passives.filter(Boolean);
 
-      // Build summary
-      const summary = document.getElementById('build-summary');
-      const items = [
-        { label: 'CORE', skill: build.core },
-        { label: 'BASIC', skill: build.basic },
-        { label: 'CTRL', skill: build.basicControl },
-        { label: 'ELEM', skill: build.elemControl },
-        { label: 'ULT', skill: build.ultimate },
-      ].filter(i => i.skill);
+      const statuses = new Set();
+      skills.forEach(s => getEffectiveStatuses(build, s).forEach(st => statuses.add(st)));
 
-      summary.innerHTML = items.map(i => {
-        const rune = getSelectedRune(i.skill.name);
-        return `<div class="build-item"><span class="build-item-label">${i.label}</span><span class="build-item-skill">${i.skill.name}</span>${rune ? `<span class="build-item-rune">${rune.name}</span>` : ''}</div>`;
-      }).join('') + (passives.length ? `<div class="build-item" style="margin-top:8px;"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:10px;">${passives.map(p => p.name).join(', ')}</span></div>` : '');
+      const elements = new Set();
+      skills.forEach(s => { const el = getEffectiveElement(build, s); if (el) elements.add(el); });
 
-      // Damage
       let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
       let mult = 1;
       if (passives.some(p => p.id === 'flourish')) mult += 0.15;
       if (passives.some(p => p.id === 'demon_pact')) mult += 0.30;
-      
-      const statuses = new Set();
-      skills.forEach(s => getEffectiveStatuses(s).forEach(st => statuses.add(st)));
       if (passives.some(p => p.id === 'elemental_resonance')) mult += statuses.size * 0.05;
-
       totalDmg = Math.round(totalDmg * mult);
-      document.getElementById('total-damage').textContent = totalDmg.toLocaleString();
-      document.getElementById('damage-breakdown').textContent = build.core ? `×${mult.toFixed(2)} from passives` : 'Pick a Core to start';
 
-      // Statuses
-      document.getElementById('status-badges').innerHTML = statuses.size 
-        ? Array.from(statuses).map(s => `<span class="status-badge ${s.toLowerCase()}">${s}</span>`).join('')
-        : '<span class="none-text">None yet</span>';
+      const totalAtk = skills.reduce((sum, s) => sum + (s.atk || 0), 0);
 
-      // ATK% & Elements
-      document.getElementById('total-atk').textContent = skills.reduce((sum, s) => sum + (s.atk || 0), 0) + '%';
-      const elements = new Set(skills.map(s => getEffectiveElement(s)).filter(Boolean));
-      document.getElementById('elements').innerHTML = elements.size
-        ? Array.from(elements).map(e => `<span class="element-dot ${e.toLowerCase()}"></span>`).join('')
-        : '<span class="none-text">—</span>';
-
-      // Synergies
       const synergies = [];
       const conflicts = [];
       const tips = [];
 
       if (passives.some(p => p.id === 'elemental_resonance')) {
-        if (statuses.size >= 3) synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% dmg (${statuses.size} statuses!)`, type: '' });
-        else if (statuses.size >= 2) synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% dmg`, type: '' });
-        else if (statuses.size === 1) tips.push('Add more status effects for Elemental Resonance');
+        if (statuses.size >= 2) synergies.push({ text: `Elem Resonance: +${statuses.size * 5}% (${statuses.size} statuses)`, type: statuses.size >= 3 ? '' : 'info' });
       }
 
       skills.forEach(s => {
-        const rune = getSelectedRune(s.name);
+        const rune = getSelectedRune(build, s.name);
         if (rune) {
-          const tierLevel = getRuneTierLevel(s.name, rune.name);
-          if (rune.newElement && tierLevel >= 2) {
-            synergies.push({ text: `${rune.name}: ${s.name} → ${rune.newElement}`, type: 'rune' });
-          } else if (rune.newElement && tierLevel < 2) {
-            tips.push(`Unlock ${rune.name} Purple for ${s.name} → ${rune.newElement}`);
-          }
-          if (rune.addsStatus && tierLevel >= 2) {
-            synergies.push({ text: `${rune.name}: Adds ${rune.addsStatus}`, type: 'rune' });
-          } else if (rune.addsStatus && tierLevel < 2) {
-            tips.push(`Unlock ${rune.name} Purple to add ${rune.addsStatus}`);
-          }
+          const tier = getRuneTierLevel(s.name, rune.name);
+          if (rune.newElement && tier >= 2) synergies.push({ text: `${rune.name}: ${s.name} → ${rune.newElement}`, type: 'rune' });
+          if (rune.addsStatus && tier >= 2) synergies.push({ text: `${rune.name}: +${rune.addsStatus}`, type: 'rune' });
         }
       });
 
       if (build.ultimate?.id === 'doppelganger' && build.basic) {
-        synergies.push({ text: `Doppelganger clones ${build.basic.name}`, type: 'info' });
-        const basicRune = getSelectedRune(build.basic.name);
-        if (basicRune) {
-          const tierLevel = getRuneTierLevel(build.basic.name, basicRune.name);
-          const tierLabels = ['', 'Blue', 'Purple', 'Yellow', 'Orange'];
-          synergies.push({ text: `Clone gets ${basicRune.name} (${tierLabels[tierLevel]}) effects!`, type: 'rune' });
-        }
+        synergies.push({ text: `Doppel clones ${build.basic.name}`, type: 'info' });
+        const rune = getSelectedRune(build, build.basic.name);
+        if (rune) synergies.push({ text: `Clone gets ${rune.name}!`, type: 'rune' });
       }
 
       const hasFlourish = passives.some(p => p.id === 'flourish');
       const hasDemonPact = passives.some(p => p.id === 'demon_pact');
       const hasShield = skills.some(s => s.shield) || passives.some(p => p.id === 'arcane_shield');
 
-      if (hasFlourish && hasShield) synergies.push({ text: 'Flourish + Shield: Stay above 80% HP', type: '' });
-      if (hasFlourish && hasDemonPact) conflicts.push('Demon Pact + Flourish: +30% taken makes 80%+ hard');
-      if (hasDemonPact && !hasShield && !skills.some(s => s.hpRecovery)) conflicts.push('Demon Pact without sustain: risky!');
+      if (hasFlourish && hasShield) synergies.push({ text: 'Flourish + Shield: HP upkeep', type: '' });
+      if (hasFlourish && hasDemonPact) conflicts.push('Demon Pact + Flourish conflict');
+      if (hasDemonPact && !hasShield && !skills.some(s => s.hpRecovery)) conflicts.push('Demon Pact no sustain');
 
-      document.getElementById('synergies-container').innerHTML = synergies.length 
-        ? `<div class="section-label">✨ SYNERGIES</div>${synergies.map(s => `<div class="synergy-item ${s.type}">${s.text}</div>`).join('')}` : '';
-      document.getElementById('conflicts-container').innerHTML = conflicts.length
-        ? `<div class="section-label">⚠️ CONFLICTS</div>${conflicts.map(c => `<div class="conflict-item">${c}</div>`).join('')}` : '';
-      document.getElementById('tips-container').innerHTML = tips.length
-        ? `<div class="section-label">💡 TIPS</div>${tips.map(t => `<div class="tip-item">${t}</div>`).join('')}` : '';
+      return { statuses: Array.from(statuses), elements: Array.from(elements), totalDmg, totalAtk, mult, synergies, conflicts, tips, hasShield };
+    }
+
+    function getRecommendations(build) {
+      const recs = { basic: [], control: [], ultimate: [], passives: [] };
+      if (!build.core) return recs;
+
+      const coreEl = getEffectiveElement(build, build.core);
+      const coreSt = getEffectiveStatuses(build, build.core);
+
+      SKILLS.basic.forEach(s => { if (s.element === coreEl || (s.status && !coreSt.includes(s.status))) recs.basic.push(s.id); });
+      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => { if (s.element === coreEl || s.shield || s.hpRecovery) recs.control.push(s.id); });
+      SKILLS.ultimate.forEach(s => { if (s.id === 'doppelganger' || s.element === coreEl) recs.ultimate.push(s.id); });
+      if (coreSt.length > 0) recs.passives.push('elemental_resonance');
+      recs.passives.push('flourish', 'conjuration');
+
+      return recs;
+    }
+
+    // ============ RENDER BUILDER ============
+    function renderBuilder(build, containerId, analysisId, mode) {
+      const container = document.getElementById(containerId);
+      const recs = getRecommendations(build);
+
+      // Core Section
+      let html = `<div class="core-section"><div class="core-title">🎯 CHOOSE YOUR CORE</div><div class="core-grid">`;
+      SKILLS.core.forEach(skill => {
+        const isSelected = build.core?.id === skill.id;
+        const el = skill.element?.toLowerCase() || 'neutral';
+        const dmg = calcDamage(skill);
+        html += `<div class="core-card ${isSelected ? 'selected-' + el : ''}" onclick="${mode}SelectCore('${skill.id}')">
+          <div class="core-icon">${skill.element === 'Fire' ? '🔥' : skill.element === 'Lightning' ? '⚡' : '❄️'}</div>
+          <div class="core-name ${el}">${skill.name}</div>
+          <div class="core-desc">${skill.desc}</div>
+          <div class="core-damage">${dmg.toLocaleString()}</div>
+        </div>`;
+      });
+      html += `</div>`;
+
+      // Core Runes
+      if (build.core) {
+        const runes = getRunesForSkill(build.core.name);
+        if (runes.length) {
+          html += `<div class="rune-section"><div class="rune-title">RUNE</div><div class="rune-options">`;
+          const selectedRune = build.runes[build.core.name];
+          runes.forEach(r => {
+            const tier = getRuneTierLevel(build.core.name, r.name);
+            const tierLabels = ['', 'B', 'P', 'Y', 'O'];
+            html += `<div class="rune-option ${selectedRune === r.name ? 'selected' : ''}" onclick="${mode}SelectCoreRune('${r.name}')">
+              <div class="rune-option-name">${r.name} <span style="opacity:0.5;font-size:9px;">${tierLabels[tier]}</span></div>
+              <div class="rune-option-effect">${r.keyStats}</div>
+              ${r.newElement && tier >= 2 ? `<div class="rune-element-change ${r.newElement.toLowerCase()}">→ ${r.newElement}</div>` : ''}
+            </div>`;
+          });
+          html += `</div></div>`;
+        }
+      }
+      html += `</div>`;
+
+      // Build Around
+      html += `<div class="build-around"><div class="build-around-title">⬇️ BUILD AROUND IT</div><div class="build-grid">`;
+      html += `<div class="build-column"><div class="column-label">BASIC</div>`;
+      SKILLS.basic.forEach(s => { html += renderSkillCard(build, s, 'basic', recs.basic.includes(s.id), mode); });
+      html += `</div>`;
+
+      html += `<div class="build-column"><div class="column-label">CONTROLS</div>`;
+      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
+        const row = SKILLS.basicControl.find(sk => sk.id === s.id) ? 'basicControl' : 'elemControl';
+        html += renderSkillCard(build, s, row, recs.control.includes(s.id), mode);
+      });
+      html += `</div>`;
+
+      html += `<div class="build-column"><div class="column-label">ULTIMATE</div>`;
+      SKILLS.ultimate.forEach(s => { html += renderSkillCard(build, s, 'ultimate', recs.ultimate.includes(s.id), mode); });
+      html += `</div></div></div>`;
+
+      // Passives
+      html += `<div class="passives-section"><div class="passives-title">PASSIVES (3)</div><div class="passives-grid">`;
+      PASSIVES.forEach(p => {
+        const isSelected = build.passives.some(bp => bp?.id === p.id);
+        const rec = recs.passives.includes(p.id);
+        html += `<div class="passive-card ${isSelected ? (p.downside ? 'selected-danger' : 'selected') : ''} ${rec && !isSelected ? 'recommended' : ''}" onclick="${mode}SelectPassive('${p.id}')">
+          <div class="passive-name">${p.name}</div>
+          <div class="passive-desc">${p.desc}</div>
+        </div>`;
+      });
+      html += `</div></div>`;
+
+      container.innerHTML = html;
+
+      // Analysis
+      renderAnalysis(build, analysisId, mode);
+    }
+
+    function renderSkillCard(build, skill, row, recommended, mode) {
+      const isSelected = build[row]?.id === skill.id;
+      const el = getEffectiveElement(build, skill)?.toLowerCase() || 'neutral';
+      const runes = getRunesForSkill(skill.name);
+      const selectedRune = getSelectedRune(build, skill.name);
+
+      let runeHtml = '';
+      if (isSelected && runes.length) {
+        runeHtml = `<div class="skill-rune-selector"><div class="skill-rune-buttons">`;
+        runes.forEach(r => {
+          const tier = getRuneTierLevel(skill.name, r.name);
+          const labels = ['', 'B', 'P', 'Y', 'O'];
+          runeHtml += `<button class="skill-rune-btn ${selectedRune?.name === r.name ? 'selected' : ''}" onclick="event.stopPropagation(); ${mode}SelectSkillRune('${skill.name}', '${r.name}')">${r.name} ${labels[tier]}</button>`;
+        });
+        runeHtml += `</div></div>`;
+      }
+
+      return `<div class="skill-card ${isSelected ? 'selected-' + el : ''} ${recommended && !isSelected ? 'recommended' : ''}" onclick="${mode}SelectSkill('${row}', '${skill.id}')">
+        <div class="skill-header">
+          <span class="skill-name ${el}">${skill.name}</span>
+          ${skill.element ? `<span class="element-tag ${skill.element.toLowerCase()}">${skill.element}</span>` : ''}
+        </div>
+        <div class="skill-desc">${skill.desc}</div>
+        ${runeHtml}
+      </div>`;
+    }
+
+    function renderAnalysis(build, containerId, mode) {
+      const analysis = analyzeBuild(build);
+      const container = document.getElementById(containerId);
+
+      // Build summary
+      let html = `<div class="analysis-title">BUILD ANALYSIS</div><div class="build-summary">`;
+      [{ l: 'CORE', k: 'core' }, { l: 'BASIC', k: 'basic' }, { l: 'CTRL', k: 'basicControl' }, { l: 'ELEM', k: 'elemControl' }, { l: 'ULT', k: 'ultimate' }].forEach(({ l, k }) => {
+        const skill = build[k];
+        if (skill) {
+          const rune = getSelectedRune(build, skill.name);
+          html += `<div class="build-item"><span class="build-item-label">${l}</span><span class="build-item-skill">${skill.name}</span>${rune ? `<span class="build-item-rune">${rune.name}</span>` : ''}</div>`;
+        }
+      });
+      const passiveNames = build.passives.filter(Boolean).map(p => p.name);
+      if (passiveNames.length) html += `<div class="build-item"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:9px;">${passiveNames.join(', ')}</span></div>`;
+      html += `</div>`;
+
+      // Damage
+      html += `<div class="damage-calc"><div class="damage-calc-title">TOTAL DAMAGE</div><div class="damage-calc-value">${analysis.totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${analysis.mult.toFixed(2)} mult</div>`;
+      
+      // Comparison for theorycraft
+      if (mode === 'theory') {
+        const currentAnalysis = analyzeBuild(currentBuild);
+        const diff = analysis.totalDmg - currentAnalysis.totalDmg;
+        if (diff > 0) html += `<div class="comparison-indicator better">▲ ${diff.toLocaleString()} vs current</div>`;
+        else if (diff < 0) html += `<div class="comparison-indicator worse">▼ ${Math.abs(diff).toLocaleString()} vs current</div>`;
+        else html += `<div class="comparison-indicator same">= same as current</div>`;
+      }
+      html += `</div>`;
+
+      // Status
+      html += `<div class="status-section"><div class="section-label">STATUS EFFECTS</div><div class="status-badges">`;
+      html += analysis.statuses.length ? analysis.statuses.map(s => `<span class="status-badge ${s.toLowerCase()}">${s}</span>`).join('') : '<span class="none-text">None</span>';
+      html += `</div></div>`;
+
+      // Quick stats
+      html += `<div class="quick-stats"><div class="quick-stat"><div class="quick-stat-label">ATK%</div><div class="quick-stat-value">${analysis.totalAtk}%</div></div>`;
+      html += `<div class="quick-stat"><div class="quick-stat-label">ELEMENTS</div><div class="element-dots">`;
+      html += analysis.elements.length ? analysis.elements.map(e => `<span class="element-dot ${e.toLowerCase()}"></span>`).join('') : '<span class="none-text">—</span>';
+      html += `</div></div></div>`;
+
+      // Synergies
+      if (analysis.synergies.length) {
+        html += `<div class="section-label">✨ SYNERGIES</div>`;
+        analysis.synergies.forEach(s => { html += `<div class="synergy-item ${s.type}">${s.text}</div>`; });
+      }
+      if (analysis.conflicts.length) {
+        html += `<div class="section-label">⚠️ CONFLICTS</div>`;
+        analysis.conflicts.forEach(c => { html += `<div class="conflict-item">${c}</div>`; });
+      }
+
+      // Save button for current build
+      if (mode === 'current') {
+        html += `<button class="save-build-btn" onclick="saveCurrentBuild()">💾 SAVE BUILD</button><div class="saved-indicator" id="build-saved">✓ Build Saved!</div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ============ CURRENT BUILD ============
+    function renderCurrentBuild() {
+      renderBuilder(currentBuild, 'current-builder', 'current-analysis', 'current');
+    }
+
+    function currentSelectCore(id) {
+      const skill = SKILLS.core.find(s => s.id === id);
+      currentBuild.core = currentBuild.core?.id === id ? null : skill;
+      if (skill) {
+        const runes = getRunesForSkill(skill.name);
+        if (runes.length && !currentBuild.runes[skill.name]) currentBuild.runes[skill.name] = runes[0].name;
+      }
+      renderCurrentBuild();
+    }
+
+    function currentSelectCoreRune(name) {
+      if (currentBuild.core) currentBuild.runes[currentBuild.core.name] = name;
+      renderCurrentBuild();
+    }
+
+    function currentSelectSkill(row, id) {
+      const skills = row === 'basicControl' || row === 'elemControl' ? [...SKILLS.basicControl, ...SKILLS.elemControl] : SKILLS[row];
+      const skill = skills.find(s => s.id === id);
+      if (row === 'basicControl' || row === 'elemControl') {
+        const actualRow = SKILLS.basicControl.find(s => s.id === id) ? 'basicControl' : 'elemControl';
+        currentBuild[actualRow] = currentBuild[actualRow]?.id === id ? null : skill;
+      } else {
+        currentBuild[row] = currentBuild[row]?.id === id ? null : skill;
+      }
+      if (skill) {
+        const runes = getRunesForSkill(skill.name);
+        if (runes.length && !currentBuild.runes[skill.name]) currentBuild.runes[skill.name] = runes[0].name;
+      }
+      renderCurrentBuild();
+    }
+
+    function currentSelectSkillRune(skill, rune) {
+      currentBuild.runes[skill] = rune;
+      renderCurrentBuild();
+    }
+
+    function currentSelectPassive(id) {
+      const passive = PASSIVES.find(p => p.id === id);
+      const idx = currentBuild.passives.findIndex(p => p?.id === id);
+      if (idx !== -1) currentBuild.passives[idx] = null;
+      else {
+        const empty = currentBuild.passives.findIndex(p => !p);
+        if (empty !== -1) currentBuild.passives[empty] = passive;
+        else currentBuild.passives[2] = passive;
+      }
+      renderCurrentBuild();
+    }
+
+    function saveCurrentBuild() {
+      saveProfile();
+      const el = document.getElementById('build-saved');
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 1500);
+    }
+
+    // ============ THEORYCRAFT ============
+    function renderTheorycraft() {
+      renderCurrentSidebar();
+      renderBuilder(theoryBuild, 'theory-builder', 'theory-analysis', 'theory');
+    }
+
+    function renderCurrentSidebar() {
+      const container = document.getElementById('current-sidebar');
+      const analysis = analyzeBuild(currentBuild);
+
+      let html = `<div class="sidebar-title">📌 CURRENT BUILD</div>`;
+
+      if (!currentBuild.core) {
+        html += `<div class="no-build-msg">No build saved.<br>Set one in MY BUILD tab.</div>`;
+      } else {
+        [{ l: 'CORE', k: 'core' }, { l: 'BASIC', k: 'basic' }, { l: 'CTRL', k: 'basicControl' }, { l: 'ELEM', k: 'elemControl' }, { l: 'ULT', k: 'ultimate' }].forEach(({ l, k }) => {
+          const skill = currentBuild[k];
+          if (skill) {
+            const rune = getSelectedRune(currentBuild, skill.name);
+            html += `<div class="sidebar-build-item"><span class="sidebar-label">${l}</span><span class="sidebar-skill">${skill.name}</span>${rune ? `<span class="sidebar-rune">${rune.name}</span>` : ''}</div>`;
+          }
+        });
+
+        html += `<div class="sidebar-stats">`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Damage</span><span class="sidebar-stat-value">${analysis.totalDmg.toLocaleString()}</span></div>`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">ATK%</span><span class="sidebar-stat-value">${analysis.totalAtk}%</span></div>`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Statuses</span><span class="sidebar-stat-value">${analysis.statuses.length}</span></div>`;
+        html += `</div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function theorySelectCore(id) {
+      const skill = SKILLS.core.find(s => s.id === id);
+      theoryBuild.core = theoryBuild.core?.id === id ? null : skill;
+      if (skill) {
+        const runes = getRunesForSkill(skill.name);
+        if (runes.length && !theoryBuild.runes[skill.name]) theoryBuild.runes[skill.name] = runes[0].name;
+      }
+      renderTheorycraft();
+    }
+
+    function theorySelectCoreRune(name) {
+      if (theoryBuild.core) theoryBuild.runes[theoryBuild.core.name] = name;
+      renderTheorycraft();
+    }
+
+    function theorySelectSkill(row, id) {
+      const skills = row === 'basicControl' || row === 'elemControl' ? [...SKILLS.basicControl, ...SKILLS.elemControl] : SKILLS[row];
+      const skill = skills.find(s => s.id === id);
+      if (row === 'basicControl' || row === 'elemControl') {
+        const actualRow = SKILLS.basicControl.find(s => s.id === id) ? 'basicControl' : 'elemControl';
+        theoryBuild[actualRow] = theoryBuild[actualRow]?.id === id ? null : skill;
+      } else {
+        theoryBuild[row] = theoryBuild[row]?.id === id ? null : skill;
+      }
+      if (skill) {
+        const runes = getRunesForSkill(skill.name);
+        if (runes.length && !theoryBuild.runes[skill.name]) theoryBuild.runes[skill.name] = runes[0].name;
+      }
+      renderTheorycraft();
+    }
+
+    function theorySelectSkillRune(skill, rune) {
+      theoryBuild.runes[skill] = rune;
+      renderTheorycraft();
+    }
+
+    function theorySelectPassive(id) {
+      const passive = PASSIVES.find(p => p.id === id);
+      const idx = theoryBuild.passives.findIndex(p => p?.id === id);
+      if (idx !== -1) theoryBuild.passives[idx] = null;
+      else {
+        const empty = theoryBuild.passives.findIndex(p => !p);
+        if (empty !== -1) theoryBuild.passives[empty] = passive;
+        else theoryBuild.passives[2] = passive;
+      }
+      renderTheorycraft();
     }
 
     // ============ INIT ============
@@ -1667,7 +1229,7 @@
       document.getElementById('sheet-id').value = savedId;
       loadFromSheets();
     } else {
-      renderBuilder();
+      renderCurrentBuild();
     }
   </script>
 </body>
