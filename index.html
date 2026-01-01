@@ -18,7 +18,7 @@
     
     header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     
     h1 {
@@ -39,6 +39,47 @@
       letter-spacing: 4px;
     }
     
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    
+    .tab-btn {
+      padding: 12px 32px;
+      font-family: "Cinzel", serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      background: rgba(30, 30, 40, 0.8);
+      border: 2px solid rgba(100, 100, 120, 0.3);
+      border-radius: 8px;
+      color: rgba(200, 200, 210, 0.7);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .tab-btn:hover {
+      background: rgba(50, 50, 60, 0.8);
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(192, 132, 252, 0.2));
+      border-color: #c084fc;
+      color: #e2e8f0;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Config Panel */
     .config-panel {
       max-width: 800px;
       margin: 0 auto 24px;
@@ -103,11 +144,6 @@
       border-color: #60a5fa;
     }
     
-    textarea.config-input {
-      resize: vertical;
-      min-height: 60px;
-    }
-    
     .config-help {
       font-size: 11px;
       color: rgba(200, 200, 210, 0.4);
@@ -134,26 +170,210 @@
       padding: 8px 12px;
       border-radius: 6px;
       font-size: 12px;
+      display: none;
     }
     
-    .config-status.success {
-      background: rgba(74, 222, 128, 0.1);
+    .config-status.success { background: rgba(74, 222, 128, 0.1); color: #86efac; border: 1px solid rgba(74, 222, 128, 0.3); display: block; }
+    .config-status.error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); display: block; }
+    .config-status.loading { background: rgba(96, 165, 250, 0.1); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.3); display: block; }
+
+    /* Profile Page Styles */
+    .profile-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .profile-section {
+      background: rgba(20, 20, 30, 0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(100, 100, 120, 0.2);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .profile-section-title {
+      font-family: "Cinzel", serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #e2e8f0;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    
+    .stat-input-group {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    
+    .stat-input-label {
+      font-size: 11px;
+      color: rgba(200, 200, 210, 0.5);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    
+    .stat-input {
+      width: 100%;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(100, 100, 120, 0.3);
+      border-radius: 4px;
+      color: #fb923c;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+    }
+    
+    .stat-input:focus {
+      outline: none;
+      border-color: #fb923c;
+    }
+    
+    .rune-skill-section {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(100, 100, 120, 0.2);
+    }
+    
+    .rune-skill-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .rune-skill-name {
+      font-family: "Cinzel", serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .rune-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .rune-card {
+      flex: 1;
+      min-width: 280px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid rgba(100, 100, 120, 0.2);
+    }
+    
+    .rune-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .rune-card-name {
+      font-weight: 600;
+      color: #c084fc;
+      font-size: 13px;
+    }
+    
+    .rune-tiers {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .rune-tier {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+    }
+    
+    .rune-tier input[type="checkbox"] {
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: #c084fc;
+    }
+    
+    .rune-tier-label {
+      flex: 1;
+      color: rgba(200, 200, 210, 0.7);
+      line-height: 1.4;
+    }
+    
+    .rune-tier.locked .rune-tier-label {
+      color: rgba(200, 200, 210, 0.4);
+    }
+    
+    .tier-badge {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    
+    .tier-badge.blue { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+    .tier-badge.purple { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
+    .tier-badge.orange { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
+    
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .profile-btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-size: 13px;
+    }
+    
+    .profile-btn.primary {
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      color: white;
+    }
+    
+    .profile-btn.secondary {
+      background: rgba(100, 100, 120, 0.3);
+      color: #e2e8f0;
+      border: 1px solid rgba(100, 100, 120, 0.3);
+    }
+    
+    .profile-btn:hover {
+      filter: brightness(1.1);
+    }
+    
+    .save-indicator {
+      font-size: 12px;
       color: #86efac;
-      border: 1px solid rgba(74, 222, 128, 0.3);
+      margin-left: auto;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
     
-    .config-status.error {
-      background: rgba(239, 68, 68, 0.1);
-      color: #fca5a5;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+    .save-indicator.show {
+      opacity: 1;
     }
-    
-    .config-status.loading {
-      background: rgba(96, 165, 250, 0.1);
-      color: #93c5fd;
-      border: 1px solid rgba(96, 165, 250, 0.3);
-    }
-    
+
+    /* Stats Bar */
     .stats-bar {
       max-width: 1200px;
       margin: 0 auto 24px;
@@ -185,7 +405,8 @@
       font-weight: 700;
       color: #fb923c;
     }
-    
+
+    /* Builder Styles */
     .main-grid {
       display: grid;
       grid-template-columns: 1fr 350px;
@@ -195,14 +416,10 @@
     }
     
     @media (max-width: 1000px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
+      .main-grid { grid-template-columns: 1fr; }
     }
     
-    .skill-section {
-      margin-bottom: 20px;
-    }
+    .skill-section { margin-bottom: 20px; }
     
     .section-label {
       font-size: 11px;
@@ -231,33 +448,12 @@
       font-family: inherit;
     }
     
-    .skill-card:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
+    .skill-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
     
-    .skill-card.selected-ice {
-      background: rgba(96, 165, 250, 0.15);
-      border-color: #60a5fa;
-      box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
-    }
-    
-    .skill-card.selected-fire {
-      background: rgba(251, 146, 60, 0.15);
-      border-color: #fb923c;
-      box-shadow: 0 0 20px rgba(251, 146, 60, 0.5);
-    }
-    
-    .skill-card.selected-lightning {
-      background: rgba(192, 132, 252, 0.15);
-      border-color: #c084fc;
-      box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
-    }
-    
-    .skill-card.selected-neutral {
-      background: rgba(148, 163, 184, 0.15);
-      border-color: #94a3b8;
-    }
+    .skill-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); }
+    .skill-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 20px rgba(251, 146, 60, 0.5); }
+    .skill-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 20px rgba(192, 132, 252, 0.5); }
+    .skill-card.selected-neutral { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; }
     
     .skill-name {
       font-weight: 600;
@@ -281,55 +477,16 @@
       font-family: "Source Sans Pro", sans-serif;
     }
     
-    .element-tag.ice {
-      background: rgba(96, 165, 250, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(96, 165, 250, 0.4);
-    }
+    .element-tag.ice { background: rgba(96, 165, 250, 0.15); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.4); }
+    .element-tag.fire { background: rgba(251, 146, 60, 0.15); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
+    .element-tag.lightning { background: rgba(192, 132, 252, 0.15); color: #d8b4fe; border: 1px solid rgba(192, 132, 252, 0.4); }
     
-    .element-tag.fire {
-      background: rgba(251, 146, 60, 0.15);
-      color: #fdba74;
-      border: 1px solid rgba(251, 146, 60, 0.4);
-    }
+    .skill-desc { font-size: 11px; color: rgba(200, 200, 210, 0.7); line-height: 1.4; }
+    .skill-damage { font-size: 12px; color: #fb923c; font-weight: 600; margin-top: 4px; }
     
-    .element-tag.lightning {
-      background: rgba(192, 132, 252, 0.15);
-      color: #d8b4fe;
-      border: 1px solid rgba(192, 132, 252, 0.4);
-    }
-    
-    .skill-desc {
-      font-size: 11px;
-      color: rgba(200, 200, 210, 0.7);
-      line-height: 1.4;
-    }
-    
-    .skill-damage {
-      font-size: 12px;
-      color: #fb923c;
-      font-weight: 600;
-      margin-top: 4px;
-    }
-    
-    /* Rune Selection */
-    .rune-selector {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(100, 100, 120, 0.2);
-    }
-    
-    .rune-label {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.5);
-      margin-bottom: 4px;
-      letter-spacing: 1px;
-    }
-    
-    .rune-buttons {
-      display: flex;
-      gap: 4px;
-    }
+    .rune-selector { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
+    .rune-label { font-size: 10px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
+    .rune-buttons { display: flex; gap: 4px; }
     
     .rune-btn {
       flex: 1;
@@ -344,34 +501,12 @@
       font-family: inherit;
     }
     
-    .rune-btn:hover {
-      background: rgba(100, 100, 120, 0.2);
-    }
+    .rune-btn:hover { background: rgba(100, 100, 120, 0.2); }
+    .rune-btn.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #d8b4fe; }
+    .rune-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .rune-btn:disabled:hover { background: rgba(0, 0, 0, 0.3); }
     
-    .rune-btn.selected {
-      background: rgba(192, 132, 252, 0.2);
-      border-color: #c084fc;
-      color: #d8b4fe;
-    }
-    
-    .rune-btn.element-change {
-      position: relative;
-    }
-    
-    .rune-btn.element-change::after {
-      content: '⚡';
-      font-size: 8px;
-      position: absolute;
-      top: 2px;
-      right: 2px;
-    }
-    
-    .rune-effect {
-      font-size: 10px;
-      color: rgba(200, 200, 210, 0.5);
-      margin-top: 4px;
-      font-style: italic;
-    }
+    .rune-effect { font-size: 10px; color: rgba(200, 200, 210, 0.5); margin-top: 4px; font-style: italic; }
     
     .passive-card {
       background: rgba(30, 30, 40, 0.8);
@@ -386,38 +521,14 @@
       font-family: inherit;
     }
     
-    .passive-card:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.1);
-    }
+    .passive-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .passive-card.selected { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
+    .passive-card.selected-danger { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
     
-    .passive-card.selected {
-      background: rgba(74, 222, 128, 0.15);
-      border-color: #4ade80;
-      box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
-    }
-    
-    .passive-card.selected-danger {
-      background: rgba(239, 68, 68, 0.15);
-      border-color: #ef4444;
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-    }
-    
-    .passive-name {
-      font-weight: 600;
-      font-size: 13px;
-      font-family: "Cinzel", serif;
-      margin-bottom: 4px;
-      color: #e2e8f0;
-    }
-    
+    .passive-name { font-weight: 600; font-size: 13px; font-family: "Cinzel", serif; margin-bottom: 4px; color: #e2e8f0; }
     .passive-card.selected .passive-name { color: #86efac; }
     .passive-card.selected-danger .passive-name { color: #fca5a5; }
-    
-    .passive-desc {
-      font-size: 11px;
-      color: rgba(200, 200, 210, 0.7);
-    }
+    .passive-desc { font-size: 11px; color: rgba(200, 200, 210, 0.7); }
     
     .analysis-panel {
       background: rgba(20, 20, 30, 0.9);
@@ -440,15 +551,8 @@
       letter-spacing: 1px;
     }
     
-    .status-section {
-      margin-bottom: 20px;
-    }
-    
-    .status-badges {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .status-section { margin-bottom: 20px; }
+    .status-badges { display: flex; gap: 6px; flex-wrap: wrap; }
     
     .status-badge {
       padding: 4px 8px;
@@ -469,10 +573,7 @@
     .status-badge.stun { background: rgba(250, 204, 21, 0.2); color: #fbbf24; border: 1px solid rgba(250, 204, 21, 0.4); }
     .status-badge.robust { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     
     .quick-stats {
       display: grid;
@@ -484,37 +585,15 @@
       border-radius: 8px;
     }
     
-    .stat-label {
-      font-size: 10px;
-      color: rgba(200,200,210,0.5);
-    }
-    
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fb923c;
-    }
-    
-    .stat-value-small {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    
+    .stat-label { font-size: 10px; color: rgba(200,200,210,0.5); }
+    .stat-value { font-size: 20px; font-weight: 700; color: #fb923c; }
+    .stat-value-small { font-size: 14px; font-weight: 600; }
     .mp-gain { color: #4ade80; }
     .mp-cost { color: #f87171; }
     .mp-divider { color: rgba(200,200,210,0.4); }
     
-    .element-dots {
-      display: flex;
-      gap: 4px;
-    }
-    
-    .element-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-    
+    .element-dots { display: flex; gap: 4px; }
+    .element-dot { width: 12px; height: 12px; border-radius: 50%; }
     .element-dot.ice { background: #60a5fa; }
     .element-dot.fire { background: #fb923c; }
     .element-dot.lightning { background: #c084fc; }
@@ -527,24 +606,9 @@
       margin-bottom: 20px;
     }
     
-    .damage-calc-title {
-      font-size: 11px;
-      color: rgba(200,200,210,0.5);
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    
-    .damage-calc-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: #fb923c;
-    }
-    
-    .damage-calc-breakdown {
-      font-size: 11px;
-      color: rgba(200,200,210,0.6);
-      margin-top: 4px;
-    }
+    .damage-calc-title { font-size: 11px; color: rgba(200,200,210,0.5); margin-bottom: 8px; letter-spacing: 1px; }
+    .damage-calc-value { font-size: 24px; font-weight: 700; color: #fb923c; }
+    .damage-calc-breakdown { font-size: 11px; color: rgba(200,200,210,0.6); margin-top: 4px; }
     
     .build-summary {
       background: rgba(0,0,0,0.2);
@@ -562,28 +626,12 @@
       border-bottom: 1px solid rgba(100,100,120,0.1);
     }
     
-    .build-item:last-child {
-      border-bottom: none;
-    }
+    .build-item:last-child { border-bottom: none; }
+    .build-item-skill { color: #e2e8f0; }
+    .build-item-rune { color: #c084fc; font-size: 11px; }
+    .build-item-element { font-size: 10px; padding: 2px 6px; border-radius: 4px; }
     
-    .build-item-skill {
-      color: #e2e8f0;
-    }
-    
-    .build-item-rune {
-      color: #c084fc;
-      font-size: 11px;
-    }
-    
-    .build-item-element {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    
-    .synergy-section, .conflict-section, .tips-section {
-      margin-bottom: 16px;
-    }
+    .synergy-section, .conflict-section, .tips-section { margin-bottom: 16px; }
     
     .synergy-item {
       padding: 8px 12px;
@@ -595,20 +643,9 @@
       border-left: 3px solid #4ade80;
     }
     
-    .synergy-item.medium {
-      border-left-color: #60a5fa;
-    }
-    
-    .synergy-item.info {
-      border-left-color: #94a3b8;
-      color: #cbd5e1;
-    }
-    
-    .synergy-item.rune {
-      border-left-color: #c084fc;
-      background: rgba(192, 132, 252, 0.08);
-      color: #d8b4fe;
-    }
+    .synergy-item.medium { border-left-color: #60a5fa; }
+    .synergy-item.info { border-left-color: #94a3b8; color: #cbd5e1; }
+    .synergy-item.rune { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.08); color: #d8b4fe; }
     
     .conflict-item {
       padding: 8px 12px;
@@ -630,22 +667,17 @@
       border-left: 3px solid #60a5fa;
     }
     
-    .empty-state {
-      text-align: center;
-      padding: 24px;
-      color: rgba(200,200,210,0.4);
-      font-size: 13px;
-    }
+    .empty-state { text-align: center; padding: 24px; color: rgba(200,200,210,0.4); font-size: 13px; }
+    .none-text { font-size: 12px; color: rgba(200,200,210,0.4); }
+    .loading-state { text-align: center; padding: 48px; color: rgba(200,200,210,0.6); }
     
-    .none-text {
-      font-size: 12px;
-      color: rgba(200,200,210,0.4);
-    }
-    
-    .loading-state {
-      text-align: center;
-      padding: 48px;
-      color: rgba(200,200,210,0.6);
+    /* Skill row labels for profile */
+    .skill-row-label {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(100, 100, 120, 0.2);
+      color: rgba(200, 200, 210, 0.6);
     }
   </style>
 </head>
@@ -655,105 +687,143 @@
     <p class="subtitle">BUILD SYNERGY EXPLORER</p>
   </header>
 
-  <!-- Config Panel -->
-  <div class="config-panel">
-    <div class="config-header" onclick="toggleConfig()">
-      <span class="config-title">⚙️ GOOGLE SHEETS CONNECTION</span>
-      <span class="config-toggle" id="config-toggle">▼ Show</span>
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="builder">BUILDER</button>
+    <button class="tab-btn" data-tab="profile">PROFILE</button>
+    <button class="tab-btn" data-tab="data">DATA</button>
+  </div>
+
+  <!-- BUILDER TAB -->
+  <div class="tab-content active" id="tab-builder">
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-chip">
+        <span class="stat-chip-label">ATK</span>
+        <span class="stat-chip-value" id="display-atk">2,730</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-label">Crit</span>
+        <span class="stat-chip-value" id="display-crit">4.6%</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-label">Crit Dmg</span>
+        <span class="stat-chip-value" id="display-critdmg">122.8%</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-label">Final Dmg↑</span>
+        <span class="stat-chip-value" id="display-finaldmg">45%</span>
+      </div>
     </div>
-    <div class="config-body" id="config-body">
+
+    <div class="main-grid">
+      <div class="skills-column" id="skills-column">
+        <div class="loading-state">Loading skills...</div>
+      </div>
+
+      <div class="analysis-panel">
+        <h2 class="analysis-title">BUILD ANALYSIS</h2>
+        
+        <div class="build-summary" id="build-summary">
+          <div class="section-label" style="margin-bottom: 8px;">CURRENT BUILD</div>
+          <div id="build-list"></div>
+        </div>
+        
+        <div class="damage-calc">
+          <div class="damage-calc-title">ESTIMATED TOTAL DAMAGE</div>
+          <div class="damage-calc-value" id="total-damage">0</div>
+          <div class="damage-calc-breakdown" id="damage-breakdown">Select skills to calculate</div>
+        </div>
+        
+        <div class="status-section">
+          <div class="section-label">STATUS EFFECTS</div>
+          <div class="status-badges" id="status-badges">
+            <span class="none-text">None selected</span>
+          </div>
+        </div>
+
+        <div class="quick-stats">
+          <div>
+            <div class="stat-label">TOTAL ATK%</div>
+            <div class="stat-value" id="total-atk">0%</div>
+          </div>
+          <div>
+            <div class="stat-label">MP ECONOMY</div>
+            <div class="stat-value-small">
+              <span class="mp-gain" id="mp-regen">+0</span>
+              <span class="mp-divider"> / </span>
+              <span class="mp-cost" id="mp-cost">-0</span>
+            </div>
+          </div>
+          <div>
+            <div class="stat-label">DEFENSES</div>
+            <div id="defenses" class="none-text">None</div>
+          </div>
+          <div>
+            <div class="stat-label">ELEMENTS</div>
+            <div class="element-dots" id="elements"></div>
+          </div>
+        </div>
+
+        <div id="synergies-container"></div>
+        <div id="conflicts-container"></div>
+        <div id="tips-container"></div>
+        <div id="empty-state" class="empty-state">Select skills and passives to see synergies</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE TAB -->
+  <div class="tab-content" id="tab-profile">
+    <div class="profile-container">
+      <!-- Character Stats -->
+      <div class="profile-section">
+        <div class="profile-section-title">
+          📊 CHARACTER STATS
+          <span class="save-indicator" id="stats-saved">✓ Saved</span>
+        </div>
+        <div class="stats-grid" id="stats-inputs">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- Rune Unlocks -->
+      <div class="profile-section">
+        <div class="profile-section-title">
+          🔮 RUNE UNLOCKS
+          <span class="save-indicator" id="runes-saved">✓ Saved</span>
+        </div>
+        <p style="font-size: 12px; color: rgba(200,200,210,0.5); margin-bottom: 16px;">
+          Check the boxes for rune tiers you've unlocked. Only unlocked runes will appear in the Builder.
+        </p>
+        <div id="rune-unlocks">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="profile-btn secondary" onclick="resetProfile()">Reset to Defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA TAB -->
+  <div class="tab-content" id="tab-data">
+    <div class="config-panel" style="max-width: 600px;">
+      <div class="config-title" style="margin-bottom: 16px;">📁 GOOGLE SHEETS CONNECTION</div>
       <div class="config-row">
         <div class="config-label">GOOGLE SHEET ID</div>
         <input type="text" class="config-input" id="sheet-id" placeholder="Paste the ID from your Google Sheet URL">
         <div class="config-help">From URL: docs.google.com/spreadsheets/d/<strong>THIS_PART</strong>/edit</div>
       </div>
       <button class="config-button" onclick="loadFromSheets()">Load Data from Google Sheets</button>
-      <div id="config-status"></div>
+      <div class="config-status" id="config-status"></div>
       <div style="margin-top: 16px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
         <div class="config-label" style="margin-bottom: 8px;">REQUIRED TABS</div>
         <div style="font-size: 11px; color: rgba(200,200,210,0.6); line-height: 1.8;">
-          <strong>Skills</strong>, <strong>Passives</strong>, <strong>CharacterStats</strong>, <strong>Runes</strong>
+          <strong>Skills</strong>, <strong>Passives</strong>, <strong>Runes</strong><br>
+          <span style="color: rgba(200,200,210,0.4);">(CharacterStats now managed in Profile tab)</span>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Character Stats Bar -->
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat-chip">
-      <span class="stat-chip-label">ATK</span>
-      <span class="stat-chip-value" id="display-atk">2,730</span>
-    </div>
-    <div class="stat-chip">
-      <span class="stat-chip-label">Crit</span>
-      <span class="stat-chip-value" id="display-crit">4.6%</span>
-    </div>
-    <div class="stat-chip">
-      <span class="stat-chip-label">Crit Dmg</span>
-      <span class="stat-chip-value" id="display-critdmg">122.8%</span>
-    </div>
-    <div class="stat-chip">
-      <span class="stat-chip-label">Final Dmg↑</span>
-      <span class="stat-chip-value" id="display-finaldmg">45%</span>
-    </div>
-  </div>
-
-  <div class="main-grid">
-    <div class="skills-column" id="skills-column">
-      <div class="loading-state">Loading skills...</div>
-    </div>
-
-    <!-- Analysis Panel -->
-    <div class="analysis-panel">
-      <h2 class="analysis-title">BUILD ANALYSIS</h2>
-      
-      <!-- Build Summary -->
-      <div class="build-summary" id="build-summary">
-        <div class="section-label" style="margin-bottom: 8px;">CURRENT BUILD</div>
-        <div id="build-list"></div>
-      </div>
-      
-      <!-- Damage Calculator -->
-      <div class="damage-calc">
-        <div class="damage-calc-title">ESTIMATED TOTAL DAMAGE</div>
-        <div class="damage-calc-value" id="total-damage">0</div>
-        <div class="damage-calc-breakdown" id="damage-breakdown">Select skills to calculate</div>
-      </div>
-      
-      <div class="status-section">
-        <div class="section-label">STATUS EFFECTS</div>
-        <div class="status-badges" id="status-badges">
-          <span class="none-text">None selected</span>
-        </div>
-      </div>
-
-      <div class="quick-stats">
-        <div>
-          <div class="stat-label">TOTAL ATK%</div>
-          <div class="stat-value" id="total-atk">0%</div>
-        </div>
-        <div>
-          <div class="stat-label">MP ECONOMY</div>
-          <div class="stat-value-small">
-            <span class="mp-gain" id="mp-regen">+0</span>
-            <span class="mp-divider"> / </span>
-            <span class="mp-cost" id="mp-cost">-0</span>
-          </div>
-        </div>
-        <div>
-          <div class="stat-label">DEFENSES</div>
-          <div id="defenses" class="none-text">None</div>
-        </div>
-        <div>
-          <div class="stat-label">ELEMENTS</div>
-          <div class="element-dots" id="elements"></div>
-        </div>
-      </div>
-
-      <div id="synergies-container"></div>
-      <div id="conflicts-container"></div>
-      <div id="tips-container"></div>
-      <div id="empty-state" class="empty-state">Select skills and passives to see synergies</div>
     </div>
   </div>
 
@@ -801,37 +871,225 @@
 
     let RUNES = [];
 
-    let CHARACTER_STATS = {
-      atk: 2730,
-      crit: 4.6,
-      critDmg: 122.8,
-      finalDmgUp: 45,
+    // Profile data - saved to localStorage
+    let PROFILE = {
+      stats: {
+        atk: 2730,
+        crit: 4.6,
+        critDmg: 122.8,
+        finalDmgUp: 45,
+        haste: 0,
+        eleDmg: 0,
+        dot: 0,
+        hoh: 0,
+      },
+      runeUnlocks: {} // Format: { "Frost Projectile|Ice Armor": { blue: true, purple: true, orange1: false, orange2: false } }
     };
 
-    // ============ STATE ============
+    const STAT_CONFIG = [
+      { key: 'atk', label: 'ATK', default: 2730 },
+      { key: 'crit', label: 'Crit %', default: 4.6 },
+      { key: 'critDmg', label: 'Crit Dmg %', default: 122.8 },
+      { key: 'finalDmgUp', label: 'Final Dmg↑ %', default: 45 },
+      { key: 'haste', label: 'Haste %', default: 0 },
+      { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
+      { key: 'dot', label: 'DoT %', default: 0 },
+      { key: 'hoh', label: 'Heal on Hit %', default: 0 },
+    ];
+
+    // Build state
     const build = {
       basic: null,
       core: null,
       basicControl: null,
       elemControl: null,
       ultimate: null,
-      runes: {}, // skill.id -> rune name
+      runes: {},
       passives: [null, null, null],
     };
 
-    // ============ CONFIG ============
-    function toggleConfig() {
-      const body = document.getElementById('config-body');
-      const toggle = document.getElementById('config-toggle');
-      body.classList.toggle('open');
-      toggle.textContent = body.classList.contains('open') ? '▲ Hide' : '▼ Show';
+    // ============ TABS ============
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        
+        if (btn.dataset.tab === 'profile') renderProfile();
+        if (btn.dataset.tab === 'builder') renderAll();
+      });
+    });
+
+    // ============ PROFILE ============
+    function loadProfile() {
+      const saved = localStorage.getItem('lootfiend-profile');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          PROFILE = { ...PROFILE, ...parsed };
+        } catch (e) {}
+      }
     }
 
+    function saveProfile() {
+      localStorage.setItem('lootfiend-profile', JSON.stringify(PROFILE));
+    }
+
+    function showSaveIndicator(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 1500);
+      }
+    }
+
+    function renderProfile() {
+      // Stats inputs
+      const statsContainer = document.getElementById('stats-inputs');
+      statsContainer.innerHTML = STAT_CONFIG.map(stat => `
+        <div class="stat-input-group">
+          <div class="stat-input-label">${stat.label}</div>
+          <input type="number" class="stat-input" id="stat-${stat.key}" 
+                 value="${PROFILE.stats[stat.key]}" 
+                 onchange="updateStat('${stat.key}', this.value)">
+        </div>
+      `).join('');
+
+      // Rune unlocks
+      renderRuneUnlocks();
+    }
+
+    function renderRuneUnlocks() {
+      const container = document.getElementById('rune-unlocks');
+      
+      // Group runes by skill
+      const skillRunes = {};
+      RUNES.forEach(rune => {
+        if (!skillRunes[rune.skill]) skillRunes[rune.skill] = [];
+        skillRunes[rune.skill].push(rune);
+      });
+
+      // Get skill row info
+      const skillRows = {};
+      Object.entries(SKILLS).forEach(([row, skills]) => {
+        skills.forEach(s => skillRows[s.name] = row);
+      });
+
+      const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Control', elemControl: 'Elem Ctrl', ultimate: 'Ultimate' };
+
+      let html = '';
+      Object.entries(skillRunes).forEach(([skillName, runes]) => {
+        const row = skillRows[skillName];
+        html += `
+          <div class="rune-skill-section">
+            <div class="rune-skill-name">
+              ${skillName}
+              <span class="skill-row-label">${rowLabels[row] || ''}</span>
+            </div>
+            <div class="rune-row">
+              ${runes.map(rune => renderRuneCard(skillName, rune)).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html || '<div class="none-text">Load data from Google Sheets first (Data tab)</div>';
+    }
+
+    function renderRuneCard(skillName, rune) {
+      const key = `${skillName}|${rune.name}`;
+      const unlocks = PROFILE.runeUnlocks[key] || { blue: true, purple: false, orange1: false, orange2: false };
+
+      if (rune.blueEffect === 'Locked') {
+        return `
+          <div class="rune-card" style="opacity: 0.5;">
+            <div class="rune-card-header">
+              <span class="rune-card-name">${rune.name}</span>
+              <span style="font-size: 10px; color: rgba(200,200,210,0.4);">LOCKED</span>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="rune-card">
+          <div class="rune-card-header">
+            <span class="rune-card-name">${rune.name}</span>
+            ${rune.newElement ? `<span class="element-tag ${rune.newElement.toLowerCase()}">${rune.newElement}</span>` : ''}
+          </div>
+          <div class="rune-tiers">
+            <div class="rune-tier">
+              <input type="checkbox" ${unlocks.blue ? 'checked' : ''} onchange="updateRuneUnlock('${key}', 'blue', this.checked)">
+              <span class="tier-badge blue">BLUE</span>
+              <span class="rune-tier-label">${rune.blueEffect}</span>
+            </div>
+            <div class="rune-tier ${!unlocks.purple ? 'locked' : ''}">
+              <input type="checkbox" ${unlocks.purple ? 'checked' : ''} onchange="updateRuneUnlock('${key}', 'purple', this.checked)">
+              <span class="tier-badge purple">PURP</span>
+              <span class="rune-tier-label">${rune.purpleEffect}</span>
+            </div>
+            <div class="rune-tier ${!unlocks.orange1 ? 'locked' : ''}">
+              <input type="checkbox" ${unlocks.orange1 ? 'checked' : ''} onchange="updateRuneUnlock('${key}', 'orange1', this.checked)">
+              <span class="tier-badge orange">ORG1</span>
+              <span class="rune-tier-label">${rune.orange1Effect}</span>
+            </div>
+            <div class="rune-tier ${!unlocks.orange2 ? 'locked' : ''}">
+              <input type="checkbox" ${unlocks.orange2 ? 'checked' : ''} onchange="updateRuneUnlock('${key}', 'orange2', this.checked)">
+              <span class="tier-badge orange">ORG2</span>
+              <span class="rune-tier-label">${rune.orange2Effect}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateStat(key, value) {
+      PROFILE.stats[key] = parseFloat(value) || 0;
+      saveProfile();
+      showSaveIndicator('stats-saved');
+      updateStatsDisplay();
+    }
+
+    function updateRuneUnlock(key, tier, checked) {
+      if (!PROFILE.runeUnlocks[key]) {
+        PROFILE.runeUnlocks[key] = { blue: true, purple: false, orange1: false, orange2: false };
+      }
+      PROFILE.runeUnlocks[key][tier] = checked;
+      saveProfile();
+      showSaveIndicator('runes-saved');
+    }
+
+    function resetProfile() {
+      if (confirm('Reset all stats and rune unlocks to defaults?')) {
+        PROFILE = {
+          stats: {},
+          runeUnlocks: {}
+        };
+        STAT_CONFIG.forEach(s => PROFILE.stats[s.key] = s.default);
+        saveProfile();
+        renderProfile();
+        updateStatsDisplay();
+      }
+    }
+
+    function isRuneUnlocked(skillName, runeName) {
+      const key = `${skillName}|${runeName}`;
+      const unlocks = PROFILE.runeUnlocks[key];
+      // A rune is "unlocked" if at least blue tier is checked
+      return unlocks ? unlocks.blue : true; // Default to true if not set
+    }
+
+    function getUnlockedTiers(skillName, runeName) {
+      const key = `${skillName}|${runeName}`;
+      return PROFILE.runeUnlocks[key] || { blue: true, purple: false, orange1: false, orange2: false };
+    }
+
+    // ============ DATA LOADING ============
     function showStatus(message, type) {
       const status = document.getElementById('config-status');
       status.className = 'config-status ' + type;
       status.textContent = message;
-      status.style.display = 'block';
     }
 
     async function loadFromSheets() {
@@ -848,31 +1106,22 @@
         const skillsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Skills`;
         const skillsResponse = await fetch(skillsUrl);
         if (!skillsResponse.ok) throw new Error('Could not fetch Skills sheet');
-        const skillsText = await skillsResponse.text();
-        parseSkillsCSV(skillsText);
+        parseSkillsCSV(await skillsResponse.text());
 
         const passivesUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Passives`;
         const passivesResponse = await fetch(passivesUrl);
         if (!passivesResponse.ok) throw new Error('Could not fetch Passives sheet');
-        const passivesText = await passivesResponse.text();
-        parsePassivesCSV(passivesText);
+        parsePassivesCSV(await passivesResponse.text());
 
-        const statsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`;
-        const statsResponse = await fetch(statsUrl);
-        if (!statsResponse.ok) throw new Error('Could not fetch CharacterStats sheet');
-        const statsText = await statsResponse.text();
-        parseStatsCSV(statsText);
-
-        // Load Runes
         const runesUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Runes`;
         const runesResponse = await fetch(runesUrl);
         if (runesResponse.ok) {
-          const runesText = await runesResponse.text();
-          parseRunesCSV(runesText);
+          parseRunesCSV(await runesResponse.text());
         }
 
         showStatus('✓ Data loaded successfully!', 'success');
         renderAll();
+        renderProfile();
       } catch (error) {
         showStatus('Error: ' + error.message, 'error');
       }
@@ -886,9 +1135,7 @@
         if (lines[i].trim()) {
           const values = parseCSVLine(lines[i]);
           const row = {};
-          headers.forEach((h, idx) => {
-            row[h.trim()] = values[idx] ? values[idx].trim() : '';
-          });
+          headers.forEach((h, idx) => row[h.trim()] = values[idx] ? values[idx].trim() : '');
           data.push(row);
         }
       }
@@ -901,14 +1148,9 @@
       let inQuotes = false;
       for (let i = 0; i < line.length; i++) {
         const char = line[i];
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          result.push(current);
-          current = '';
-        } else {
-          current += char;
-        }
+        if (char === '"') inQuotes = !inQuotes;
+        else if (char === ',' && !inQuotes) { result.push(current); current = ''; }
+        else current += char;
       }
       result.push(current);
       return result;
@@ -950,16 +1192,6 @@
       }));
     }
 
-    function parseStatsCSV(text) {
-      const data = parseCSV(text);
-      const statsMap = { 'ATK': 'atk', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Final Dmg Up': 'finalDmgUp' };
-      data.forEach(row => {
-        const key = statsMap[row['Stat']];
-        if (key) CHARACTER_STATS[key] = parseFloat(row['Value']) || 0;
-      });
-      updateStatsDisplay();
-    }
-
     function parseRunesCSV(text) {
       const data = parseCSV(text);
       RUNES = data.map(row => ({
@@ -976,15 +1208,15 @@
     }
 
     function updateStatsDisplay() {
-      document.getElementById('display-atk').textContent = CHARACTER_STATS.atk.toLocaleString();
-      document.getElementById('display-crit').textContent = CHARACTER_STATS.crit + '%';
-      document.getElementById('display-critdmg').textContent = CHARACTER_STATS.critDmg + '%';
-      document.getElementById('display-finaldmg').textContent = CHARACTER_STATS.finalDmgUp + '%';
+      document.getElementById('display-atk').textContent = PROFILE.stats.atk.toLocaleString();
+      document.getElementById('display-crit').textContent = PROFILE.stats.crit + '%';
+      document.getElementById('display-critdmg').textContent = PROFILE.stats.critDmg + '%';
+      document.getElementById('display-finaldmg').textContent = PROFILE.stats.finalDmgUp + '%';
     }
 
-    // ============ HELPERS ============
+    // ============ BUILDER HELPERS ============
     function getRunesForSkill(skillName) {
-      return RUNES.filter(r => r.skill === skillName && r.blueEffect !== 'Locked');
+      return RUNES.filter(r => r.skill === skillName && r.blueEffect !== 'Locked' && isRuneUnlocked(skillName, r.name));
     }
 
     function getSelectedRune(skillName) {
@@ -1021,12 +1253,12 @@
 
     function calculateSkillDamage(skill) {
       if (!skill || !skill.atk) return 0;
-      const baseDmg = CHARACTER_STATS.atk * (skill.atk / 100);
-      const withFinal = baseDmg * (1 + CHARACTER_STATS.finalDmgUp / 100);
+      const baseDmg = PROFILE.stats.atk * (skill.atk / 100);
+      const withFinal = baseDmg * (1 + PROFILE.stats.finalDmgUp / 100);
       return Math.round(withFinal);
     }
 
-    // ============ RENDER ============
+    // ============ RENDER BUILDER ============
     function renderSkillCard(skill, row) {
       const isSelected = build[row]?.id === skill.id;
       const effectiveElement = isSelected ? getEffectiveElement(skill) : skill.element;
@@ -1045,7 +1277,7 @@
             <div class="rune-label">RUNE</div>
             <div class="rune-buttons">
               ${runes.map(r => `
-                <button class="rune-btn ${selectedRune?.name === r.name ? 'selected' : ''} ${r.newElement ? 'element-change' : ''}" 
+                <button class="rune-btn ${selectedRune?.name === r.name ? 'selected' : ''}" 
                         data-skill="${skill.name}" data-rune="${r.name}">
                   ${r.name}
                 </button>
@@ -1054,6 +1286,8 @@
             ${selectedRune ? `<div class="rune-effect">${selectedRune.keyStats}</div>` : ''}
           </div>
         `;
+      } else if (isSelected && runes.length === 0 && RUNES.some(r => r.skill === skill.name)) {
+        runeHtml = `<div class="rune-selector"><div class="rune-effect" style="color: rgba(200,200,210,0.4);">No runes unlocked - check Profile tab</div></div>`;
       }
       
       card.innerHTML = `
@@ -1068,11 +1302,9 @@
         ${runeHtml}
       `;
       
-      // Skill selection click
       card.querySelector('.skill-header').onclick = () => {
         build[row] = isSelected ? null : skill;
         if (!isSelected) {
-          // Auto-select first rune if available
           const skillRunes = getRunesForSkill(skill.name);
           if (skillRunes.length > 0 && !build.runes[skill.name]) {
             build.runes[skill.name] = skillRunes[0].name;
@@ -1081,7 +1313,6 @@
         renderAll();
       };
       
-      // Rune button clicks
       card.querySelectorAll('.rune-btn').forEach(btn => {
         btn.onclick = (e) => {
           e.stopPropagation();
@@ -1109,11 +1340,8 @@
           build.passives[existingIndex] = null;
         } else {
           const emptySlot = build.passives.findIndex(p => p === null);
-          if (emptySlot !== -1) {
-            build.passives[emptySlot] = passive;
-          } else {
-            build.passives[2] = passive;
-          }
+          if (emptySlot !== -1) build.passives[emptySlot] = passive;
+          else build.passives[2] = passive;
         }
         renderAll();
       };
@@ -1124,20 +1352,11 @@
       const selectedSkills = [build.basic, build.core, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const selectedPassives = build.passives.filter(Boolean);
 
-      // Gather statuses (including from runes)
       const statuses = new Set();
-      let maxBurningStacks = 0;
-      let maxShockStacks = 0;
-      
       selectedSkills.forEach(skill => {
-        getEffectiveStatuses(skill).forEach(s => {
-          statuses.add(s);
-          if (s === 'Burning') maxBurningStacks += skill.stacks || 1;
-          if (s === 'Shock') maxShockStacks += skill.stacks || 1;
-        });
+        getEffectiveStatuses(skill).forEach(s => statuses.add(s));
       });
 
-      // Gather elements (including rune changes)
       const elements = new Set();
       selectedSkills.forEach(skill => {
         const el = getEffectiveElement(skill);
@@ -1155,16 +1374,12 @@
       // Elemental Resonance
       const hasElemRes = selectedPassives.some(p => p.id === 'elemental_resonance');
       if (hasElemRes) {
-        if (statuses.size >= 3) {
-          synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (${statuses.size} statuses!)`, strength: 'strong' });
-        } else if (statuses.size >= 2) {
-          synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (${statuses.size} statuses)`, strength: 'medium' });
-        } else if (statuses.size === 1) {
-          tips.push(`Add more status effects for Elemental Resonance (+5% per status)`);
-        }
+        if (statuses.size >= 3) synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (${statuses.size} statuses!)`, strength: 'strong' });
+        else if (statuses.size >= 2) synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (${statuses.size} statuses)`, strength: 'medium' });
+        else if (statuses.size === 1) tips.push(`Add more status effects for Elemental Resonance (+5% per status)`);
       }
 
-      // Check for rune-based element changes
+      // Rune effects
       selectedSkills.forEach(skill => {
         const rune = getSelectedRune(skill.name);
         if (rune && rune.newElement) {
@@ -1180,11 +1395,13 @@
       if (hasFlourish) {
         if (hasShield) synergies.push({ text: 'Flourish + Shield: Easier to maintain HP > 80%', strength: 'strong' });
         if (hasFlash) synergies.push({ text: 'Flourish + Flash: Dodge helps maintain high HP', strength: 'medium' });
-        
-        // Check for Ice Armor rune
         const frostProjRune = getSelectedRune('Frost Projectile');
         if (frostProjRune?.name === 'Ice Armor') {
           synergies.push({ text: 'Flourish + Ice Armor: Final Dmg↓ stacking helps stay above 80%', strength: 'strong' });
+        }
+        const flashRune = getSelectedRune('Flash');
+        if (flashRune?.name === 'Stunt') {
+          synergies.push({ text: 'Flourish + Stunt: Decoy + dodge = safe HP', strength: 'strong' });
         }
       }
 
@@ -1202,59 +1419,31 @@
       const hasSoulHunt = selectedPassives.some(p => p.id === 'soul_hunt');
       if (hasSoulHunt) {
         const wideAreaSkills = selectedSkills.filter(s => s.area === 'Large' || s.area === 'Area');
-        if (wideAreaSkills.length >= 2) {
-          synergies.push({ text: 'Soul Hunt + AoE skills: Great for add clear sustain', strength: 'strong' });
-        }
+        if (wideAreaSkills.length >= 2) synergies.push({ text: 'Soul Hunt + AoE skills: Great for add clear sustain', strength: 'strong' });
       }
 
-      // Vulnerable stacking
-      if (statuses.has('Vulnerable')) {
-        tips.push('Vulnerable increases damage taken by enemies - great for burst!');
-      }
-
-      // Electrocution + Crit
-      if (statuses.has('Electrocution') || statuses.has('Shock')) {
-        const shockCount = (statuses.has('Shock') ? 1 : 0) + (statuses.has('Electrocution') ? 1 : 0);
-        if (CHARACTER_STATS.crit > 10) {
-          synergies.push({ text: `Shock/Electrocution + ${CHARACTER_STATS.crit}% Crit: Reduced enemy Crit Res`, strength: 'medium' });
-        } else {
-          tips.push('Shock reduces enemy Crit Res - consider building more Crit!');
-        }
-      }
-
-      // Imprison/Freeze combos
-      if (statuses.has('Imprison') || statuses.has('Freeze')) {
-        synergies.push({ text: 'Hard CC (Imprison/Freeze): Enables safe damage windows', strength: 'medium' });
-      }
-
-      // Doppelganger + Basic skill rune
+      // Doppelganger
       const hasDoppel = selectedSkills.some(s => s.id === 'doppelganger');
       if (hasDoppel && build.basic) {
         const basicRune = getSelectedRune(build.basic.name);
         synergies.push({ text: `Doppelganger clones your ${build.basic.name}`, strength: 'info' });
-        if (basicRune) {
-          synergies.push({ text: `Clone inherits ${basicRune.name} rune effects!`, strength: 'rune' });
-        }
+        if (basicRune) synergies.push({ text: `Clone inherits ${basicRune.name} rune effects!`, strength: 'rune' });
       }
 
-      // Conjuration + high CD
+      // Conjuration
       const hasConjuration = selectedPassives.some(p => p.id === 'conjuration');
       if (hasConjuration) {
         const highCdSkills = selectedSkills.filter(s => s.cd >= 20);
-        if (highCdSkills.length >= 1) {
-          synergies.push({ text: `Conjuration: -10% CD on ${highCdSkills.map(s => s.name).join(', ')}`, strength: 'medium' });
-        }
+        if (highCdSkills.length >= 1) synergies.push({ text: `Conjuration: -10% CD on ${highCdSkills.map(s => s.name).join(', ')}`, strength: 'medium' });
       }
 
-      // Calculate totals
+      // Totals
       const totalAtk = selectedSkills.reduce((sum, s) => sum + (s.atk || 0), 0);
       const mpRegen = build.basic ? 10 : 0;
       const mpCost = build.core?.mpCost || 0;
 
       let totalDamage = 0;
-      selectedSkills.forEach(skill => {
-        totalDamage += calculateSkillDamage(skill);
-      });
+      selectedSkills.forEach(skill => totalDamage += calculateSkillDamage(skill));
 
       let damageMultiplier = 1;
       if (hasFlourish) damageMultiplier += 0.15;
@@ -1263,31 +1452,15 @@
 
       totalDamage = Math.round(totalDamage * damageMultiplier);
 
-      return {
-        statuses: Array.from(statuses),
-        elements: Array.from(elements),
-        maxBurningStacks,
-        maxShockStacks,
-        synergies,
-        antiSynergies,
-        tips,
-        totalAtk,
-        mpRegen,
-        mpCost,
-        hasShield,
-        hasHpRecovery,
-        totalDamage,
-        damageMultiplier,
-      };
+      return { statuses: Array.from(statuses), elements: Array.from(elements), synergies, antiSynergies, tips, totalAtk, mpRegen, mpCost, hasShield, hasHpRecovery, totalDamage, damageMultiplier };
     }
 
     function renderBuildSummary() {
       const list = document.getElementById('build-list');
       const rows = ['basic', 'core', 'basicControl', 'elemControl', 'ultimate'];
-      const labels = ['Basic', 'Core', 'Control', 'Elem Ctrl', 'Ultimate'];
       
       let html = '';
-      rows.forEach((row, i) => {
+      rows.forEach(row => {
         const skill = build[row];
         if (skill) {
           const rune = getSelectedRune(skill.name);
@@ -1316,91 +1489,44 @@
 
     function renderAnalysis() {
       const analysis = analyze();
-
       renderBuildSummary();
 
-      // Total damage
       document.getElementById('total-damage').textContent = analysis.totalDamage.toLocaleString();
-      document.getElementById('damage-breakdown').textContent = 
-        analysis.totalDamage > 0 
-          ? `×${analysis.damageMultiplier.toFixed(2)} multiplier from passives`
-          : 'Select skills to calculate';
+      document.getElementById('damage-breakdown').textContent = analysis.totalDamage > 0 ? `×${analysis.damageMultiplier.toFixed(2)} multiplier from passives` : 'Select skills to calculate';
 
-      // Status badges
       const statusBadges = document.getElementById('status-badges');
-      if (analysis.statuses.length > 0) {
-        statusBadges.innerHTML = analysis.statuses.map(status => {
-          const statusClass = status.toLowerCase().replace(/\s+/g, '');
-          return `<span class="status-badge ${statusClass}">${status}</span>`;
-        }).join('');
-      } else {
-        statusBadges.innerHTML = '<span class="none-text">None selected</span>';
-      }
+      statusBadges.innerHTML = analysis.statuses.length > 0 
+        ? analysis.statuses.map(s => `<span class="status-badge ${s.toLowerCase().replace(/\s+/g, '')}">${s}</span>`).join('')
+        : '<span class="none-text">None selected</span>';
 
-      // Quick stats
       document.getElementById('total-atk').textContent = analysis.totalAtk + '%';
       document.getElementById('mp-regen').textContent = '+' + analysis.mpRegen;
       document.getElementById('mp-cost').textContent = '-' + analysis.mpCost;
 
-      // Defenses
       const defenses = document.getElementById('defenses');
       const defenseIcons = [];
       if (analysis.hasShield) defenseIcons.push('🛡️');
       if (analysis.hasHpRecovery) defenseIcons.push('💚');
       defenses.innerHTML = defenseIcons.length > 0 ? defenseIcons.join(' ') : 'None';
 
-      // Elements
       const elements = document.getElementById('elements');
-      if (analysis.elements.length > 0) {
-        elements.innerHTML = analysis.elements.map(el => 
-          `<span class="element-dot ${el.toLowerCase()}"></span>`
-        ).join('');
-      } else {
-        elements.innerHTML = '<span class="none-text">—</span>';
-      }
+      elements.innerHTML = analysis.elements.length > 0 
+        ? analysis.elements.map(el => `<span class="element-dot ${el.toLowerCase()}"></span>`).join('')
+        : '<span class="none-text">—</span>';
 
-      // Synergies
-      const synergiesContainer = document.getElementById('synergies-container');
-      if (analysis.synergies.length > 0) {
-        synergiesContainer.innerHTML = `
-          <div class="synergy-section">
-            <div class="section-label">✨ SYNERGIES</div>
-            ${analysis.synergies.map(s => `<div class="synergy-item ${s.strength}">${s.text}</div>`).join('')}
-          </div>
-        `;
-      } else {
-        synergiesContainer.innerHTML = '';
-      }
+      document.getElementById('synergies-container').innerHTML = analysis.synergies.length > 0 
+        ? `<div class="synergy-section"><div class="section-label">✨ SYNERGIES</div>${analysis.synergies.map(s => `<div class="synergy-item ${s.strength}">${s.text}</div>`).join('')}</div>` 
+        : '';
 
-      // Conflicts
-      const conflictsContainer = document.getElementById('conflicts-container');
-      if (analysis.antiSynergies.length > 0) {
-        conflictsContainer.innerHTML = `
-          <div class="conflict-section">
-            <div class="section-label">⚠️ CONFLICTS</div>
-            ${analysis.antiSynergies.map(c => `<div class="conflict-item">${c}</div>`).join('')}
-          </div>
-        `;
-      } else {
-        conflictsContainer.innerHTML = '';
-      }
+      document.getElementById('conflicts-container').innerHTML = analysis.antiSynergies.length > 0 
+        ? `<div class="conflict-section"><div class="section-label">⚠️ CONFLICTS</div>${analysis.antiSynergies.map(c => `<div class="conflict-item">${c}</div>`).join('')}</div>` 
+        : '';
 
-      // Tips
-      const tipsContainer = document.getElementById('tips-container');
-      if (analysis.tips.length > 0) {
-        tipsContainer.innerHTML = `
-          <div class="tips-section">
-            <div class="section-label">💡 TIPS</div>
-            ${analysis.tips.map(t => `<div class="tip-item">${t}</div>`).join('')}
-          </div>
-        `;
-      } else {
-        tipsContainer.innerHTML = '';
-      }
+      document.getElementById('tips-container').innerHTML = analysis.tips.length > 0 
+        ? `<div class="tips-section"><div class="section-label">💡 TIPS</div>${analysis.tips.map(t => `<div class="tip-item">${t}</div>`).join('')}</div>` 
+        : '';
 
-      // Empty state
-      document.getElementById('empty-state').style.display = 
-        (analysis.synergies.length > 0 || analysis.antiSynergies.length > 0 || analysis.tips.length > 0) ? 'none' : 'block';
+      document.getElementById('empty-state').style.display = (analysis.synergies.length > 0 || analysis.antiSynergies.length > 0 || analysis.tips.length > 0) ? 'none' : 'block';
     }
 
     function renderSkillsColumn() {
@@ -1419,30 +1545,19 @@
         const section = document.createElement('div');
         section.className = 'skill-section';
         section.innerHTML = `<div class="section-label">${label}</div>`;
-        
         const grid = document.createElement('div');
         grid.className = 'skill-grid';
-        
-        SKILLS[key].forEach(skill => {
-          grid.appendChild(renderSkillCard(skill, key));
-        });
-        
+        SKILLS[key].forEach(skill => grid.appendChild(renderSkillCard(skill, key)));
         section.appendChild(grid);
         column.appendChild(section);
       });
 
-      // Passives
       const passiveSection = document.createElement('div');
       passiveSection.className = 'skill-section';
       passiveSection.innerHTML = `<div class="section-label">PASSIVES (SELECT 3)</div>`;
-      
       const passiveGrid = document.createElement('div');
       passiveGrid.className = 'skill-grid';
-      
-      PASSIVES.forEach(passive => {
-        passiveGrid.appendChild(renderPassiveCard(passive));
-      });
-      
+      PASSIVES.forEach(passive => passiveGrid.appendChild(renderPassiveCard(passive)));
       passiveSection.appendChild(passiveGrid);
       column.appendChild(passiveSection);
     }
@@ -1454,6 +1569,9 @@
     }
 
     // ============ INIT ============
+    loadProfile();
+    updateStatsDisplay();
+    
     const savedSheetId = localStorage.getItem('lootfiend-sheet-id');
     if (savedSheetId) {
       document.getElementById('sheet-id').value = savedSheetId;
