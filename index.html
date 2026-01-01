@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lootfiend Build Synergy Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #e2e8f0;
+      font-family: "Source Sans Pro", system-ui, sans-serif;
+      padding: 24px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    h1 {
+      font-family: "Cinzel", serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #60a5fa, #c084fc, #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+    
+    .subtitle {
+      color: rgba(200, 200, 210, 0.6);
+      font-size: 14px;
+      letter-spacing: 4px;
+    }
+    
+    /* Config Panel */
+    .config-panel {
+      max-width: 800px;
+      margin: 0 auto 24px;
+      background: rgba(20, 20, 30, 0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(100, 100, 120, 0.2);
+      padding: 16px 20px;
+    }
+    
+    .config-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .config-title {
+      font-family: "Cinzel", serif;
+      font-size: 14px;
+      color: rgba(200, 200, 210, 0.7);
+      letter-spacing: 1px;
+    }
+    
+    .config-toggle {
+      font-size: 12px;
+      color: #60a5fa;
+    }
+    
+    .config-body {
+      display: none;
+      margin-top: 16px;
+    }
+    
+    .config-body.open {
+      display: block;
+    }
+    
+    .config-row {
+      margin-bottom: 12px;
+    }
+    
+    .config-label {
+      font-size: 11px;
+      color: rgba(200, 200, 210, 0.5);
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+    }
+    
+    .config-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(100, 100, 120, 0.3);
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    
+    .config-input:focus {
+      outline: none;
+      border-color: #60a5fa;
+    }
+    
+    .config-help {
+      font-size: 11px;
+      color: rgba(200, 200, 210, 0.4);
+      margin-top: 4px;
+    }
+    
+    .config-button {
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    
+    .config-button:hover {
+      filter: brightness(1.1);
+    }
+    
+    .config-status {
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    
+    .config-status.success {
+      background: rgba(74, 222, 128, 0.1);
+      color: #86efac;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    
+    .config-status.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .config-status.loading {
+      background: rgba(96, 165, 250, 0.1);
+      color: #93c5fd;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    /* Character Stats Bar */
+    .stats-bar {
+      max-width: 1200px;
+      margin: 0 auto 24px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .stat-chip {
+      background: rgba(20, 20, 30, 0.9);
+      border: 1px solid rgba(100, 100, 120, 0.2);
+      border-radius: 8px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .stat-chip-label {
+      font-size: 10px;
+      color: rgba(200, 200, 210, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .stat-chip-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fb923c;
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .skill-section {
+      margin-bottom: 20px;
+    }
+    
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(200, 200, 210, 0.5);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+    
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    
+    .skill-card {
+      background: rgba(30, 30, 40, 0.8);
+      border: 2px solid rgba(100, 100, 120, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+      color: inherit;
+      font-family: inherit;
+    }
+    
+    .skill-card:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    
+    .skill-card.selected-ice {
+      background: rgba(96, 165, 250, 0.15);
+      border-color: #60a5fa;
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+    }
+    
+    .skill-card.selected-fire {
+      background: rgba(251, 146, 60, 0.15);
+      border-color: #fb923c;
+      box-shadow: 0 0 20px rgba(251, 146, 60, 0.5);
+    }
+    
+    .skill-card.selected-lightning {
+      background: rgba(192, 132, 252, 0.15);
+      border-color: #c084fc;
+      box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+    }
+    
+    .skill-card.selected-neutral {
+      background: rgba(148, 163, 184, 0.15);
+      border-color: #94a3b8;
+    }
+    
+    .skill-name {
+      font-weight: 600;
+      font-size: 14px;
+      font-family: "Cinzel", serif;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .skill-name.ice { color: #93c5fd; }
+    .skill-name.fire { color: #fdba74; }
+    .skill-name.lightning { color: #d8b4fe; }
+    .skill-name.neutral { color: #94a3b8; }
+    
+    .element-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "Source Sans Pro", sans-serif;
+    }
+    
+    .element-tag.ice {
+      background: rgba(96, 165, 250, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+    }
+    
+    .element-tag.fire {
+      background: rgba(251, 146, 60, 0.15);
+      color: #fdba74;
+      border: 1px solid rgba(251, 146, 60, 0.4);
+    }
+    
+    .element-tag.lightning {
+      background: rgba(192, 132, 252, 0.15);
+      color: #d8b4fe;
+      border: 1px solid rgba(192, 132, 252, 0.4);
+    }
+    
+    .skill-desc {
+      font-size: 11px;
+      color: rgba(200, 200, 210, 0.7);
+      line-height: 1.4;
+    }
+    
+    .skill-damage {
+      font-size: 12px;
+      color: #fb923c;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    
+    .passive-card {
+      background: rgba(30, 30, 40, 0.8);
+      border: 2px solid rgba(100, 100, 120, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+      color: inherit;
+      font-family: inherit;
+    }
+    
+    .passive-card:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    
+    .passive-card.selected {
+      background: rgba(74, 222, 128, 0.15);
+      border-color: #4ade80;
+      box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+    }
+    
+    .passive-card.selected-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+    
+    .passive-name {
+      font-weight: 600;
+      font-size: 13px;
+      font-family: "Cinzel", serif;
+      margin-bottom: 4px;
+      color: #e2e8f0;
+    }
+    
+    .passive-card.selected .passive-name { color: #86efac; }
+    .passive-card.selected-danger .passive-name { color: #fca5a5; }
+    
+    .passive-desc {
+      font-size: 11px;
+      color: rgba(200, 200, 210, 0.7);
+    }
+    
+    .analysis-panel {
+      background: rgba(20, 20, 30, 0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(100, 100, 120, 0.2);
+      padding: 20px;
+      position: sticky;
+      top: 24px;
+      height: fit-content;
+    }
+    
+    .analysis-title {
+      font-family: "Cinzel", serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #e2e8f0;
+      letter-spacing: 1px;
+    }
+    
+    .status-section {
+      margin-bottom: 20px;
+    }
+    
+    .status-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .status-badge.chill {
+      background: rgba(96, 165, 250, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+    }
+    
+    .status-badge.burning {
+      background: rgba(251, 146, 60, 0.2);
+      color: #fb923c;
+      border: 1px solid rgba(251, 146, 60, 0.4);
+    }
+    
+    .status-badge.shock {
+      background: rgba(192, 132, 252, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(192, 132, 252, 0.4);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .quick-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+    
+    .stat-label {
+      font-size: 10px;
+      color: rgba(200,200,210,0.5);
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fb923c;
+    }
+    
+    .stat-value-small {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .mp-gain { color: #4ade80; }
+    .mp-cost { color: #f87171; }
+    .mp-divider { color: rgba(200,200,210,0.4); }
+    
+    .element-dots {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .element-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .element-dot.ice { background: #60a5fa; }
+    .element-dot.fire { background: #fb923c; }
+    .element-dot.lightning { background: #c084fc; }
+    
+    .damage-calc {
+      background: rgba(251, 146, 60, 0.1);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .damage-calc-title {
+      font-size: 11px;
+      color: rgba(200,200,210,0.5);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    
+    .damage-calc-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fb923c;
+    }
+    
+    .damage-calc-breakdown {
+      font-size: 11px;
+      color: rgba(200,200,210,0.6);
+      margin-top: 4px;
+    }
+    
+    .synergy-section, .conflict-section, .tips-section {
+      margin-bottom: 16px;
+    }
+    
+    .synergy-item {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: rgba(74, 222, 128, 0.08);
+      border-radius: 6px;
+      font-size: 12px;
+      color: #86efac;
+      border-left: 3px solid #4ade80;
+    }
+    
+    .synergy-item.medium {
+      border-left-color: #60a5fa;
+    }
+    
+    .synergy-item.info {
+      border-left-color: #94a3b8;
+    }
+    
+    .conflict-item {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: rgba(239, 68, 68, 0.1);
+      border-radius: 6px;
+      font-size: 12px;
+      color: #fca5a5;
+      border-left: 3px solid #ef4444;
+    }
+    
+    .tip-item {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      background: rgba(96, 165, 250, 0.08);
+      border-radius: 6px;
+      font-size: 12px;
+      color: #93c5fd;
+      border-left: 3px solid #60a5fa;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: rgba(200,200,210,0.4);
+      font-size: 13px;
+    }
+    
+    .none-text {
+      font-size: 12px;
+      color: rgba(200,200,210,0.4);
+    }
+    
+    .loading-state {
+      text-align: center;
+      padding: 48px;
+      color: rgba(200,200,210,0.6);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LOOTFIEND</h1>
+    <p class="subtitle">BUILD SYNERGY EXPLORER</p>
+  </header>
+
+  <!-- Config Panel -->
+  <div class="config-panel">
+    <div class="config-header" onclick="toggleConfig()">
+      <span class="config-title">⚙️ GOOGLE SHEETS CONNECTION</span>
+      <span class="config-toggle" id="config-toggle">▼ Show</span>
+    </div>
+    <div class="config-body" id="config-body">
+      <div class="config-row">
+        <div class="config-label">GOOGLE SHEET ID</div>
+        <input type="text" class="config-input" id="sheet-id" placeholder="Paste the ID from your Google Sheet URL">
+        <div class="config-help">From URL: docs.google.com/spreadsheets/d/<strong>THIS_PART</strong>/edit</div>
+      </div>
+      <button class="config-button" onclick="loadFromSheets()">Load Data from Google Sheets</button>
+      <div id="config-status"></div>
+      <div style="margin-top: 16px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+        <div class="config-label" style="margin-bottom: 8px;">SETUP INSTRUCTIONS</div>
+        <ol style="font-size: 11px; color: rgba(200,200,210,0.6); padding-left: 16px; line-height: 1.8;">
+          <li>Create a new Google Sheet</li>
+          <li>Create 3 tabs named exactly: <strong>Skills</strong>, <strong>Passives</strong>, <strong>CharacterStats</strong></li>
+          <li>Import the CSV files I gave you into each tab</li>
+          <li>Go to File → Share → Publish to web</li>
+          <li>Select "Entire Document" and "CSV", click Publish</li>
+          <li>Copy the Sheet ID from your URL and paste above</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Character Stats Bar -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-chip">
+      <span class="stat-chip-label">ATK</span>
+      <span class="stat-chip-value" id="display-atk">2,730</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-chip-label">Crit</span>
+      <span class="stat-chip-value" id="display-crit">4.6%</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-chip-label">Crit Dmg</span>
+      <span class="stat-chip-value" id="display-critdmg">122.8%</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-chip-label">Final Dmg↑</span>
+      <span class="stat-chip-value" id="display-finaldmg">45%</span>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="skills-column" id="skills-column">
+      <div class="loading-state">Loading skills...</div>
+    </div>
+
+    <!-- Analysis Panel -->
+    <div class="analysis-panel">
+      <h2 class="analysis-title">BUILD ANALYSIS</h2>
+      
+      <!-- Damage Calculator -->
+      <div class="damage-calc">
+        <div class="damage-calc-title">ESTIMATED TOTAL DAMAGE</div>
+        <div class="damage-calc-value" id="total-damage">0</div>
+        <div class="damage-calc-breakdown" id="damage-breakdown">Select skills to calculate</div>
+      </div>
+      
+      <div class="status-section">
+        <div class="section-label">STATUS EFFECTS</div>
+        <div class="status-badges" id="status-badges">
+          <span class="none-text">None selected</span>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div>
+          <div class="stat-label">TOTAL ATK%</div>
+          <div class="stat-value" id="total-atk">0%</div>
+        </div>
+        <div>
+          <div class="stat-label">MP ECONOMY</div>
+          <div class="stat-value-small">
+            <span class="mp-gain" id="mp-regen">+0</span>
+            <span class="mp-divider"> / </span>
+            <span class="mp-cost" id="mp-cost">-0</span>
+          </div>
+        </div>
+        <div>
+          <div class="stat-label">DEFENSES</div>
+          <div id="defenses" class="none-text">None</div>
+        </div>
+        <div>
+          <div class="stat-label">ELEMENTS</div>
+          <div class="element-dots" id="elements"></div>
+        </div>
+      </div>
+
+      <div id="synergies-container"></div>
+      <div id="conflicts-container"></div>
+      <div id="tips-container"></div>
+      <div id="empty-state" class="empty-state">Select skills and passives to see synergies</div>
+    </div>
+  </div>
+
+  <script>
+    // ============ DEFAULT DATA (used if no Google Sheet connected) ============
+    let SKILLS = {
+      basic: [
+        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', stacks: 0, area: 'Small', desc: '60% ATK, small area, applies Chill for 5s' },
+        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', stacks: 1, area: 'Frontal', desc: '30% ATK, frontal, applies 1 Burning stack' },
+        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', stacks: 1, area: 'Frontal', desc: '50% ATK, frontal, applies 1 Shock stack' },
+      ],
+      core: [
+        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', stacks: 2, mpCost: 20, area: 'Large', desc: '70% ATK, large area, applies 2 Burning stacks' },
+        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', stacks: 2, mpCost: 30, area: 'Area', desc: '160% ATK, area, applies 2 Shock stacks' },
+        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', stacks: 0, mpCost: 40, area: 'Small', channeled: true, desc: '70% ATK every 0.4s, channeled, applies Chill' },
+      ],
+      basicControl: [
+        { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, area: 'Nearby', desc: '50% ATK, knockback + stun, CD 12s' },
+        { id: 'flash', name: 'Flash', element: null, atk: 0, cd: 12, hpRecovery: 15, area: 'Self', desc: 'Auto-dodge, recovers 15% lost HP, CD 12s' },
+        { id: 'gravity_field', name: 'Gravity Field', element: null, atk: 0, cd: 20, duration: 5, area: 'Frontal', desc: 'Haste -50%, MSPD -35% for 5s, CD 20s' },
+      ],
+      elemControl: [
+        { id: 'lightning_orb', name: 'Lightning Orb', element: 'Lightning', atk: 35, status: 'Shock', stacks: 1, cd: 12, area: 'Nearby', desc: '35% ATK every 0.3s, slow-moving orb, applies Shock' },
+        { id: 'frost_shield', name: 'Frost Shield', element: 'Ice', atk: 0, cd: 15, duration: 8, shield: 35, area: 'Self', desc: 'Shield = 35% Max HP for 8s, CD 15s' },
+        { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, duration: 8, area: 'Summon', desc: 'Summons turret for 8s, max 2 active, CD 12s' },
+      ],
+      ultimate: [
+        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, duration: 3, area: 'Frontal', desc: '50% ATK x2 per sec for 3s, Chill, MSPD -20%' },
+        { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, duration: 12, area: 'Summon', desc: 'Clone uses Basic skill, 70% your HP, 12s' },
+        { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, duration: 15, area: 'Self', desc: '15% chance bonus Energy Wave when using skills' },
+      ],
+    };
+
+    let PASSIVES = [
+      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% dmg per status effect on target', condition: 'status_count', value: 5 },
+      { id: 'life_rewind', name: 'Life Rewind', desc: 'Restore 100% HP when below 30%, CD 30s', condition: 'low_hp', value: 100 },
+      { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen, +1 Mana/sec', condition: 'always', value: 10 },
+      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion for 3s after hit (5s CD)', condition: 'after_hit', value: 25 },
+      { id: 'flourish', name: 'Flourish', desc: '+15% Final Dmg when HP > 80%', condition: 'high_hp', value: 15 },
+      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 Mana and 2% Max HP on kill', condition: 'on_kill', value: 2 },
+      { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg dealt, +30% Dmg taken', condition: 'always', value: 30, downside: true },
+      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield (30% Max HP) after 3s no damage', condition: 'no_damage', value: 30 },
+      { id: 'conjuration', name: 'Conjuration', desc: 'All skill cooldowns -10%', condition: 'always', value: 10 },
+    ];
+
+    let CHARACTER_STATS = {
+      atk: 2730,
+      def: 414,
+      hp: 120480,
+      crit: 4.6,
+      critDmg: 122.8,
+      finalDmgUp: 45,
+      haste: 0,
+      mpRegen: 0,
+    };
+
+    // ============ STATE ============
+    const build = {
+      basic: null,
+      core: null,
+      basicControl: null,
+      elemControl: null,
+      ultimate: null,
+      passives: [null, null, null],
+    };
+
+    // ============ CONFIG FUNCTIONS ============
+    function toggleConfig() {
+      const body = document.getElementById('config-body');
+      const toggle = document.getElementById('config-toggle');
+      body.classList.toggle('open');
+      toggle.textContent = body.classList.contains('open') ? '▲ Hide' : '▼ Show';
+    }
+
+    function showStatus(message, type) {
+      const status = document.getElementById('config-status');
+      status.className = 'config-status ' + type;
+      status.textContent = message;
+      status.style.display = 'block';
+    }
+
+    async function loadFromSheets() {
+      const sheetId = document.getElementById('sheet-id').value.trim();
+      if (!sheetId) {
+        showStatus('Please enter a Google Sheet ID', 'error');
+        return;
+      }
+
+      // Save to localStorage
+      localStorage.setItem('lootfiend-sheet-id', sheetId);
+
+      showStatus('Loading data from Google Sheets...', 'loading');
+
+      try {
+        // Load Skills
+        const skillsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Skills`;
+        const skillsResponse = await fetch(skillsUrl);
+        if (!skillsResponse.ok) throw new Error('Could not fetch Skills sheet');
+        const skillsText = await skillsResponse.text();
+        parseSkillsCSV(skillsText);
+
+        // Load Passives
+        const passivesUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Passives`;
+        const passivesResponse = await fetch(passivesUrl);
+        if (!passivesResponse.ok) throw new Error('Could not fetch Passives sheet');
+        const passivesText = await passivesResponse.text();
+        parsePassivesCSV(passivesText);
+
+        // Load Character Stats
+        const statsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`;
+        const statsResponse = await fetch(statsUrl);
+        if (!statsResponse.ok) throw new Error('Could not fetch CharacterStats sheet');
+        const statsText = await statsResponse.text();
+        parseStatsCSV(statsText);
+
+        showStatus('✓ Data loaded successfully!', 'success');
+        renderAll();
+
+      } catch (error) {
+        showStatus('Error: ' + error.message + '. Make sure the sheet is published to web.', 'error');
+        console.error(error);
+      }
+    }
+
+    function parseCSV(text) {
+      const lines = text.split('\n');
+      const headers = parseCSVLine(lines[0]);
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (lines[i].trim()) {
+          const values = parseCSVLine(lines[i]);
+          const row = {};
+          headers.forEach((h, idx) => {
+            row[h.trim()] = values[idx] ? values[idx].trim() : '';
+          });
+          data.push(row);
+        }
+      }
+      return data;
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current);
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current);
+      return result;
+    }
+
+    function parseSkillsCSV(text) {
+      const data = parseCSV(text);
+      SKILLS = { basic: [], core: [], basicControl: [], elemControl: [], ultimate: [] };
+      
+      const rowMap = {
+        'Basic': 'basic',
+        'Core': 'core',
+        'Basic Control': 'basicControl',
+        'Elemental Control': 'elemControl',
+        'Ultimate': 'ultimate'
+      };
+
+      data.forEach(row => {
+        const rowType = rowMap[row['Row']];
+        if (rowType) {
+          SKILLS[rowType].push({
+            id: row['Skill Name'].toLowerCase().replace(/\s+/g, '_'),
+            name: row['Skill Name'],
+            element: row['Element'] || null,
+            atk: parseFloat(row['ATK%']) || 0,
+            status: row['Status Effect'] || null,
+            stacks: parseInt(row['Stacks']) || 0,
+            mpCost: parseInt(row['MP Cost']) || 0,
+            mpRegen: parseInt(row['MP Regen']) || 0,
+            cd: parseInt(row['CD']) || 0,
+            duration: parseInt(row['Duration']) || 0,
+            area: row['Area'] || '',
+            shield: parseFloat(row['Shield %']) || 0,
+            hpRecovery: parseFloat(row['HP Recovery %']) || 0,
+            desc: `${row['ATK%'] ? row['ATK%'] + '% ATK, ' : ''}${row['Area'] ? row['Area'].toLowerCase() + ', ' : ''}${row['Special'] || ''}`.replace(/, $/, ''),
+          });
+        }
+      });
+    }
+
+    function parsePassivesCSV(text) {
+      const data = parseCSV(text);
+      PASSIVES = data.map(row => ({
+        id: row['Passive Name'].toLowerCase().replace(/\s+/g, '_'),
+        name: row['Passive Name'],
+        desc: row['Description'],
+        condition: row['Condition'],
+        value: parseFloat(row['Value']) || 0,
+        downside: row['Downside'] === 'TRUE',
+      }));
+    }
+
+    function parseStatsCSV(text) {
+      const data = parseCSV(text);
+      const statsMap = {
+        'ATK': 'atk',
+        'DEF': 'def',
+        'HP': 'hp',
+        'Crit': 'crit',
+        'Crit Dmg': 'critDmg',
+        'Final Dmg Up': 'finalDmgUp',
+        'Haste': 'haste',
+        'MP Regen': 'mpRegen',
+      };
+      
+      data.forEach(row => {
+        const key = statsMap[row['Stat']];
+        if (key) {
+          CHARACTER_STATS[key] = parseFloat(row['Value']) || 0;
+        }
+      });
+      
+      updateStatsDisplay();
+    }
+
+    function updateStatsDisplay() {
+      document.getElementById('display-atk').textContent = CHARACTER_STATS.atk.toLocaleString();
+      document.getElementById('display-crit').textContent = CHARACTER_STATS.crit + '%';
+      document.getElementById('display-critdmg').textContent = CHARACTER_STATS.critDmg + '%';
+      document.getElementById('display-finaldmg').textContent = CHARACTER_STATS.finalDmgUp + '%';
+    }
+
+    // ============ RENDER FUNCTIONS ============
+    function getElementClass(element) {
+      if (!element) return 'neutral';
+      return element.toLowerCase();
+    }
+
+    function calculateSkillDamage(skill) {
+      if (!skill.atk) return 0;
+      const baseDmg = CHARACTER_STATS.atk * (skill.atk / 100);
+      const withFinal = baseDmg * (1 + CHARACTER_STATS.finalDmgUp / 100);
+      return Math.round(withFinal);
+    }
+
+    function renderSkillCard(skill, row) {
+      const isSelected = build[row]?.id === skill.id;
+      const elementClass = getElementClass(skill.element);
+      const damage = calculateSkillDamage(skill);
+      
+      const card = document.createElement('button');
+      card.className = `skill-card ${isSelected ? 'selected-' + elementClass : ''}`;
+      card.innerHTML = `
+        <div class="skill-name ${elementClass}">
+          ${skill.name}
+          ${skill.element ? `<span class="element-tag ${elementClass}">${skill.element}</span>` : ''}
+        </div>
+        <div class="skill-desc">${skill.desc}</div>
+        ${damage > 0 ? `<div class="skill-damage">${damage.toLocaleString()} dmg</div>` : ''}
+      `;
+      card.onclick = () => {
+        build[row] = isSelected ? null : skill;
+        renderAll();
+      };
+      return card;
+    }
+
+    function renderPassiveCard(passive) {
+      const isSelected = build.passives.some(p => p?.id === passive.id);
+      const isDanger = passive.downside;
+      
+      const card = document.createElement('button');
+      card.className = `passive-card ${isSelected ? (isDanger ? 'selected-danger' : 'selected') : ''}`;
+      card.innerHTML = `
+        <div class="passive-name">${passive.name}</div>
+        <div class="passive-desc">${passive.desc}</div>
+      `;
+      card.onclick = () => {
+        const existingIndex = build.passives.findIndex(p => p?.id === passive.id);
+        if (existingIndex !== -1) {
+          build.passives[existingIndex] = null;
+        } else {
+          const emptySlot = build.passives.findIndex(p => p === null);
+          if (emptySlot !== -1) {
+            build.passives[emptySlot] = passive;
+          } else {
+            build.passives[2] = passive;
+          }
+        }
+        renderAll();
+      };
+      return card;
+    }
+
+    function analyze() {
+      const selectedSkills = [build.basic, build.core, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      const selectedPassives = build.passives.filter(Boolean);
+
+      const statuses = new Set();
+      let maxBurningStacks = 0;
+      let maxShockStacks = 0;
+      
+      selectedSkills.forEach(skill => {
+        if (skill.status) {
+          statuses.add(skill.status);
+          if (skill.status === 'Burning') maxBurningStacks += skill.stacks || 0;
+          if (skill.status === 'Shock') maxShockStacks += skill.stacks || 0;
+        }
+      });
+
+      const elements = new Set(selectedSkills.map(s => s.element).filter(Boolean));
+      const hasShield = selectedSkills.some(s => s.shield > 0) || selectedPassives.some(p => p.id === 'arcane_shield');
+      const hasHpRecovery = selectedSkills.some(s => s.hpRecovery > 0) || selectedPassives.some(p => p.id === 'life_rewind' || p.id === 'soul_hunt');
+      const hasFlash = selectedSkills.some(s => s.id === 'flash');
+
+      const synergies = [];
+      const antiSynergies = [];
+      const tips = [];
+
+      // Elemental Resonance
+      const hasElemRes = selectedPassives.some(p => p.id === 'elemental_resonance');
+      if (hasElemRes) {
+        if (statuses.size >= 3) {
+          synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (all 3 statuses!)`, strength: 'strong' });
+        } else if (statuses.size >= 2) {
+          synergies.push({ text: `Elemental Resonance: +${statuses.size * 5}% damage (${statuses.size} statuses)`, strength: 'medium' });
+        } else if (statuses.size === 1) {
+          tips.push(`Add more elements for Elemental Resonance (+5% per status)`);
+        }
+      }
+
+      // Flourish
+      const hasFlourish = selectedPassives.some(p => p.id === 'flourish');
+      if (hasFlourish) {
+        if (hasShield) synergies.push({ text: 'Flourish + Shield: Easier to maintain HP > 80%', strength: 'strong' });
+        if (hasFlash) synergies.push({ text: 'Flourish + Flash: Dodge helps maintain high HP', strength: 'medium' });
+      }
+
+      // Demon Pact
+      const hasDemonPact = selectedPassives.some(p => p.id === 'demon_pact');
+      if (hasDemonPact) {
+        if (hasFlourish) antiSynergies.push('Demon Pact + Flourish: Taking +30% damage makes HP > 80% harder');
+        if (selectedPassives.some(p => p.id === 'life_rewind')) {
+          synergies.push({ text: 'Demon Pact + Life Rewind: Safety net for glass cannon', strength: 'medium' });
+        }
+        if (!hasShield && !hasHpRecovery) antiSynergies.push('Demon Pact with no sustain: Very risky!');
+      }
+
+      // Soul Hunt
+      const hasSoulHunt = selectedPassives.some(p => p.id === 'soul_hunt');
+      if (hasSoulHunt) {
+        const wideAreaSkills = selectedSkills.filter(s => s.area === 'Large' || s.area === 'Area');
+        if (wideAreaSkills.length >= 2) {
+          synergies.push({ text: 'Soul Hunt + AoE skills: Great for add clear sustain', strength: 'strong' });
+        } else {
+          tips.push('Soul Hunt works best with wide AoE for more kills');
+        }
+      }
+
+      // Arcane Shield
+      const hasArcaneShield = selectedPassives.some(p => p.id === 'arcane_shield');
+      if (hasArcaneShield) {
+        const hasRanged = selectedSkills.some(s => s.area === 'Frontal' || s.area === 'Large');
+        if (hasRanged) synergies.push({ text: 'Arcane Shield + Ranged skills: Kiting enables shield uptime', strength: 'medium' });
+      }
+
+      // Shock + Crit
+      if (statuses.has('Shock') && maxShockStacks >= 2) {
+        tips.push(`${maxShockStacks} Shock stacks = -${maxShockStacks * 5}% enemy Crit Res. Build Crit!`);
+      }
+
+      // Conjuration
+      const hasConjuration = selectedPassives.some(p => p.id === 'conjuration');
+      if (hasConjuration) {
+        const highCdSkills = selectedSkills.filter(s => s.cd >= 20);
+        if (highCdSkills.length >= 1) {
+          synergies.push({ text: `Conjuration: -10% CD on ${highCdSkills.map(s => s.name).join(', ')}`, strength: 'medium' });
+        }
+      }
+
+      // Doppelganger
+      const hasDoppel = selectedSkills.some(s => s.id === 'doppelganger');
+      if (hasDoppel && build.basic) {
+        synergies.push({ text: `Doppelganger clones your ${build.basic.name}`, strength: 'info' });
+        if (build.basic.status) {
+          synergies.push({ text: `Clone also applies ${build.basic.status}!`, strength: 'medium' });
+        }
+      }
+
+      const totalAtk = selectedSkills.reduce((sum, s) => sum + (s.atk || 0), 0);
+      const mpRegen = build.basic ? 10 : 0;
+      const mpCost = build.core?.mpCost || 0;
+
+      // Calculate total damage
+      let totalDamage = 0;
+      selectedSkills.forEach(skill => {
+        totalDamage += calculateSkillDamage(skill);
+      });
+
+      // Apply passive bonuses
+      let damageMultiplier = 1;
+      if (hasFlourish) damageMultiplier += 0.15;
+      if (hasDemonPact) damageMultiplier += 0.30;
+      if (hasElemRes) damageMultiplier += (statuses.size * 0.05);
+
+      totalDamage = Math.round(totalDamage * damageMultiplier);
+
+      return {
+        statuses: Array.from(statuses),
+        elements: Array.from(elements),
+        maxBurningStacks,
+        maxShockStacks,
+        synergies,
+        antiSynergies,
+        tips,
+        totalAtk,
+        mpRegen,
+        mpCost,
+        hasShield,
+        hasHpRecovery,
+        totalDamage,
+        damageMultiplier,
+      };
+    }
+
+    function renderAnalysis() {
+      const analysis = analyze();
+
+      // Total damage
+      document.getElementById('total-damage').textContent = analysis.totalDamage.toLocaleString();
+      const multiplierParts = [];
+      if (analysis.damageMultiplier > 1) {
+        multiplierParts.push(`×${analysis.damageMultiplier.toFixed(2)} from passives`);
+      }
+      document.getElementById('damage-breakdown').textContent = 
+        analysis.totalDamage > 0 
+          ? `Base × Final Dmg↑ ${multiplierParts.length ? multiplierParts.join(', ') : ''}`
+          : 'Select skills to calculate';
+
+      // Status badges
+      const statusBadges = document.getElementById('status-badges');
+      if (analysis.statuses.length > 0) {
+        statusBadges.innerHTML = analysis.statuses.map(status => {
+          let extra = '';
+          if (status === 'Burning' && analysis.maxBurningStacks > 0) extra = ` (${analysis.maxBurningStacks})`;
+          if (status === 'Shock' && analysis.maxShockStacks > 0) extra = ` (${analysis.maxShockStacks})`;
+          return `<span class="status-badge ${status.toLowerCase()}">${status}${extra}</span>`;
+        }).join('');
+      } else {
+        statusBadges.innerHTML = '<span class="none-text">None selected</span>';
+      }
+
+      // Quick stats
+      document.getElementById('total-atk').textContent = analysis.totalAtk + '%';
+      document.getElementById('mp-regen').textContent = '+' + analysis.mpRegen;
+      document.getElementById('mp-cost').textContent = '-' + analysis.mpCost;
+
+      // Defenses
+      const defenses = document.getElementById('defenses');
+      const defenseIcons = [];
+      if (analysis.hasShield) defenseIcons.push('🛡️');
+      if (analysis.hasHpRecovery) defenseIcons.push('💚');
+      defenses.innerHTML = defenseIcons.length > 0 ? defenseIcons.join(' ') : 'None';
+      defenses.className = defenseIcons.length > 0 ? '' : 'none-text';
+
+      // Elements
+      const elements = document.getElementById('elements');
+      if (analysis.elements.length > 0) {
+        elements.innerHTML = analysis.elements.map(el => 
+          `<span class="element-dot ${el.toLowerCase()}"></span>`
+        ).join('');
+      } else {
+        elements.innerHTML = '<span class="none-text">—</span>';
+      }
+
+      // Synergies
+      const synergiesContainer = document.getElementById('synergies-container');
+      if (analysis.synergies.length > 0) {
+        synergiesContainer.innerHTML = `
+          <div class="synergy-section">
+            <div class="section-label">✨ SYNERGIES</div>
+            ${analysis.synergies.map(s => `<div class="synergy-item ${s.strength}">${s.text}</div>`).join('')}
+          </div>
+        `;
+      } else {
+        synergiesContainer.innerHTML = '';
+      }
+
+      // Conflicts
+      const conflictsContainer = document.getElementById('conflicts-container');
+      if (analysis.antiSynergies.length > 0) {
+        conflictsContainer.innerHTML = `
+          <div class="conflict-section">
+            <div class="section-label">⚠️ CONFLICTS</div>
+            ${analysis.antiSynergies.map(c => `<div class="conflict-item">${c}</div>`).join('')}
+          </div>
+        `;
+      } else {
+        conflictsContainer.innerHTML = '';
+      }
+
+      // Tips
+      const tipsContainer = document.getElementById('tips-container');
+      if (analysis.tips.length > 0) {
+        tipsContainer.innerHTML = `
+          <div class="tips-section">
+            <div class="section-label">💡 TIPS</div>
+            ${analysis.tips.map(t => `<div class="tip-item">${t}</div>`).join('')}
+          </div>
+        `;
+      } else {
+        tipsContainer.innerHTML = '';
+      }
+
+      // Empty state
+      const emptyState = document.getElementById('empty-state');
+      const hasContent = analysis.synergies.length > 0 || analysis.antiSynergies.length > 0 || analysis.tips.length > 0;
+      emptyState.style.display = hasContent ? 'none' : 'block';
+    }
+
+    function renderSkillsColumn() {
+      const column = document.getElementById('skills-column');
+      column.innerHTML = '';
+
+      const rows = [
+        { key: 'basic', label: 'BASIC' },
+        { key: 'core', label: 'CORE' },
+        { key: 'basicControl', label: 'BASIC CONTROL' },
+        { key: 'elemControl', label: 'ELEMENTAL CONTROL' },
+        { key: 'ultimate', label: 'ULTIMATE' },
+      ];
+
+      rows.forEach(({ key, label }) => {
+        const section = document.createElement('div');
+        section.className = 'skill-section';
+        section.innerHTML = `<div class="section-label">${label}</div>`;
+        
+        const grid = document.createElement('div');
+        grid.className = 'skill-grid';
+        
+        SKILLS[key].forEach(skill => {
+          grid.appendChild(renderSkillCard(skill, key));
+        });
+        
+        section.appendChild(grid);
+        column.appendChild(section);
+      });
+
+      // Passives
+      const passiveSection = document.createElement('div');
+      passiveSection.className = 'skill-section';
+      passiveSection.innerHTML = `<div class="section-label">PASSIVES (SELECT 3)</div>`;
+      
+      const passiveGrid = document.createElement('div');
+      passiveGrid.className = 'skill-grid';
+      
+      PASSIVES.forEach(passive => {
+        passiveGrid.appendChild(renderPassiveCard(passive));
+      });
+      
+      passiveSection.appendChild(passiveGrid);
+      column.appendChild(passiveSection);
+    }
+
+    function renderAll() {
+      renderSkillsColumn();
+      renderAnalysis();
+      updateStatsDisplay();
+    }
+
+    // ============ INIT ============
+    // Check for saved sheet ID
+    const savedSheetId = localStorage.getItem('lootfiend-sheet-id');
+    if (savedSheetId) {
+      document.getElementById('sheet-id').value = savedSheetId;
+      // Auto-load on startup
+      loadFromSheets();
+    } else {
+      renderAll();
+    }
+  </script>
+</body>
+</html>
