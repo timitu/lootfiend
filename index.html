@@ -5,262 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lootfiend Build Synergy Explorer</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { min-height: 100vh; background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%); color: #e2e8f0; font-family: "Source Sans Pro", system-ui, sans-serif; padding: 20px; }
-    header { text-align: center; margin-bottom: 20px; }
-    h1 { font-family: "Cinzel", serif; font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #c084fc, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
-    .subtitle { color: rgba(200, 200, 210, 0.5); font-size: 12px; letter-spacing: 3px; }
-    .tab-nav { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
-    .tab-btn { padding: 10px 24px; font-family: "Cinzel", serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; color: rgba(200, 200, 210, 0.6); cursor: pointer; transition: all 0.2s ease; }
-    .tab-btn:hover { background: rgba(50, 50, 60, 0.8); }
-    .tab-btn.active { background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(192, 132, 252, 0.2)); border-color: #c084fc; color: #e2e8f0; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .builder-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; max-width: 1400px; margin: 0 auto; }
-    .theorycraft-layout { display: grid; grid-template-columns: 260px 1fr 340px; gap: 20px; max-width: 1600px; margin: 0 auto; }
-    @media (max-width: 1200px) { .theorycraft-layout { grid-template-columns: 1fr 340px; } .current-build-sidebar { display: none; } }
-    @media (max-width: 900px) { .builder-layout, .theorycraft-layout { grid-template-columns: 1fr; } }
-    
-    .current-build-sidebar { background: rgba(20, 20, 30, 0.95); border-radius: 12px; border: 2px solid rgba(74, 222, 128, 0.3); padding: 16px; position: sticky; top: 20px; height: fit-content; }
-    .sidebar-title { font-family: "Cinzel", serif; font-size: 12px; color: #86efac; letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
-    .sidebar-build-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 11px; border-bottom: 1px solid rgba(100,100,120,0.1); }
-    .sidebar-build-item:last-child { border-bottom: none; }
-    .sidebar-label { color: rgba(200,200,210,0.4); font-size: 9px; }
-    .sidebar-skill { color: #e2e8f0; }
-    .sidebar-rune { color: #c084fc; font-size: 10px; }
-    .sidebar-stats { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(100,100,120,0.2); }
-    .sidebar-stat { display: flex; justify-content: space-between; font-size: 10px; padding: 3px 0; }
-    .sidebar-stat-label { color: rgba(200,200,210,0.5); }
-    .sidebar-stat-value { color: #fb923c; font-weight: 600; }
-    .no-build-msg { text-align: center; color: rgba(200,200,210,0.4); font-size: 11px; padding: 20px 0; }
-
-    .core-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 2px solid rgba(192, 132, 252, 0.3); padding: 20px; margin-bottom: 20px; text-align: center; }
-    .core-title { font-family: "Cinzel", serif; font-size: 12px; color: rgba(200, 200, 210, 0.5); letter-spacing: 2px; margin-bottom: 12px; }
-    .core-grid { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .core-card { width: 140px; padding: 16px 12px; background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
-    .core-card:hover { transform: translateY(-3px); filter: brightness(1.1); }
-    .core-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 25px rgba(251, 146, 60, 0.4); }
-    .core-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); }
-    .core-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 25px rgba(96, 165, 250, 0.4); }
-    .core-card.recommended { box-shadow: 0 0 12px rgba(74, 222, 128, 0.25); border-color: rgba(74, 222, 128, 0.4); }
-    .core-icon { font-size: 28px; margin-bottom: 6px; }
-    .core-name { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-    .core-name.fire { color: #fdba74; }
-    .core-name.lightning { color: #d8b4fe; }
-    .core-name.ice { color: #93c5fd; }
-    .core-desc { font-size: 10px; color: rgba(200, 200, 210, 0.5); }
-    .core-damage { font-size: 13px; color: #fb923c; font-weight: 700; margin-top: 6px; }
-
-    .rune-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
-    .rune-section.hidden { display: none; }
-    .rune-title { font-size: 10px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 10px; }
-    .rune-options { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    .rune-option { padding: 10px 16px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 120px; }
-    .rune-option:hover { background: rgba(100, 100, 120, 0.2); }
-    .rune-option.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
-    .rune-option.recommended { border-color: rgba(74, 222, 128, 0.5); box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
-    .rune-option-name { font-weight: 600; color: #c084fc; font-size: 12px; margin-bottom: 2px; }
-    .rune-option-effect { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
-    .rune-element-change { display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
-    .rune-element-change.ice { background: rgba(96, 165, 250, 0.2); color: #93c5fd; }
-    .rune-element-change.fire { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
-    .rune-element-change.lightning { background: rgba(192, 132, 252, 0.2); color: #d8b4fe; }
-
-    .build-around { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; margin-bottom: 20px; }
-    .build-around-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
-    .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    @media (max-width: 600px) { .build-grid { grid-template-columns: 1fr; } }
-    .build-column { display: flex; flex-direction: column; gap: 6px; }
-    .column-label { font-size: 9px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
-
-    .skill-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.2s ease; position: relative; }
-    .skill-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .skill-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 15px rgba(96, 165, 250, 0.4); }
-    .skill-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 15px rgba(251, 146, 60, 0.4); }
-    .skill-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
-    .skill-card.selected-neutral { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; box-shadow: 0 0 15px rgba(148, 163, 184, 0.3); }
-    .skill-card.recommended { box-shadow: 0 0 12px rgba(74, 222, 128, 0.25); border-color: rgba(74, 222, 128, 0.4); }
-    .skill-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
-    .skill-name { font-weight: 600; font-size: 12px; font-family: "Cinzel", serif; }
-    .skill-name.ice { color: #93c5fd; }
-    .skill-name.fire { color: #fdba74; }
-    .skill-name.lightning { color: #d8b4fe; }
-    .skill-name.neutral { color: #94a3b8; }
-    .element-tag { font-size: 8px; padding: 2px 5px; border-radius: 4px; }
-    .element-tag.ice { background: rgba(96, 165, 250, 0.15); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.4); }
-    .element-tag.fire { background: rgba(251, 146, 60, 0.15); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
-    .element-tag.lightning { background: rgba(192, 132, 252, 0.15); color: #d8b4fe; border: 1px solid rgba(192, 132, 252, 0.4); }
-    .skill-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
-    .skill-rune-selector { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
-    .skill-rune-buttons { display: flex; gap: 3px; }
-    .skill-rune-btn { flex: 1; padding: 4px 5px; font-size: 9px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: rgba(200, 200, 210, 0.6); cursor: pointer; font-family: inherit; }
-    .skill-rune-btn:hover { background: rgba(100, 100, 120, 0.2); }
-    .skill-rune-btn.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #d8b4fe; }
-    .skill-rune-btn.recommended { border-color: rgba(74, 222, 128, 0.5); box-shadow: 0 0 6px rgba(74, 222, 128, 0.2); }
-
-    .passives-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
-    .passives-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
-    .passives-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    @media (max-width: 600px) { .passives-grid { grid-template-columns: repeat(2, 1fr); } }
-    .passive-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: all 0.2s ease; }
-    .passive-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .passive-card.selected { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; box-shadow: 0 0 12px rgba(74, 222, 128, 0.3); }
-    .passive-card.selected-danger { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
-    .passive-card.recommended { box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); border-color: rgba(74, 222, 128, 0.3); }
-    .passive-name { font-weight: 600; font-size: 11px; font-family: "Cinzel", serif; color: #e2e8f0; margin-bottom: 2px; }
-    .passive-card.selected .passive-name { color: #86efac; }
-    .passive-card.selected-danger .passive-name { color: #fca5a5; }
-    .passive-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
-
-    .analysis-panel { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 40px); overflow-y: auto; }
-    .analysis-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; letter-spacing: 1px; text-align: center; }
-    .build-identity { background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(147, 51, 234, 0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; text-align: center; }
-    .identity-main { margin-bottom: 4px; }
-    .identity-label { font-size: 10px; color: rgba(200, 200, 210, 0.6); letter-spacing: 1px; }
-    .identity-tags { font-size: 13px; font-weight: 600; color: #c4b5fd; }
-    .coherence-indicator { font-size: 10px; padding: 2px 8px; border-radius: 4px; display: inline-block; }
-    .coherence-indicator.high { background: rgba(74, 222, 128, 0.2); color: #86efac; }
-    .coherence-indicator.medium { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
-    .coherence-indicator.low { background: rgba(248, 113, 113, 0.2); color: #fca5a5; }
-
-    /* Stat Totals */
-    .stat-totals { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
-    .stat-totals-title { font-size: 9px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 8px; }
-    .stat-totals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 12px; }
-    .stat-row { display: flex; justify-content: space-between; font-size: 10px; }
-    .stat-row-label { color: rgba(200,200,210,0.6); }
-    .stat-row-value { font-weight: 600; }
-    .stat-row-value.high { color: #86efac; }
-    .stat-row-value.medium { color: #fbbf24; }
-    .stat-row-value.low { color: rgba(200,200,210,0.5); }
-
-    .build-summary { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
-    .build-item { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 10px; border-bottom: 1px solid rgba(100,100,120,0.1); }
-    .build-item:last-child { border-bottom: none; }
-    .build-item-label { color: rgba(200,200,210,0.4); font-size: 9px; }
-    .build-item-skill { color: #e2e8f0; }
-    .build-item-rune { color: #c084fc; font-size: 9px; }
-    .damage-calc { background: rgba(251, 146, 60, 0.1); border: 1px solid rgba(251, 146, 60, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 12px; text-align: center; }
-    .damage-calc-title { font-size: 9px; color: rgba(200,200,210,0.5); letter-spacing: 1px; margin-bottom: 2px; }
-    .damage-calc-value { font-size: 24px; font-weight: 700; color: #fb923c; }
-    .damage-calc-breakdown { font-size: 9px; color: rgba(200,200,210,0.4); margin-top: 2px; }
-    .comparison-indicator { font-size: 11px; margin-top: 4px; }
-    .comparison-indicator.better { color: #86efac; }
-    .comparison-indicator.worse { color: #fca5a5; }
-    .comparison-indicator.same { color: rgba(200,200,210,0.5); }
-    .status-section { margin-bottom: 12px; }
-    .section-label { font-size: 9px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 6px; }
-    .status-badges { display: flex; gap: 4px; flex-wrap: wrap; }
-    .status-badge { padding: 3px 6px; border-radius: 10px; font-size: 9px; font-weight: 600; }
-    .status-badge.chill { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
-    .status-badge.burning { background: rgba(251, 146, 60, 0.2); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.4); }
-    .status-badge.shock { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
-    .status-badge.electrocution { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
-    .status-badge.imprison { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
-    .status-badge.freeze { background: rgba(96, 165, 250, 0.3); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.5); }
-    .status-badge.vulnerable { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    .status-badge.frostbite { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
-    .status-badge.stun { background: rgba(250, 204, 21, 0.2); color: #fbbf24; border: 1px solid rgba(250, 204, 21, 0.4); }
-    .status-badge.robust { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
-    
-    .synergy-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(74, 222, 128, 0.08); border-radius: 6px; font-size: 10px; color: #86efac; border-left: 3px solid #4ade80; }
-    .synergy-item.rune { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.08); color: #d8b4fe; }
-    .synergy-item.info { border-left-color: #94a3b8; color: #cbd5e1; background: rgba(148, 163, 184, 0.08); }
-    .synergy-item.crit { border-left-color: #fb923c; background: rgba(251, 146, 60, 0.08); color: #fdba74; }
-    .synergy-item.dot { border-left-color: #f87171; background: rgba(239, 68, 68, 0.08); color: #fca5a5; }
-    .synergy-item.sustain { border-left-color: #4ade80; }
-    .conflict-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; font-size: 10px; color: #fca5a5; border-left: 3px solid #ef4444; }
-    .tip-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(250, 204, 21, 0.08); border-radius: 6px; font-size: 10px; color: #fde047; border-left: 3px solid #facc15; }
-    
-    .flag-item { padding: 6px 10px; margin-bottom: 4px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 8px; }
-    .flag-item .flag-icon { font-size: 10px; flex-shrink: 0; }
-    .flag-item.good { background: rgba(74, 222, 128, 0.1); color: #86efac; }
-    .flag-item.good .flag-icon { color: #4ade80; }
-    .flag-item.bad { background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
-    .flag-item.bad .flag-icon { color: #ef4444; }
-    .flag-item.info { background: rgba(250, 204, 21, 0.08); color: #fde047; }
-    .flag-item.info .flag-icon { color: #facc15; }
-    
-    .none-text { font-size: 10px; color: rgba(200,200,210,0.4); }
-    .save-build-btn { width: 100%; padding: 10px; margin-top: 12px; background: linear-gradient(135deg, #4ade80, #22c55e); border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 12px; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: 1px; }
-    .save-build-btn:hover { filter: brightness(1.1); }
-    .reset-build-btn { width: 100%; padding: 8px; margin-top: 8px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; color: #fca5a5; font-weight: 600; font-size: 11px; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: 1px; }
-    .reset-build-btn:hover { background: rgba(239, 68, 68, 0.3); }
-
-    .zenith-pool { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px; background: rgba(250, 204, 21, 0.1); border-radius: 8px; border: 1px solid rgba(250, 204, 21, 0.2); }
-    .zenith-pool-label { font-size: 11px; color: #fde047; font-weight: 600; }
-    .zenith-pool-input { width: 60px; padding: 6px 8px; background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 4px; color: #fde047; font-size: 12px; text-align: center; }
-    .zenith-remaining { font-size: 11px; color: rgba(200,200,210,0.6); margin-left: auto; }
-    .zenith-remaining.over { color: #f87171; }
-    .zenith-remaining.ok { color: #4ade80; }
-    .zenith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .zenith-input-group { background: rgba(40, 40, 50, 0.6); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
-    .zenith-input-label { font-size: 9px; color: rgba(200,200,210,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
-    .zenith-input { width: 100%; padding: 6px; background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(200, 200, 210, 0.15); border-radius: 4px; color: white; font-size: 12px; text-align: center; }
-    .zenith-input:focus { border-color: rgba(250, 204, 21, 0.5); outline: none; }
-    .saved-indicator { text-align: center; font-size: 10px; color: #86efac; margin-top: 6px; opacity: 0; transition: opacity 0.3s; }
-    .saved-indicator.show { opacity: 1; }
-
-    .profile-container { max-width: 1000px; margin: 0 auto; }
-    .profile-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; margin-bottom: 20px; }
-    .profile-section-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; display: flex; align-items: center; gap: 8px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-    .stat-input-group { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; }
-    .stat-input-label { font-size: 9px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
-    .stat-input { width: 100%; padding: 6px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: #fb923c; font-size: 14px; font-weight: 700; text-align: center; }
-    .stat-input:focus { outline: none; border-color: #fb923c; }
-    .profile-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .profile-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; }
-    .profile-btn.primary { background: linear-gradient(135deg, #60a5fa, #c084fc); color: white; }
-    .profile-btn.secondary { background: rgba(100, 100, 120, 0.3); color: #e2e8f0; border: 1px solid rgba(100, 100, 120, 0.3); }
-    .profile-btn:hover { filter: brightness(1.1); }
-    .save-indicator { font-size: 11px; color: #86efac; margin-left: auto; opacity: 0; transition: opacity 0.3s; }
-    .save-indicator.show { opacity: 1; }
-    .rune-skill-section { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(100, 100, 120, 0.15); }
-    .rune-skill-section:last-child { border-bottom: none; }
-    .rune-skill-name { font-family: "Cinzel", serif; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-    .skill-row-label { font-size: 8px; padding: 2px 5px; border-radius: 4px; background: rgba(100, 100, 120, 0.2); color: rgba(200, 200, 210, 0.5); }
-    .rune-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .rune-card { flex: 1; min-width: 260px; background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(100, 100, 120, 0.15); }
-    .rune-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .rune-card-name { font-weight: 600; color: #c084fc; font-size: 12px; }
-    .tier-pill { display: flex; gap: 2px; margin-bottom: 8px; }
-    .tier-pill-btn { flex: 1; padding: 5px 3px; font-size: 8px; font-weight: 700; border: none; cursor: pointer; transition: all 0.15s ease; letter-spacing: 0.5px; }
-    .tier-pill-btn:first-child { border-radius: 5px 0 0 5px; }
-    .tier-pill-btn:last-child { border-radius: 0 5px 5px 0; }
-    .tier-pill-btn.blue { background: rgba(96, 165, 250, 0.15); color: rgba(96, 165, 250, 0.5); }
-    .tier-pill-btn.blue.active { background: rgba(96, 165, 250, 0.4); color: #93c5fd; box-shadow: 0 0 8px rgba(96, 165, 250, 0.3); }
-    .tier-pill-btn.purple { background: rgba(192, 132, 252, 0.15); color: rgba(192, 132, 252, 0.5); }
-    .tier-pill-btn.purple.active { background: rgba(192, 132, 252, 0.4); color: #d8b4fe; box-shadow: 0 0 8px rgba(192, 132, 252, 0.3); }
-    .tier-pill-btn.yellow { background: rgba(250, 204, 21, 0.15); color: rgba(250, 204, 21, 0.5); }
-    .tier-pill-btn.yellow.active { background: rgba(250, 204, 21, 0.4); color: #fde047; box-shadow: 0 0 8px rgba(250, 204, 21, 0.3); }
-    .tier-pill-btn.orange { background: rgba(251, 146, 60, 0.15); color: rgba(251, 146, 60, 0.5); }
-    .tier-pill-btn.orange.active { background: rgba(251, 146, 60, 0.4); color: #fdba74; box-shadow: 0 0 8px rgba(251, 146, 60, 0.3); }
-    .tier-pill-btn:hover:not(.active) { filter: brightness(1.3); }
-    .rune-effects { display: flex; flex-direction: column; gap: 3px; }
-    .rune-effect-row { display: flex; align-items: flex-start; gap: 5px; font-size: 9px; padding: 2px 0; }
-    .rune-effect-row.locked { opacity: 0.3; }
-    .tier-badge { font-size: 7px; padding: 1px 4px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
-    .tier-badge.blue { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
-    .tier-badge.purple { background: rgba(192, 132, 252, 0.2); color: #c084fc; }
-    .tier-badge.yellow { background: rgba(250, 204, 21, 0.2); color: #fbbf24; }
-    .tier-badge.orange { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
-    .rune-effect-text { flex: 1; color: rgba(200, 200, 210, 0.6); line-height: 1.3; }
-    .config-panel { max-width: 500px; margin: 0 auto; background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
-    .config-title { font-family: "Cinzel", serif; font-size: 13px; color: rgba(200, 200, 210, 0.7); letter-spacing: 1px; margin-bottom: 12px; }
-    .config-row { margin-bottom: 10px; }
-    .config-label { font-size: 10px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
-    .config-input { width: 100%; padding: 8px 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 6px; color: #e2e8f0; font-family: monospace; font-size: 12px; }
-    .config-input:focus { outline: none; border-color: #60a5fa; }
-    .config-help { font-size: 10px; color: rgba(200, 200, 210, 0.4); margin-top: 3px; }
-    .config-button { background: linear-gradient(135deg, #60a5fa, #c084fc); border: none; padding: 10px 20px; border-radius: 6px; color: white; font-weight: 600; cursor: pointer; margin-top: 6px; }
-    .config-button:hover { filter: brightness(1.1); }
-    .config-status { margin-top: 10px; padding: 8px 10px; border-radius: 6px; font-size: 11px; display: none; }
-    .config-status.success { background: rgba(74, 222, 128, 0.1); color: #86efac; border: 1px solid rgba(74, 222, 128, 0.3); display: block; }
-    .config-status.error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); display: block; }
-    .config-status.loading { background: rgba(96, 165, 250, 0.1); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.3); display: block; }
-  </style>
+  <link rel="stylesheet" href="lootfiend-styles.css">
 </head>
 <body>
   <header>
@@ -374,7 +119,49 @@
       { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns', archetype: 'utility', provides: ['cd-reduction'], wants: [] },
     ];
 
-    let RUNES = [];
+    let RUNES = [
+      // Basic Skills
+      { skill: 'Frost Projectile', name: 'Ice Armor', blueEffect: 'Final Dmg↓ +5%', purpleEffect: '+2.5% Final Dmg↓ per stack', orange1Effect: 'HoH +30%', orange2Effect: '4% per stack (8 max)', newElement: null, addsStatus: null, keyStats: 'Final Dmg↓ +5%, HoH +30%', provides: ['ice', 'hoh', 'sustain', 'final-dmg-down'], wants: [] },
+      { skill: 'Frost Projectile', name: 'Icicle', blueEffect: 'Haste +10%', purpleEffect: '20% Imprison on Chill 1.5s', orange1Effect: 'Dmg +30%', orange2Effect: 'Ice spikes 5x50% ATK', newElement: null, addsStatus: 'Imprison', keyStats: 'Haste +10%, Dmg +30%', provides: ['ice', 'imprison', 'haste', 'dmg-boost', 'control'], wants: ['chill'] },
+      { skill: 'Flame Wave', name: 'Scorch', blueEffect: '+2 Mana on use', purpleEffect: '+2.5% Ele Dmg per stack', orange1Effect: 'Haste +10%', orange2Effect: '4% per stack (12 max)', newElement: null, addsStatus: null, keyStats: 'Ele Dmg stacking, Haste +10%', provides: ['fire', 'ele-dmg', 'haste', 'mp'], wants: [] },
+      { skill: 'Flame Wave', name: 'Explosion', blueEffect: 'Dmg +30%', purpleEffect: 'Applies 2 Vulnerable stacks', orange1Effect: 'DoT +20%', orange2Effect: '30% chance explode 180% ATK + 3 Vulnerable', newElement: null, addsStatus: 'Vulnerable', keyStats: 'Dmg +30%, DoT +20%', provides: ['fire', 'vulnerable', 'dmg-boost', 'dot-boost', 'clone-synergy'], wants: ['burning'] },
+      { skill: 'Lightning Whip', name: 'Numb', blueEffect: 'Crit Chance +10%', purpleEffect: '+20% Crit vs Shocked', orange1Effect: 'Crit Chance +5%', orange2Effect: '20% stun on crit 0.5s', newElement: null, addsStatus: 'Stun', keyStats: 'Crit Chance +15%', provides: ['lightning', 'crit-chance', 'stun'], wants: ['shock'] },
+      { skill: 'Lightning Whip', name: 'Energize', blueEffect: 'Ele Dmg +5%', purpleEffect: '30% chance +3 MP on Electrocuted', orange1Effect: 'MP Regen +5%', orange2Effect: '+5 MP instead', newElement: null, addsStatus: null, keyStats: 'Ele Dmg +5%, MP Regen +5%', provides: ['lightning', 'ele-dmg', 'mp'], wants: ['electrocution'] },
+      // Core Skills
+      { skill: 'Fireball', name: 'Pyroblast', blueEffect: 'Crit Chance +5%', purpleEffect: 'Lava fireball 120% ATK 3 Burning', orange1Effect: 'Crit Dmg +45%', orange2Effect: '50% chance lava bomb 200% ATK', newElement: null, addsStatus: null, keyStats: 'Crit Chance +5%, Crit Dmg +45%', provides: ['fire', 'crit-chance', 'crit-dmg', 'burning-stacks', 'burst'], wants: [] },
+      { skill: 'Fireball', name: 'Jolt', blueEffect: 'Dmg +30%', purpleEffect: 'Lightning spear 200% ATK 2 Electrocution', orange1Effect: 'Crit Chance +10%', orange2Effect: '25% Thunder Gods Spear 500% ATK', newElement: 'Lightning', addsStatus: 'Electrocution', keyStats: 'Dmg +30%, Crit Chance +10%', provides: ['lightning', 'electrocution', 'crit-chance', 'dmg-boost', 'burst'], wants: [] },
+      { skill: 'Fireball', name: 'Iceflame', blueEffect: 'HoH +30%', purpleEffect: '5 ice shards + Chill + Burning', orange1Effect: 'Additional Damage +30%', orange2Effect: 'Ice Crystal stacks → Flower', newElement: 'Ice', addsStatus: 'Chill, Burning', keyStats: 'HoH +30%, Add Dmg +30%', provides: ['ice', 'chill', 'burning', 'hoh', 'add-dmg', 'multi-hit'], wants: [] },
+      { skill: 'Lightning Punch', name: 'Ice Sword', blueEffect: 'Dmg +30%', purpleEffect: 'Frost sword 500% ATK + Chill', orange1Effect: 'Final Dmg +5%', orange2Effect: 'On crit freeze 0.5s', newElement: 'Ice', addsStatus: 'Chill, Freeze', keyStats: 'Dmg +30%, Final Dmg +5%', provides: ['ice', 'chill', 'freeze', 'dmg-boost', 'final-dmg', 'burst', 'control'], wants: ['crit-chance'] },
+      { skill: 'Lightning Punch', name: 'Flame Bow', blueEffect: 'DoT +20%', purpleEffect: 'Flame arrow 200% ATK 3 Burning', orange1Effect: 'Crit Chance +10%', orange2Effect: '30% fire dragon 350% ATK + 20 Burning', newElement: 'Fire', addsStatus: 'Burning', keyStats: 'DoT +20%, Crit Chance +10%', provides: ['fire', 'burning-stacks', 'dot-boost', 'crit-chance'], wants: [] },
+      { skill: 'Lightning Punch', name: 'Thunder Punch', blueEffect: 'Crit Chance +5%', purpleEffect: '300% ATK 3 Electrocution', orange1Effect: 'Add Dmg Chance +15%', orange2Effect: '30% continuous blast 200% ATK', newElement: null, addsStatus: 'Electrocution', keyStats: 'Crit Chance +5%, Add Dmg +15%', provides: ['lightning', 'electrocution', 'crit-chance', 'add-dmg'], wants: [] },
+      { skill: 'Ice Ray', name: 'Rimebite', blueEffect: 'Add Dmg +45%', purpleEffect: 'Interval reduced to 0.3s', orange1Effect: 'Add Dmg Chance +10%', orange2Effect: 'Each hit +1 Frostbite', newElement: null, addsStatus: 'Frostbite', keyStats: 'Add Dmg +45%, Add Dmg Chance +10%', provides: ['ice', 'multi-hit', 'add-dmg', 'frostbite'], wants: ['hoh'] },
+      { skill: 'Ice Ray', name: 'Pyresight', blueEffect: 'DoT +20%', purpleEffect: 'Hellish Eye sweep 300% ATK 3 Burning', orange1Effect: 'MP Cost -8', orange2Effect: 'Leaves burning area', newElement: 'Fire', addsStatus: 'Burning', keyStats: 'DoT +20%, MP Cost -8', provides: ['fire', 'burning-stacks', 'dot-boost', 'aoe'], wants: [] },
+      { skill: 'Ice Ray', name: 'Ionization', blueEffect: 'Dmg +30%', purpleEffect: 'EM beam 100% ATK/tick + Shock', orange1Effect: 'Add Dmg Chance +15%', orange2Effect: '+5% Energy Charge on hit', newElement: 'Lightning', addsStatus: 'Shock', keyStats: 'Dmg +30%, Add Dmg Chance +15%', provides: ['lightning', 'shock', 'multi-hit', 'dmg-boost', 'add-dmg'], wants: [] },
+      // Basic Control Skills
+      { skill: 'Concussion', name: 'Imprison', blueEffect: 'Final Dmg +5%', purpleEffect: 'Increased range + 5 Vulnerable', orange1Effect: 'Crit Chance +5%', orange2Effect: '10 Vulnerable + 90% slow', newElement: null, addsStatus: 'Vulnerable', keyStats: 'Final Dmg +5%, Crit Chance +5%', provides: ['vulnerable', 'final-dmg', 'crit-chance', 'control'], wants: [] },
+      { skill: 'Concussion', name: 'Echo', blueEffect: 'CD -2s', purpleEffect: 'Recovers 15 MP on hit', orange1Effect: 'MP Regen +5%', orange2Effect: 'Knocks back 2 more times', newElement: null, addsStatus: null, keyStats: 'CD -2s, MP Regen +5%', provides: ['cd-reduction', 'mp', 'control'], wants: [] },
+      { skill: 'Flash', name: 'Backstab', blueEffect: 'MP Regen +5%', purpleEffect: 'Teleport behind + Robust 3s', orange1Effect: 'Healing +20%', orange2Effect: 'Auto-casts again after 3s', newElement: null, addsStatus: 'Robust', keyStats: 'MP Regen +5%, Healing +20%', provides: ['mp', 'sustain', 'heal-boost'], wants: [] },
+      { skill: 'Flash', name: 'Stunt', blueEffect: 'CD -2s', purpleEffect: 'Leaves decoy 30% HP 5s', orange1Effect: 'HoH +30%', orange2Effect: 'Double HP recovered', newElement: null, addsStatus: null, keyStats: 'CD -2s, HoH +30%', provides: ['cd-reduction', 'hoh', 'sustain'], wants: [] },
+      { skill: 'Gravity Field', name: 'Black Hole', blueEffect: 'Final Dmg +5%', purpleEffect: '10% ATK/s + pulls to center', orange1Effect: 'Skill Dmg +100%', orange2Effect: '20% ATK + 2 Vulnerable', newElement: null, addsStatus: 'Vulnerable', keyStats: 'Final Dmg +5%, Skill Dmg +100%', provides: ['vulnerable', 'final-dmg', 'aoe', 'control'], wants: [] },
+      { skill: 'Gravity Field', name: 'Domain', blueEffect: 'Final Dmg↓ +5%', purpleEffect: 'Centers on character, 2x range', orange1Effect: 'Evasion +5%', orange2Effect: '+20% Haste for allies', newElement: null, addsStatus: null, keyStats: 'Final Dmg↓ +5%, Evasion +5%', provides: ['final-dmg-down', 'evasion', 'haste', 'sustain'], wants: [] },
+      // Elemental Control Skills
+      { skill: 'Lightning Orb', name: 'Electrolysis', blueEffect: 'Dmg +30%', purpleEffect: 'Large orb 200% ATK 3 Electrocution', orange1Effect: 'Crit Chance +5%', orange2Effect: '250% ATK 5 Electrocution 1s Stun', newElement: null, addsStatus: 'Electrocution', keyStats: 'Dmg +30%, Crit Chance +5%', provides: ['lightning', 'electrocution', 'stun', 'dmg-boost', 'crit-chance', 'burst'], wants: [] },
+      { skill: 'Lightning Orb', name: 'Frozen', blueEffect: 'CD -2s', purpleEffect: 'Rotating ice orb 150% ATK/0.5s', orange1Effect: 'Final Dmg↓ +5%', orange2Effect: '250% ATK + 1.5s Imprison', newElement: 'Ice', addsStatus: 'Imprison', keyStats: 'CD -2s, Final Dmg↓ +5%', provides: ['ice', 'imprison', 'cd-reduction', 'final-dmg-down', 'multi-hit', 'control'], wants: [] },
+      { skill: 'Frost Shield', name: 'Shattered Ice', blueEffect: 'Shield +10%', purpleEffect: 'Applies to all allies', orange1Effect: 'Final Dmg↓ +5%', orange2Effect: 'Freezes enemies 1s on end', newElement: null, addsStatus: 'Freeze', keyStats: 'Shield +10%, Final Dmg↓ +5%', provides: ['ice', 'shield', 'sustain', 'freeze', 'final-dmg-down', 'control'], wants: [] },
+      { skill: 'Frost Shield', name: 'Molten Fire', blueEffect: 'CD -3s', purpleEffect: '50% ATK/s + 1 Burning + Robust', orange1Effect: 'Ele Dmg +5%', orange2Effect: '8s duration +15% Ele Dmg', newElement: 'Fire', addsStatus: 'Burning', keyStats: 'CD -3s, Ele Dmg +20%', provides: ['fire', 'burning', 'ele-dmg', 'cd-reduction'], wants: [] },
+      { skill: 'Infernal Bloom', name: 'Fire Core', blueEffect: 'Final Dmg +5%', purpleEffect: 'Fire Core summon 8s', orange1Effect: 'DoT +20%', orange2Effect: '250% ATK + knockback + 5 Burning', newElement: null, addsStatus: 'Burning', keyStats: 'Final Dmg +5%, DoT +20%', provides: ['fire', 'burning-stacks', 'dot-boost', 'final-dmg', 'summon'], wants: [] },
+      { skill: 'Infernal Bloom', name: 'Electric Eel', blueEffect: 'CD -2s', purpleEffect: 'Electric Eel companion 10s', orange1Effect: 'Final Dmg +5%', orange2Effect: '15s duration, max 3 summons', newElement: 'Lightning', addsStatus: null, keyStats: 'CD -2s, Final Dmg +5%', provides: ['lightning', 'cd-reduction', 'final-dmg', 'summon'], wants: [] },
+      // Ultimate Skills
+      { skill: 'Hail', name: 'Glacial', blueEffect: 'HoH +30%', purpleEffect: '+1s duration, 10% Imprison', orange1Effect: 'Add Dmg Chance +10%', orange2Effect: '5x per second instead of 2x', newElement: null, addsStatus: 'Imprison', keyStats: 'HoH +30%, Add Dmg Chance +10%', provides: ['ice', 'hoh', 'multi-hit', 'imprison', 'add-dmg', 'sustain', 'control'], wants: [] },
+      { skill: 'Hail', name: 'Skyfire', blueEffect: 'CD -5s', purpleEffect: 'Meteor 200% ATK 8 Burning', orange1Effect: 'DoT +20%', orange2Effect: 'Burning area 80% ATK/s', newElement: 'Fire', addsStatus: 'Burning', keyStats: 'CD -5s, DoT +20%', provides: ['fire', 'burning-stacks', 'dot-boost', 'cd-reduction', 'aoe'], wants: [] },
+      { skill: 'Hail', name: 'Meteor', blueEffect: 'Dmg +30%', purpleEffect: 'Electric meteors 300% ATK 3 Electrocution', orange1Effect: 'Crit Chance +5%', orange2Effect: '+1 meteor 350% ATK 5 Electrocution', newElement: 'Lightning', addsStatus: 'Electrocution', keyStats: 'Dmg +30%, Crit Chance +5%', provides: ['lightning', 'electrocution', 'stun', 'dmg-boost', 'crit-chance', 'burst'], wants: [] },
+      { skill: 'Doppelganger', name: 'Ice Soul', blueEffect: 'Final Dmg↓ +5%', purpleEffect: 'Ice Clone 70% HP 12s', orange1Effect: 'Add Dmg +30%', orange2Effect: '50% HP ice shield + Freeze on break', newElement: 'Ice', addsStatus: 'Freeze', keyStats: 'Final Dmg↓ +5%, Add Dmg +30%', provides: ['ice', 'freeze', 'add-dmg', 'final-dmg-down', 'clone', 'sustain', 'control'], wants: [] },
+      { skill: 'Doppelganger', name: 'Ember', blueEffect: 'Ele Dmg +5%', purpleEffect: 'Fire Clone 70% HP 12s', orange1Effect: 'CD -10s', orange2Effect: 'On death 800% ATK + 20 Burning', newElement: 'Fire', addsStatus: 'Burning', keyStats: 'Ele Dmg +5%, CD -10s', provides: ['fire', 'burning-stacks', 'ele-dmg', 'cd-reduction', 'clone', 'burst'], wants: [] },
+      { skill: 'Doppelganger', name: 'Thunderbolt', blueEffect: 'MP Regen +5%', purpleEffect: 'Lightning Clone 70% HP 12s', orange1Effect: 'Final Dmg +5%', orange2Effect: '50% enhanced orb 100% ATK 5x + 3 Electrocution', newElement: 'Lightning', addsStatus: 'Electrocution', keyStats: 'MP Regen +5%, Final Dmg +5%', provides: ['lightning', 'electrocution', 'mp', 'final-dmg', 'clone'], wants: [] },
+      { skill: 'Aether Form', name: 'Cryo', blueEffect: 'MP Regen +5%', purpleEffect: 'Ice form casts Ice Thorn', orange1Effect: 'Final Dmg↓ +5%', orange2Effect: '+15% Ele Dmg + Accuracy', newElement: 'Ice', addsStatus: null, keyStats: 'MP Regen +5%, Final Dmg↓ +5%', provides: ['ice', 'mp', 'final-dmg-down', 'ele-dmg', 'sustain'], wants: [] },
+      { skill: 'Aether Form', name: 'Wildfire', blueEffect: 'DoT +20%', purpleEffect: 'Fire form casts Wildfire Spread', orange1Effect: 'Final Dmg +5%', orange2Effect: '+15% Ele Dmg + Accuracy', newElement: 'Fire', addsStatus: null, keyStats: 'DoT +20%, Final Dmg +5%', provides: ['fire', 'dot-boost', 'final-dmg', 'ele-dmg'], wants: [] },
+      { skill: 'Aether Form', name: 'Thunder', blueEffect: 'Crit Chance +5%', purpleEffect: 'Lightning form casts Thunderstorm', orange1Effect: 'HoH +30%', orange2Effect: '+15% Ele Dmg + Accuracy', newElement: 'Lightning', addsStatus: null, keyStats: 'Crit Chance +5%, HoH +30%', provides: ['lightning', 'crit-chance', 'hoh', 'ele-dmg', 'sustain'], wants: [] },
+    ];
 
     let PROFILE = {
       stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0, dot: 0, eleDmg: 0, finalDmg: 0, evasion: 0 },
@@ -1262,63 +1049,182 @@
       return Math.round(PROFILE.stats.atk * (skill.atk / 100) * (1 + PROFILE.stats.finalDmgUp / 100));
     }
 
+    // ============ IDENTITY GROUPING ============
+    function getAllRuneCombos() {
+      const combos = [];
+      const rowMap = {
+        basic: 'Basic',
+        core: 'Core', 
+        basicControl: 'Ctrl',
+        elemControl: 'Elem',
+        ultimate: 'Ult'
+      };
+      
+      Object.entries(SKILLS).forEach(([rowKey, skills]) => {
+        skills.forEach(skill => {
+          const runes = getRunesForSkill(skill.name);
+          if (runes.length === 0) {
+            // Skill with no runes
+            combos.push({
+              skill,
+              rune: null,
+              row: rowKey,
+              rowLabel: rowMap[rowKey],
+              identity: getComboIdentity(skill, null),
+              provides: skill.provides || []
+            });
+          } else {
+            runes.forEach(rune => {
+              combos.push({
+                skill,
+                rune,
+                row: rowKey,
+                rowLabel: rowMap[rowKey],
+                identity: getComboIdentity(skill, rune),
+                provides: [...(skill.provides || []), ...(rune.provides || [])]
+              });
+            });
+          }
+        });
+      });
+      return combos;
+    }
+
+    function getComboIdentity(skill, rune) {
+      const tags = new Set();
+      
+      // From skill
+      if (skill.provides) skill.provides.forEach(t => tags.add(t));
+      if (skill.element) tags.add(skill.element.toLowerCase());
+      if (skill.status) tags.add(skill.status.toLowerCase());
+      
+      // From rune (if tier 2+)
+      if (rune) {
+        const tier = getRuneTierLevel(skill.name, rune.name);
+        if (tier >= 2 && rune.provides) rune.provides.forEach(t => tags.add(t));
+        if (tier >= 2 && rune.newElement) tags.add(rune.newElement.toLowerCase());
+        if (tier >= 2 && rune.addsStatus) {
+          rune.addsStatus.split(',').forEach(s => tags.add(s.trim().toLowerCase()));
+        }
+      }
+      
+      // Determine primary identity
+      const hasDoT = tags.has('dot-boost') || tags.has('burning-stacks') || tags.has('burning');
+      const hasCrit = tags.has('crit-chance') || tags.has('crit-dmg');
+      const hasSustain = tags.has('sustain') || tags.has('shield') || tags.has('hoh') || tags.has('heal-boost');
+      const hasControl = tags.has('control') || tags.has('imprison') || tags.has('freeze') || tags.has('stun') || tags.has('vulnerable');
+      const hasBurst = tags.has('burst') || tags.has('dmg-boost') || tags.has('final-dmg');
+      
+      if (hasDoT) return 'dot';
+      if (hasCrit) return 'crit';
+      if (hasControl) return 'control';
+      if (hasSustain) return 'sustain';
+      if (hasBurst) return 'burst';
+      return 'utility';
+    }
+
+    function groupCombosByIdentity(combos) {
+      const groups = {
+        dot: { name: 'DoT / Burning', icon: '🔥', combos: [] },
+        crit: { name: 'Crit', icon: '⚡', combos: [] },
+        control: { name: 'Control', icon: '🧊', combos: [] },
+        sustain: { name: 'Sustain', icon: '💚', combos: [] },
+        burst: { name: 'Burst / Damage', icon: '💥', combos: [] },
+        utility: { name: 'Utility', icon: '⚙️', combos: [] }
+      };
+      
+      combos.forEach(combo => {
+        if (groups[combo.identity]) {
+          groups[combo.identity].combos.push(combo);
+        } else {
+          groups.utility.combos.push(combo);
+        }
+      });
+      
+      return groups;
+    }
+
     // ============ RENDER ============
     function renderBuilder(build, containerId, analysisId, mode) {
       const container = document.getElementById(containerId);
       const recs = getSmartRecommendations(build);
-
-      let html = `<div class="core-section"><div class="core-title">🎯 CHOOSE YOUR CORE</div><div class="core-grid">`;
-      SKILLS.core.forEach(skill => {
-        const isSelected = build.core?.id === skill.id;
-        const isRec = recs.core.includes(skill.id) && !isSelected;
-        const el = skill.element?.toLowerCase() || 'neutral';
-        const dmg = calcDamage(skill);
-        html += `<div class="core-card ${isSelected ? 'selected-' + el : ''} ${isRec ? 'recommended' : ''}" onclick="${mode}SelectCore('${skill.id}')">
-          <div class="core-icon">${skill.element === 'Fire' ? '🔥' : skill.element === 'Lightning' ? '⚡' : '❄️'}</div>
-          <div class="core-name ${el}">${skill.name}</div>
-          <div class="core-desc">${skill.desc}</div>
-          <div class="core-damage">${dmg.toLocaleString()}</div>
-        </div>`;
+      const combos = getAllRuneCombos();
+      const groups = groupCombosByIdentity(combos);
+      
+      // Track which rows are filled
+      const filledRows = {};
+      if (build.core) filledRows.core = build.core.id;
+      if (build.basic) filledRows.basic = build.basic.id;
+      if (build.basicControl) filledRows.basicControl = build.basicControl.id;
+      if (build.elemControl) filledRows.elemControl = build.elemControl.id;
+      if (build.ultimate) filledRows.ultimate = build.ultimate.id;
+      
+      let html = `<div class="identity-view">`;
+      
+      Object.entries(groups).forEach(([identity, group]) => {
+        if (group.combos.length === 0) return;
+        
+        html += `<div class="identity-group">
+          <div class="identity-group-header">
+            <span class="identity-group-icon">${group.icon}</span>
+            <span class="identity-group-name ${identity}">${group.name}</span>
+          </div>
+          <div class="identity-cards">`;
+        
+        group.combos.forEach(combo => {
+          const isSelected = combo.rune 
+            ? (build[combo.row]?.id === combo.skill.id && build.runes[combo.skill.name] === combo.rune.name)
+            : (build[combo.row]?.id === combo.skill.id && !build.runes[combo.skill.name]);
+          
+          const rowTaken = filledRows[combo.row] && filledRows[combo.row] !== combo.skill.id;
+          const sameSkillDiffRune = build[combo.row]?.id === combo.skill.id && combo.rune && build.runes[combo.skill.name] !== combo.rune.name;
+          
+          // Check if recommended
+          const isRec = combo.rune 
+            ? recs.runes.some(r => r.skill === combo.skill.name && r.rune === combo.rune.name)
+            : false;
+          
+          const displayName = combo.rune ? combo.rune.name : combo.skill.name;
+          const skillName = combo.rune ? `(${combo.skill.name})` : '';
+          
+          // Get element for coloring
+          let element = combo.skill.element?.toLowerCase() || '';
+          if (combo.rune?.newElement && getRuneTierLevel(combo.skill.name, combo.rune.name) >= 2) {
+            element = combo.rune.newElement.toLowerCase();
+          }
+          
+          // Key tags to show
+          const keyTags = [];
+          if (element) keyTags.push({ type: element, text: element.charAt(0).toUpperCase() + element.slice(1) });
+          if (combo.rune?.addsStatus) {
+            combo.rune.addsStatus.split(',').slice(0, 2).forEach(s => {
+              keyTags.push({ type: 'status', text: s.trim() });
+            });
+          }
+          if (combo.rune?.keyStats) {
+            const statMatch = combo.rune.keyStats.match(/([A-Za-z\s↓↑]+)\s*\+?\d+%?/);
+            if (statMatch) keyTags.push({ type: 'stat', text: statMatch[1].trim().substring(0, 12) });
+          }
+          
+          html += `<div class="identity-card ${isSelected ? 'selected' : ''} ${rowTaken && !sameSkillDiffRune ? 'row-taken' : ''} ${isRec && !isSelected ? 'recommended' : ''}" 
+                       onclick="${mode}SelectCombo('${combo.row}', '${combo.skill.id}', ${combo.rune ? `'${combo.rune.name}'` : 'null'})">
+            <div class="identity-card-main">
+              <span class="identity-card-rune">${displayName}</span>
+              <span class="identity-card-skill">${skillName}</span>
+              <span class="identity-card-row">${combo.rowLabel}</span>
+            </div>
+            <div class="identity-card-tags">
+              ${keyTags.slice(0, 3).map(t => `<span class="identity-card-tag ${t.type}">${t.text}</span>`).join('')}
+            </div>
+          </div>`;
+        });
+        
+        html += `</div></div>`;
       });
+      
       html += `</div>`;
-
-      if (build.core) {
-        const runes = getRunesForSkill(build.core.name);
-        if (runes.length) {
-          html += `<div class="rune-section"><div class="rune-title">RUNE</div><div class="rune-options">`;
-          const selectedRune = build.runes[build.core.name];
-          runes.forEach(r => {
-            const tier = getRuneTierLevel(build.core.name, r.name);
-            const tierLabels = ['', 'B', 'P', 'Y', 'O'];
-            const runeRec = recs.runes.find(rec => rec.skill === build.core.name && rec.rune === r.name);
-            const isRec = runeRec && selectedRune !== r.name;
-            html += `<div class="rune-option ${selectedRune === r.name ? 'selected' : ''} ${isRec ? 'recommended' : ''}" onclick="${mode}SelectCoreRune('${r.name}')" title="${runeRec ? runeRec.reason : ''}">
-              <div class="rune-option-name">${r.name} <span style="opacity:0.5;font-size:9px;">${tierLabels[tier]}</span></div>
-              <div class="rune-option-effect">${r.keyStats}</div>
-              ${r.newElement && tier >= 2 ? `<div class="rune-element-change ${r.newElement.toLowerCase()}">→ ${r.newElement}</div>` : ''}
-            </div>`;
-          });
-          html += `</div></div>`;
-        }
-      }
-      html += `</div>`;
-
-      html += `<div class="build-around"><div class="build-around-title">⬇️ BUILD AROUND IT</div><div class="build-grid">`;
-      html += `<div class="build-column"><div class="column-label">BASIC</div>`;
-      SKILLS.basic.forEach(s => { html += renderSkillCard(build, s, 'basic', recs.basic.includes(s.id), mode, recs.runes); });
-      html += `</div>`;
-
-      html += `<div class="build-column"><div class="column-label">CONTROLS</div>`;
-      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
-        const row = SKILLS.basicControl.find(sk => sk.id === s.id) ? 'basicControl' : 'elemControl';
-        html += renderSkillCard(build, s, row, recs.control.includes(s.id), mode, recs.runes);
-      });
-      html += `</div>`;
-
-      html += `<div class="build-column"><div class="column-label">ULTIMATE</div>`;
-      SKILLS.ultimate.forEach(s => { html += renderSkillCard(build, s, 'ultimate', recs.ultimate.includes(s.id), mode, recs.runes); });
-      html += `</div></div></div>`;
-
+      
+      // Passives section
       html += `<div class="passives-section"><div class="passives-title">PASSIVES (3)</div><div class="passives-grid">`;
       PASSIVES.forEach(p => {
         const isSelected = build.passives.some(bp => bp?.id === p.id);
@@ -1334,33 +1240,34 @@
       renderAnalysis(build, analysisId, mode);
     }
 
-    function renderSkillCard(build, skill, row, recommended, mode, runeRecs = []) {
-      const isSelected = build[row]?.id === skill.id;
-      const el = getEffectiveElement(build, skill)?.toLowerCase() || 'neutral';
-      const runes = getRunesForSkill(skill.name);
-      const selectedRune = getSelectedRune(build, skill.name);
-
-      let runeHtml = '';
-      if (isSelected && runes.length) {
-        runeHtml = `<div class="skill-rune-selector"><div class="skill-rune-buttons">`;
-        runes.forEach(r => {
-          const tier = getRuneTierLevel(skill.name, r.name);
-          const labels = ['', 'B', 'P', 'Y', 'O'];
-          const runeRec = runeRecs.find(rec => rec.skill === skill.name && rec.rune === r.name);
-          const isRec = runeRec && selectedRune?.name !== r.name;
-          runeHtml += `<button class="skill-rune-btn ${selectedRune?.name === r.name ? 'selected' : ''} ${isRec ? 'recommended' : ''}" onclick="event.stopPropagation(); ${mode}SelectSkillRune('${skill.name}', '${r.name}')" title="${runeRec ? runeRec.reason : ''}">${r.name} ${labels[tier]}</button>`;
-        });
-        runeHtml += `</div></div>`;
+    // Selection handler for identity view
+    function currentSelectCombo(row, skillId, runeName) {
+      const skill = Object.values(SKILLS).flat().find(s => s.id === skillId);
+      if (!skill) return;
+      
+      currentBuild[row] = skill;
+      if (runeName) {
+        currentBuild.runes[skill.name] = runeName;
+      } else {
+        delete currentBuild.runes[skill.name];
       }
+      
+      saveProfile();
+      renderCurrentBuild();
+    }
 
-      return `<div class="skill-card ${isSelected ? 'selected-' + el : ''} ${recommended && !isSelected ? 'recommended' : ''}" onclick="${mode}SelectSkill('${row}', '${skill.id}')">
-        <div class="skill-header">
-          <span class="skill-name ${el}">${skill.name}</span>
-          ${skill.element ? `<span class="element-tag ${skill.element.toLowerCase()}">${skill.element}</span>` : ''}
-        </div>
-        <div class="skill-desc">${skill.desc}</div>
-        ${runeHtml}
-      </div>`;
+    function theorySelectCombo(row, skillId, runeName) {
+      const skill = Object.values(SKILLS).flat().find(s => s.id === skillId);
+      if (!skill) return;
+      
+      theoryBuild[row] = skill;
+      if (runeName) {
+        theoryBuild.runes[skill.name] = runeName;
+      } else {
+        delete theoryBuild.runes[skill.name];
+      }
+      
+      renderTheorycraft();
     }
 
     function renderAnalysis(build, containerId, mode) {
