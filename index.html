@@ -174,7 +174,17 @@
     .synergy-item.dot { border-left-color: #f87171; background: rgba(239, 68, 68, 0.08); color: #fca5a5; }
     .synergy-item.sustain { border-left-color: #4ade80; }
     .conflict-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; font-size: 10px; color: #fca5a5; border-left: 3px solid #ef4444; }
-    .tip-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(96, 165, 250, 0.08); border-radius: 6px; font-size: 10px; color: #93c5fd; border-left: 3px solid #60a5fa; }
+    .tip-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(250, 204, 21, 0.08); border-radius: 6px; font-size: 10px; color: #fde047; border-left: 3px solid #facc15; }
+    
+    .flag-item { padding: 6px 10px; margin-bottom: 4px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 8px; }
+    .flag-item .flag-icon { font-size: 10px; flex-shrink: 0; }
+    .flag-item.good { background: rgba(74, 222, 128, 0.1); color: #86efac; }
+    .flag-item.good .flag-icon { color: #4ade80; }
+    .flag-item.bad { background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
+    .flag-item.bad .flag-icon { color: #ef4444; }
+    .flag-item.info { background: rgba(250, 204, 21, 0.08); color: #fde047; }
+    .flag-item.info .flag-icon { color: #facc15; }
+    
     .none-text { font-size: 10px; color: rgba(200,200,210,0.4); }
     .save-build-btn { width: 100%; padding: 10px; margin-top: 12px; background: linear-gradient(135deg, #4ade80, #22c55e); border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 12px; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: 1px; }
     .save-build-btn:hover { filter: brightness(1.1); }
@@ -552,102 +562,178 @@
       return Array.from(statuses);
     }
 
-    // ============ SMART SYNERGIES ============
-    function getSmartSynergies(build) {
-      const synergies = [];
-      const conflicts = [];
-      const tips = [];
+    // ============ BUILD FLAGS (Relationship-Based) ============
+    
+    function countShockSources(build) {
+      let count = 0;
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      skills.forEach(skill => {
+        if (skill.status === 'Shock') count++;
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          const tier = getRuneTierLevel(skill.name, runeName);
+          if (tier >= 2 && rune?.addsStatus) {
+            if (rune.addsStatus.includes('Shock') || rune.addsStatus.includes('Electrocution')) count++;
+          }
+        }
+      });
+      return count;
+    }
+
+    function countBurningStackSources(build) {
+      let sources = [];
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      skills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          const tier = getRuneTierLevel(skill.name, runeName);
+          const effects = [rune?.blueEffect, rune?.purpleEffect, rune?.orange1Effect, rune?.orange2Effect];
+          for (let i = 0; i < tier && i < effects.length; i++) {
+            const effect = effects[i] || '';
+            const match = effect.match(/(\d+)\s*burning/i);
+            if (match && parseInt(match[1]) >= 3) {
+              sources.push({ skill: skill.name, rune: runeName, stacks: parseInt(match[1]) });
+            }
+          }
+        }
+      });
+      return sources;
+    }
+
+    function countMultiHitSkills(build) {
+      const multiHit = [];
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      skills.forEach(skill => {
+        if (skill.hitRate === 'high') multiHit.push(skill.name);
+        if (skill.id === 'doppelganger' && build.basic) multiHit.push('Doppelganger');
+      });
+      return multiHit;
+    }
+
+    function countSustainTools(build) {
+      const tools = [];
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      const stats = getBuildStats(build);
+      
+      skills.forEach(skill => {
+        if (skill.shield) tools.push(skill.name);
+        if (skill.hpRecovery) tools.push(skill.name);
+      });
+      
+      if (stats.hoh > 0) tools.push('HoH');
+      if (stats.finalDmgDown > 0) tools.push('Final Dmg↓');
+      if (build.passives.some(p => p?.id === 'arcane_shield')) tools.push('Arcane Shield');
+      if (build.passives.some(p => p?.id === 'life_rewind')) tools.push('Life Rewind');
+      if (build.passives.some(p => p?.id === 'tumbler')) tools.push('Tumbler');
+      
+      return tools;
+    }
+
+    function hasNumbRune(build) {
+      return build.runes['Lightning Whip'] === 'Numb' && getRuneTierLevel('Lightning Whip', 'Numb') >= 2;
+    }
+
+    function getBuildFlags(build) {
+      const flags = [];
       const stats = getBuildStats(build);
       const statuses = getAllStatuses(build);
-      const archetype = detectArchetype(build);
       const passives = build.passives.filter(Boolean);
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
 
-      // === CRIT SYNERGIES ===
-      if (stats.critVsShocked > 0) {
-        if (statuses.includes('Shock')) {
-          synergies.push({ text: `Numb + Shock: +${stats.critVsShocked}% Crit vs Shocked enemies`, type: 'crit' });
+      // === NUMB + SHOCK ===
+      if (hasNumbRune(build)) {
+        const shockSources = countShockSources(build);
+        if (shockSources === 0) {
+          flags.push({ type: 'bad', text: `Numb: 0 Shock sources` });
         } else {
-          tips.push(`Numb gives +${stats.critVsShocked}% Crit vs Shocked — add Shock sources!`);
+          flags.push({ type: 'good', text: `Numb: ${shockSources} Shock source${shockSources > 1 ? 's' : ''}` });
         }
       }
 
-      if (archetype.type === 'crit') {
-        if (stats.critChance >= 20) {
-          synergies.push({ text: `Crit build: ${stats.critChance.toFixed(1)}% Crit Chance — solid`, type: 'crit' });
+      // === CRIT BALANCE ===
+      const baseCritDmg = 122.8;
+      const baseCrit = 4.6;
+      const critDmgInvested = stats.critDmg - baseCritDmg;
+      const critChanceInvested = stats.critChance - baseCrit;
+      
+      if (critDmgInvested > 20 && critChanceInvested < 5) {
+        flags.push({ type: 'info', text: `Crit Dmg +${critDmgInvested.toFixed(0)}%, Crit Chance +${critChanceInvested.toFixed(0)}%` });
+      } else if (critChanceInvested > 5 && critDmgInvested > 20) {
+        flags.push({ type: 'good', text: `Crit: +${critChanceInvested.toFixed(0)}% Chance, +${critDmgInvested.toFixed(0)}% Dmg` });
+      }
+
+      // === HOH + MULTI-HIT ===
+      const multiHitSkills = countMultiHitSkills(build);
+      if (stats.hoh > 0) {
+        if (multiHitSkills.length === 0) {
+          flags.push({ type: 'info', text: `HoH ${stats.hoh}%: no multi-hit skills` });
         } else {
-          tips.push(`Crit build with only ${stats.critChance.toFixed(1)}% Crit — needs more sources`);
+          flags.push({ type: 'good', text: `HoH ${stats.hoh}%: ${multiHitSkills.join(', ')}` });
         }
       }
 
-      // === DOT SYNERGIES ===
-      if (archetype.type === 'dot') {
-        if (stats.dot >= 20 && stats.burningStacks >= 3) {
-          synergies.push({ text: `DoT build: ${stats.dot}% DoT + ${stats.burningStacks} Burning stacks — strong`, type: 'dot' });
-        } else if (stats.dot >= 20) {
-          tips.push(`DoT% is high but need more Burning stack sources`);
+      // === DOT + BURNING ===
+      const burningStackSources = countBurningStackSources(build);
+      if (stats.dot > 0) {
+        if (burningStackSources.length === 0 && !statuses.includes('Burning')) {
+          flags.push({ type: 'bad', text: `DoT +${stats.dot}%: no Burning` });
+        } else if (burningStackSources.length > 0) {
+          const totalStacks = burningStackSources.reduce((sum, s) => sum + s.stacks, 0);
+          flags.push({ type: 'good', text: `DoT +${stats.dot}%: ${totalStacks}+ Burning stacks` });
         }
       }
 
-      if (stats.burningStacks >= 5 && stats.eleDmg > 0) {
-        synergies.push({ text: `Burning stacks + Ele Dmg: DoT scales with both`, type: 'dot' });
-      }
-
-      // === SUSTAIN SYNERGIES ===
+      // === FLOURISH + DEMON PACT + SUSTAIN ===
       const hasFlourish = passives.some(p => p.id === 'flourish');
       const hasDemonPact = passives.some(p => p.id === 'demon_pact');
-      const hasShield = build.elemControl?.shield || passives.some(p => p.id === 'arcane_shield');
-      const hasHoH = stats.hoh >= 30;
-      const hasHighHitRate = skills.some(s => s.hitRate === 'high');
+      const sustainTools = countSustainTools(build);
 
-      if (hasFlourish) {
-        if (hasShield || stats.finalDmgDown >= 5) {
-          synergies.push({ text: `Flourish + defense: Easier to stay above 80% HP`, type: 'sustain' });
-        }
-        if (hasDemonPact) {
-          conflicts.push(`Demon Pact + Flourish: +30% damage taken breaks Flourish uptime`);
+      if (hasFlourish && hasDemonPact) {
+        flags.push({ type: 'info', text: `Flourish + Demon Pact: ${sustainTools.length} sustain` });
+      } else if (hasFlourish) {
+        if (sustainTools.length >= 2) {
+          flags.push({ type: 'good', text: `Flourish: ${sustainTools.join(', ')}` });
+        } else if (sustainTools.length === 1) {
+          flags.push({ type: 'info', text: `Flourish: ${sustainTools.join(', ')}` });
+        } else {
+          flags.push({ type: 'info', text: `Flourish: no sustain tools` });
         }
       }
 
-      if (hasHoH && hasHighHitRate) {
-        synergies.push({ text: `HoH ${stats.hoh}% + multi-hit skill: Great sustain`, type: 'sustain' });
-      } else if (hasHoH && !hasHighHitRate) {
-        tips.push(`HoH ${stats.hoh}% but no multi-hit skills — consider Ice Ray or Hail`);
-      }
-
-      if (hasDemonPact && !hasShield && !hasHoH && !build.basicControl?.hpRecovery) {
-        conflicts.push(`Demon Pact with no sustain tools — very risky`);
+      if (hasDemonPact && !hasFlourish) {
+        flags.push({ type: 'info', text: `Demon Pact: ${sustainTools.length} sustain` });
       }
 
       // === ELEMENTAL RESONANCE ===
       const hasElemRes = passives.some(p => p.id === 'elemental_resonance');
       if (hasElemRes) {
-        if (statuses.length >= 3) {
-          synergies.push({ text: `Elemental Resonance: +${statuses.length * 5}% dmg (${statuses.length} statuses!)`, type: '' });
-        } else if (statuses.length === 2) {
-          synergies.push({ text: `Elemental Resonance: +${statuses.length * 5}% dmg (${statuses.length} statuses)`, type: 'info' });
+        if (statuses.length === 0) {
+          flags.push({ type: 'bad', text: `Elemental Resonance: 0 statuses` });
         } else {
-          tips.push(`Elemental Resonance but only ${statuses.length} status — add more for value`);
+          flags.push({ type: statuses.length >= 2 ? 'good' : 'info', text: `Elemental Resonance: ${statuses.length} statuses (+${statuses.length * 5}%)` });
         }
       }
 
-      // === VULNERABLE SYNERGIES ===
-      if (stats.vulnerableStacks >= 5) {
-        synergies.push({ text: `Vulnerable stacking: ${stats.vulnerableStacks}+ stacks = massive damage amp`, type: '' });
+      // === CONJURATION ===
+      const hasConjuration = passives.some(p => p.id === 'conjuration');
+      if (hasConjuration) {
+        const cdSkills = skills.filter(s => s.cd && s.cd > 0);
+        flags.push({ type: cdSkills.length >= 2 ? 'good' : 'info', text: `Conjuration: ${cdSkills.length} CD skills` });
       }
 
       // === DOPPELGANGER ===
       if (build.ultimate?.id === 'doppelganger' && build.basic) {
         const basicRune = build.runes[build.basic.name];
-        synergies.push({ text: `Doppelganger clones ${build.basic.name}`, type: 'info' });
         if (basicRune) {
           const rune = RUNES.find(r => r.skill === build.basic.name && r.name === basicRune);
-          if (rune) {
-            synergies.push({ text: `Clone inherits ${basicRune} — doubles your status/proc output`, type: 'rune' });
-            if (rune.addsStatus) {
-              synergies.push({ text: `Clone also applies ${rune.addsStatus}!`, type: 'rune' });
-            }
-          }
+          flags.push({ type: 'good', text: `Doppelganger: clones ${build.basic.name} + ${basicRune}` });
+        } else {
+          flags.push({ type: 'info', text: `Doppelganger: clones ${build.basic.name}` });
         }
       }
 
@@ -657,62 +743,67 @@
         if (runeName) {
           const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
           const tier = getRuneTierLevel(skill.name, runeName);
-          if (rune?.newElement && tier >= 2) {
-            synergies.push({ text: `${runeName}: ${skill.name} → ${rune.newElement}`, type: 'rune' });
+          if (rune?.newElement && tier >= 2 && rune.newElement !== skill.element) {
+            flags.push({ type: 'info', text: `${skill.name} → ${rune.newElement} (${runeName})` });
           }
         }
       });
 
-      return { synergies, conflicts, tips, archetype, stats };
+      // === VULNERABLE ===
+      if (stats.vulnerableStacks >= 5) {
+        flags.push({ type: 'good', text: `${stats.vulnerableStacks}+ Vulnerable stacks` });
+      }
+
+      return { flags, stats };
     }
 
-    // ============ SMART RECOMMENDATIONS ============
+    // ============ SMART RECOMMENDATIONS (Relationship-Based) ============
     function getSmartRecommendations(build) {
       const recs = { basic: [], control: [], ultimate: [], passives: [] };
       if (!build.core) return recs;
 
       const stats = getBuildStats(build);
       const statuses = getAllStatuses(build);
-      const archetype = detectArchetype(build);
       const coreElement = getEffectiveElement(build, build.core);
+      const hasNumb = hasNumbRune(build);
+      const sustainTools = countSustainTools(build);
+      const multiHitSkills = countMultiHitSkills(build);
 
       // Basic recommendations
       SKILLS.basic.forEach(s => {
         // Element match
         if (s.element === coreElement) recs.basic.push(s.id);
-        // Status diversity for Elem Res
+        // Status diversity
         if (s.status && !statuses.includes(s.status)) recs.basic.push(s.id);
-        // Crit build wants Shock sources
-        if (archetype.type === 'crit' && stats.critVsShocked > 0 && s.status === 'Shock') recs.basic.push(s.id);
+        // If Numb selected, recommend Shock sources
+        if (hasNumb && s.status === 'Shock') recs.basic.push(s.id);
       });
 
       // Control recommendations
       [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
-        // Sustain tools if needed
-        if (archetype.type === 'sustain' && (s.shield || s.hpRecovery)) recs.control.push(s.id);
+        // If you have HoH but no sustain, recommend sustain tools
+        if (stats.hoh > 0 && sustainTools.length < 2 && (s.shield || s.hpRecovery)) recs.control.push(s.id);
         // Element match
         if (s.element === coreElement) recs.control.push(s.id);
-        // Shock source for crit builds
-        if (archetype.type === 'crit' && stats.critVsShocked > 0 && s.status === 'Shock') recs.control.push(s.id);
+        // If Numb selected, recommend Shock sources
+        if (hasNumb && s.status === 'Shock') recs.control.push(s.id);
       });
 
       // Ultimate recommendations
       SKILLS.ultimate.forEach(s => {
-        if (s.id === 'doppelganger') recs.ultimate.push(s.id); // Always good
+        if (s.id === 'doppelganger') recs.ultimate.push(s.id); // Clone is always valuable
         if (s.element === coreElement) recs.ultimate.push(s.id);
-        // HoH wants multi-hit
-        if (stats.hoh >= 30 && s.hitRate === 'high') recs.ultimate.push(s.id);
+        // If HoH but no multi-hit, recommend multi-hit ultimates
+        if (stats.hoh > 0 && multiHitSkills.length === 0 && s.hitRate === 'high') recs.ultimate.push(s.id);
       });
 
       // Passive recommendations
+      // Elemental Resonance if multiple statuses
       if (statuses.length >= 2) recs.passives.push('elemental_resonance');
-      if (archetype.type === 'sustain' || stats.hoh >= 30 || stats.finalDmgDown >= 5) {
-        recs.passives.push('flourish');
-      }
-      if (archetype.type !== 'sustain' && stats.hoh < 30) {
-        recs.passives.push('demon_pact'); // Glass cannon option
-      }
-      recs.passives.push('conjuration'); // Always useful
+      // Flourish if you have sustain tools
+      if (sustainTools.length >= 1) recs.passives.push('flourish');
+      // Conjuration is generally useful
+      recs.passives.push('conjuration');
 
       // Dedupe
       Object.keys(recs).forEach(k => recs[k] = [...new Set(recs[k])]);
@@ -1087,24 +1178,41 @@
 
     function renderAnalysis(build, containerId, mode) {
       const container = document.getElementById(containerId);
-      const { synergies, conflicts, tips, archetype, stats } = getSmartSynergies(build);
+      const { flags, stats } = getBuildFlags(build);
       const statuses = getAllStatuses(build);
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const passives = build.passives.filter(Boolean);
 
       let html = `<div class="analysis-title">BUILD ANALYSIS</div>`;
 
-      // Archetype badge
-      if (build.core) {
-        const archetypeLabels = { crit: '⚔️ CRIT', dot: '🔥 DOT', sustain: '💚 SUSTAIN', control: '🧊 CONTROL', burst: '💥 BURST', hybrid: '⚖️ HYBRID' };
-        html += `<div class="archetype-section">
-          <div class="archetype-badge ${archetype.type}">${archetypeLabels[archetype.type] || 'HYBRID'}</div>
-          <div class="archetype-strength ${archetype.strength}">${archetype.strength.toUpperCase()}</div>
-        </div>`;
+      // Build summary
+      html += `<div class="build-summary">`;
+      [{ l: 'CORE', k: 'core' }, { l: 'BASIC', k: 'basic' }, { l: 'CTRL', k: 'basicControl' }, { l: 'ELEM', k: 'elemControl' }, { l: 'ULT', k: 'ultimate' }].forEach(({ l, k }) => {
+        const skill = build[k];
+        if (skill) {
+          const rune = getSelectedRune(build, skill.name);
+          html += `<div class="build-item"><span class="build-item-label">${l}</span><span class="build-item-skill">${skill.name}</span>${rune ? `<span class="build-item-rune">${rune.name}</span>` : ''}</div>`;
+        }
+      });
+      if (passives.length) html += `<div class="build-item"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:9px;">${passives.map(p => p.name).join(', ')}</span></div>`;
+      html += `</div>`;
+
+      // Status
+      html += `<div class="status-section"><div class="section-label">STATUS EFFECTS</div><div class="status-badges">`;
+      html += statuses.length ? statuses.map(s => `<span class="status-badge ${s.toLowerCase().replace(/\s+/g, '')}">${s}</span>`).join('') : '<span class="none-text">None</span>';
+      html += `</div></div>`;
+
+      // Flags
+      if (flags.length) {
+        html += `<div class="section-label">BUILD FLAGS</div>`;
+        const icons = { good: '▲', bad: '▼', info: '💡' };
+        flags.forEach(f => {
+          html += `<div class="flag-item ${f.type}"><span class="flag-icon">${icons[f.type]}</span><span>${f.text}</span></div>`;
+        });
       }
 
       // Stat totals
-      html += `<div class="stat-totals"><div class="stat-totals-title">RUNE STAT BONUSES</div><div class="stat-totals-grid">`;
+      html += `<div class="stat-totals"><div class="stat-totals-title">STAT BONUSES</div><div class="stat-totals-grid">`;
       const statDisplay = [
         { key: 'critChance', label: 'Crit', suffix: '%', threshold: [20, 10] },
         { key: 'critDmg', label: 'Crit Dmg', suffix: '%', threshold: [150, 100] },
@@ -1123,18 +1231,6 @@
       });
       html += `</div></div>`;
 
-      // Build summary
-      html += `<div class="build-summary">`;
-      [{ l: 'CORE', k: 'core' }, { l: 'BASIC', k: 'basic' }, { l: 'CTRL', k: 'basicControl' }, { l: 'ELEM', k: 'elemControl' }, { l: 'ULT', k: 'ultimate' }].forEach(({ l, k }) => {
-        const skill = build[k];
-        if (skill) {
-          const rune = getSelectedRune(build, skill.name);
-          html += `<div class="build-item"><span class="build-item-label">${l}</span><span class="build-item-skill">${skill.name}</span>${rune ? `<span class="build-item-rune">${rune.name}</span>` : ''}</div>`;
-        }
-      });
-      if (passives.length) html += `<div class="build-item"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:9px;">${passives.map(p => p.name).join(', ')}</span></div>`;
-      html += `</div>`;
-
       // Damage
       let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
       let mult = 1 + (stats.dmg / 100);
@@ -1145,10 +1241,10 @@
 
       html += `<div class="damage-calc"><div class="damage-calc-title">TOTAL DAMAGE</div><div class="damage-calc-value">${totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${mult.toFixed(2)} mult</div>`;
       if (mode === 'theory') {
-        const currentAnalysis = getSmartSynergies(currentBuild);
+        const currentFlags = getBuildFlags(currentBuild);
         const currentSkills = [currentBuild.core, currentBuild.basic, currentBuild.basicControl, currentBuild.elemControl, currentBuild.ultimate].filter(Boolean);
         let currentDmg = currentSkills.reduce((sum, s) => sum + calcDamage(s), 0);
-        let currentMult = 1 + (currentAnalysis.stats.dmg / 100);
+        let currentMult = 1 + (currentFlags.stats.dmg / 100);
         if (currentBuild.passives.some(p => p?.id === 'flourish')) currentMult += 0.15;
         if (currentBuild.passives.some(p => p?.id === 'demon_pact')) currentMult += 0.30;
         if (currentBuild.passives.some(p => p?.id === 'elemental_resonance')) currentMult += getAllStatuses(currentBuild).length * 0.05;
@@ -1159,25 +1255,6 @@
         else html += `<div class="comparison-indicator same">= same</div>`;
       }
       html += `</div>`;
-
-      // Status
-      html += `<div class="status-section"><div class="section-label">STATUS EFFECTS</div><div class="status-badges">`;
-      html += statuses.length ? statuses.map(s => `<span class="status-badge ${s.toLowerCase().replace(/\s+/g, '')}">${s}</span>`).join('') : '<span class="none-text">None</span>';
-      html += `</div></div>`;
-
-      // Synergies
-      if (synergies.length) {
-        html += `<div class="section-label">✨ SYNERGIES</div>`;
-        synergies.forEach(s => { html += `<div class="synergy-item ${s.type}">${s.text}</div>`; });
-      }
-      if (conflicts.length) {
-        html += `<div class="section-label">⚠️ CONFLICTS</div>`;
-        conflicts.forEach(c => { html += `<div class="conflict-item">${c}</div>`; });
-      }
-      if (tips.length) {
-        html += `<div class="section-label">💡 TIPS</div>`;
-        tips.forEach(t => { html += `<div class="tip-item">${t}</div>`; });
-      }
 
       if (mode === 'current') {
         html += `<button class="save-build-btn" onclick="saveCurrentBuild()">💾 SAVE BUILD</button><div class="saved-indicator" id="build-saved">✓ Saved!</div>`;
@@ -1248,7 +1325,7 @@
 
     function renderCurrentSidebar() {
       const container = document.getElementById('current-sidebar');
-      const { stats, archetype } = getSmartSynergies(currentBuild);
+      const { stats } = getBuildFlags(currentBuild);
       const statuses = getAllStatuses(currentBuild);
 
       let html = `<div class="sidebar-title">📌 CURRENT BUILD</div>`;
@@ -1273,7 +1350,6 @@
         dmg = Math.round(dmg * mult);
 
         html += `<div class="sidebar-stats">`;
-        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Type</span><span class="sidebar-stat-value">${archetype.type.toUpperCase()}</span></div>`;
         html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Damage</span><span class="sidebar-stat-value">${dmg.toLocaleString()}</span></div>`;
         html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Statuses</span><span class="sidebar-stat-value">${statuses.length}</span></div>`;
         html += `</div>`;
