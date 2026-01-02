@@ -115,6 +115,9 @@
 
     .analysis-panel { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 40px); overflow-y: auto; }
     .analysis-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; letter-spacing: 1px; text-align: center; }
+    .build-identity { background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(147, 51, 234, 0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; text-align: center; }
+    .identity-label { font-size: 10px; color: rgba(200, 200, 210, 0.6); letter-spacing: 1px; }
+    .identity-tags { font-size: 13px; font-weight: 600; color: #c4b5fd; }
     
     /* Archetype Badge */
     .archetype-section { margin-bottom: 16px; text-align: center; }
@@ -342,42 +345,42 @@
     // ============ DATA ============
     let SKILLS = {
       basic: [
-        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', desc: '60% ATK, Chill', hitRate: 'medium' },
-        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', desc: '30% ATK, Burning', hitRate: 'medium' },
-        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', desc: '50% ATK, Shock', hitRate: 'medium' },
+        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', desc: '60% ATK, Chill', hitRate: 'medium', provides: ['ice', 'chill'] },
+        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', desc: '30% ATK, Burning', hitRate: 'medium', provides: ['fire', 'burning'] },
+        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', desc: '50% ATK, Shock', hitRate: 'medium', provides: ['lightning', 'shock'] },
       ],
       core: [
-        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', mpCost: 20, desc: '70% ATK, Burning', hitRate: 'low' },
-        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', mpCost: 30, desc: '160% ATK, Shock', hitRate: 'low' },
-        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', mpCost: 40, desc: '70% ATK channel, Chill', hitRate: 'high' },
+        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', mpCost: 20, desc: '70% ATK, Burning', hitRate: 'low', provides: ['fire', 'burning', 'burst'] },
+        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', mpCost: 30, desc: '160% ATK, Shock', hitRate: 'low', provides: ['lightning', 'shock', 'burst'] },
+        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', mpCost: 40, desc: '70% ATK channel, Chill', hitRate: 'high', provides: ['ice', 'chill', 'multi-hit', 'channel'] },
       ],
       basicControl: [
-        { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, desc: 'Knockback + stun' },
-        { id: 'flash', name: 'Flash', element: null, atk: 0, cd: 12, hpRecovery: 15, desc: 'Dodge, 15% HP' },
-        { id: 'gravity_field', name: 'Gravity Field', element: null, atk: 0, cd: 20, desc: 'Slow zone' },
+        { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, desc: 'Knockback + stun', provides: ['control', 'stun'] },
+        { id: 'flash', name: 'Flash', element: null, atk: 0, cd: 12, hpRecovery: 15, desc: 'Dodge, 15% HP', provides: ['sustain', 'mobility'] },
+        { id: 'gravity_field', name: 'Gravity Field', element: null, atk: 0, cd: 20, desc: 'Slow zone', provides: ['control', 'aoe'] },
       ],
       elemControl: [
-        { id: 'lightning_orb', name: 'Lightning Orb', element: 'Lightning', atk: 35, status: 'Shock', cd: 12, desc: 'Shock orb' },
-        { id: 'frost_shield', name: 'Frost Shield', element: 'Ice', atk: 0, cd: 15, shield: 35, desc: '35% HP shield' },
-        { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, desc: 'Fire turret' },
+        { id: 'lightning_orb', name: 'Lightning Orb', element: 'Lightning', atk: 35, status: 'Shock', cd: 12, desc: 'Shock orb', provides: ['lightning', 'shock'] },
+        { id: 'frost_shield', name: 'Frost Shield', element: 'Ice', atk: 0, cd: 15, shield: 35, desc: '35% HP shield', provides: ['ice', 'shield', 'sustain'] },
+        { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, desc: 'Fire turret', provides: ['fire', 'summon'] },
       ],
       ultimate: [
-        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, desc: 'Ice storm', hitRate: 'high' },
-        { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, desc: 'Clone' },
-        { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, desc: 'Transform' },
+        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, desc: 'Ice storm', hitRate: 'high', provides: ['ice', 'chill', 'multi-hit', 'aoe'] },
+        { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, desc: 'Clone', provides: ['clone'] },
+        { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, desc: 'Transform', provides: [] },
       ],
     };
 
     let PASSIVES = [
-      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% per status', archetype: 'status' },
-      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30%', archetype: 'sustain' },
-      { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen', archetype: 'utility' },
-      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion', archetype: 'sustain' },
-      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg >80% HP', archetype: 'sustain', conditionalDmg: true },
-      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 MP/HP on kill', archetype: 'sustain' },
-      { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg, +30% taken', downside: true, archetype: 'burst' },
-      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s', archetype: 'sustain' },
-      { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns', archetype: 'utility' },
+      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% per status', archetype: 'status', provides: [], wants: ['status-variety'] },
+      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30%', archetype: 'sustain', provides: ['sustain'], wants: [] },
+      { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen', archetype: 'utility', provides: ['mp'], wants: [] },
+      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion', archetype: 'sustain', provides: ['sustain', 'evasion'], wants: [] },
+      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg >80% HP', archetype: 'sustain', conditionalDmg: true, provides: ['dmg-boost'], wants: ['sustain'] },
+      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 MP/HP on kill', archetype: 'sustain', provides: ['sustain', 'mp'], wants: [] },
+      { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg, +30% taken', downside: true, archetype: 'burst', provides: ['dmg-boost'], wants: [] },
+      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s', archetype: 'sustain', provides: ['shield', 'sustain'], wants: [] },
+      { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns', archetype: 'utility', provides: ['cd-reduction'], wants: [] },
     ];
 
     let RUNES = [];
@@ -698,6 +701,133 @@
       return build.runes['Lightning Whip'] === 'Numb' && getRuneTierLevel('Lightning Whip', 'Numb') >= 2;
     }
 
+    // ============ TAG SYSTEM ============
+    function getBuildProvides(build) {
+      const provides = new Set();
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      // Add skill provides
+      skills.forEach(skill => {
+        (skill.provides || []).forEach(tag => provides.add(tag));
+      });
+      
+      // Add rune provides (only if unlocked to tier 2+)
+      skills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          if (rune && getRuneTierLevel(skill.name, runeName) >= 2) {
+            (rune.provides || []).forEach(tag => provides.add(tag));
+          }
+        }
+      });
+      
+      // Add passive provides
+      build.passives.filter(Boolean).forEach(p => {
+        (p.provides || []).forEach(tag => provides.add(tag));
+      });
+      
+      // Derive additional tags from stats
+      const stats = getBuildStats(build);
+      if (stats.critChance >= 15) provides.add('crit-chance');
+      if (stats.dot >= 20) provides.add('dot-boost');
+      if (stats.haste >= 20) provides.add('haste');
+      
+      return provides;
+    }
+
+    function getUnmetWants(build) {
+      const provides = getBuildProvides(build);
+      const unmet = [];
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      // Check rune wants
+      skills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          if (rune && getRuneTierLevel(skill.name, runeName) >= 2) {
+            (rune.wants || []).forEach(want => {
+              if (!provides.has(want)) {
+                unmet.push({ source: `${skill.name} → ${runeName}`, wants: want });
+              }
+            });
+          }
+        }
+      });
+      
+      // Check passive wants
+      build.passives.filter(Boolean).forEach(p => {
+        (p.wants || []).forEach(want => {
+          if (!provides.has(want)) {
+            unmet.push({ source: p.name, wants: want });
+          }
+        });
+      });
+      
+      return unmet;
+    }
+
+    function getMatchingRecommendations(build) {
+      const provides = getBuildProvides(build);
+      const recs = { skills: [], runes: [], passives: [] };
+      
+      // Find runes whose WANTS are satisfied by our PROVIDES
+      RUNES.forEach(rune => {
+        if (rune.wants && rune.wants.length > 0) {
+          const satisfied = rune.wants.every(want => provides.has(want));
+          if (satisfied) {
+            // Check if not already selected
+            const skill = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate]
+              .filter(Boolean).find(s => s.name === rune.skill);
+            if (!skill || build.runes[rune.skill] !== rune.name) {
+              recs.runes.push({ 
+                skill: rune.skill, 
+                rune: rune.name, 
+                reason: `You have: ${rune.wants.join(', ')}`,
+                provides: rune.provides
+              });
+            }
+          }
+        }
+      });
+      
+      // Find passives whose WANTS are satisfied
+      PASSIVES.forEach(p => {
+        if (p.wants && p.wants.length > 0) {
+          const satisfied = p.wants.every(want => provides.has(want));
+          if (satisfied && !build.passives.some(bp => bp?.id === p.id)) {
+            recs.passives.push({ id: p.id, reason: `You have: ${p.wants.join(', ')}` });
+          }
+        }
+      });
+      
+      // Find skills that would fill gaps (provide what runes want)
+      const allWants = new Set();
+      RUNES.forEach(rune => {
+        const selected = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate]
+          .filter(Boolean).find(s => s.name === rune.skill && build.runes[rune.skill] === rune.name);
+        if (selected) {
+          (rune.wants || []).forEach(w => { if (!provides.has(w)) allWants.add(w); });
+        }
+      });
+      
+      // Find skills that provide what we're missing
+      Object.values(SKILLS).flat().forEach(skill => {
+        const skillProvides = skill.provides || [];
+        const matches = skillProvides.filter(p => allWants.has(p));
+        if (matches.length > 0) {
+          const isSelected = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate]
+            .some(s => s?.id === skill.id);
+          if (!isSelected) {
+            recs.skills.push({ id: skill.id, reason: `Provides: ${matches.join(', ')}` });
+          }
+        }
+      });
+      
+      return recs;
+    }
+
     function getBuildFlags(build) {
       const flags = [];
       const stats = getBuildStats(build);
@@ -720,16 +850,6 @@
         flags.push({ type: 'info', text: `Crit Dmg ${stats.critDmg}% but low Crit ${stats.critChance}%` });
       } else if (stats.critChance >= 15 && stats.critDmg >= 30) {
         flags.push({ type: 'good', text: `Crit: ${stats.critChance}% Chance, ${stats.critDmg}% Dmg` });
-      }
-
-      // === HOH + MULTI-HIT ===
-      const multiHitSkills = countMultiHitSkills(build);
-      if (stats.hoh > 0) {
-        if (multiHitSkills.length === 0) {
-          flags.push({ type: 'info', text: `HoH ${stats.hoh}%: no multi-hit skills` });
-        } else {
-          flags.push({ type: 'good', text: `HoH ${stats.hoh}%: ${multiHitSkills.join(', ')}` });
-        }
       }
 
       // === DOT + BURNING ===
@@ -797,127 +917,104 @@
         flags.push({ type: 'good', text: `${stats.vulnerableStacks}+ Vulnerable stacks` });
       }
 
+      // === UNMET WANTS (Tag System) ===
+      const unmet = getUnmetWants(build);
+      unmet.forEach(u => {
+        flags.push({ type: 'bad', text: `${u.source}: needs ${u.wants}` });
+      });
+
+      // === SATISFIED WANTS (Tag System) ===
+      const provides = getBuildProvides(build);
+      const selectedSkills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      selectedSkills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          if (rune && rune.wants && rune.wants.length > 0 && getRuneTierLevel(skill.name, runeName) >= 2) {
+            const satisfied = rune.wants.every(want => provides.has(want));
+            if (satisfied) {
+              flags.push({ type: 'good', text: `${runeName}: ${rune.wants.join(', ')} ✓` });
+            }
+          }
+        }
+      });
+
       return { flags, stats };
     }
 
-    // ============ SMART RECOMMENDATIONS (Stat-Driven) ============
+    // ============ SMART RECOMMENDATIONS (Tag-Based) ============
     function getSmartRecommendations(build) {
       const recs = { basic: [], core: [], control: [], ultimate: [], passives: [], runes: [] };
-      const stats = getBuildStats(build);
-      const statuses = getAllStatuses(build);
-      const coreElement = build.core ? getEffectiveElement(build, build.core) : null;
-      const hasNumb = hasNumbRune(build);
-      const sustainTools = countSustainTools(build);
-      const multiHitSkills = countMultiHitSkills(build);
-
-      // === STAT-DRIVEN RECOMMENDATIONS ===
+      const provides = getBuildProvides(build);
+      const tagRecs = getMatchingRecommendations(build);
       
-      // High Haste → wants multi-hit skills (more attacks = more value from haste)
-      if (stats.haste >= 20) {
-        recs.core.push('ice_ray'); // channel = lots of hits
-        SKILLS.ultimate.forEach(s => { if (s.hitRate === 'high') recs.ultimate.push(s.id); });
-      }
-
-      // High Crit → wants crit-dmg runes, shock sources for Numb
-      if (stats.critChance >= 15) {
-        recs.core.push('lightning_punch'); // High single-hit, benefits from crit
-        recs.core.push('fireball'); // Good crit runes
-        // Recommend crit-boosting runes
-        recs.runes.push({ skill: 'Fireball', rune: 'Pyroblast', reason: 'Crit Dmg +45%' });
-        recs.runes.push({ skill: 'Fireball', rune: 'Jolt', reason: 'Crit +10%' });
-        recs.runes.push({ skill: 'Lightning Punch', rune: 'Thunder Punch', reason: 'Crit +5%, Add Dmg +15%' });
-        // If no Numb yet, suggest it
-        if (!hasNumb) {
-          recs.runes.push({ skill: 'Lightning Whip', rune: 'Numb', reason: '+20% Crit vs Shocked' });
+      // Add rune recommendations from tag matching
+      tagRecs.runes.forEach(r => {
+        recs.runes.push({ skill: r.skill, rune: r.rune, reason: r.reason });
+      });
+      
+      // Add passive recommendations from tag matching
+      tagRecs.passives.forEach(p => {
+        recs.passives.push(p.id);
+      });
+      
+      // Add skill recommendations from tag matching (fill gaps)
+      tagRecs.skills.forEach(s => {
+        const skill = Object.values(SKILLS).flat().find(sk => sk.id === s.id);
+        if (skill) {
+          const row = Object.entries(SKILLS).find(([k, v]) => v.includes(skill))?.[0];
+          if (row === 'basic') recs.basic.push(s.id);
+          else if (row === 'core') recs.core.push(s.id);
+          else if (row === 'basicControl' || row === 'elemControl') recs.control.push(s.id);
+          else if (row === 'ultimate') recs.ultimate.push(s.id);
         }
-      }
-
-      // High HoH → wants multi-hit skills
-      if (stats.hoh >= 15) {
-        recs.core.push('ice_ray'); // Multi-hit channel
-        recs.ultimate.push('hail'); // Multi-hit storm
-        recs.runes.push({ skill: 'Hail', rune: 'Glacial', reason: 'HoH +30%, multi-hit' });
-        recs.runes.push({ skill: 'Ice Ray', rune: 'Rimebite', reason: 'Faster ticks = more HoH procs' });
-        recs.runes.push({ skill: 'Fireball', rune: 'Iceflame', reason: 'HoH +30%, multi-hit shards' });
-      }
-
-      // High DoT → wants burning-stack sources
-      if (stats.dot >= 20) {
-        recs.core.push('fireball'); // Fire core for burning
-        recs.runes.push({ skill: 'Lightning Punch', rune: 'Flame Bow', reason: '20 Burning stacks' });
-        recs.runes.push({ skill: 'Hail', rune: 'Skyfire', reason: '8+ Burning stacks' });
-        recs.runes.push({ skill: 'Doppelganger', rune: 'Ember', reason: '20 Burning on death' });
-        recs.runes.push({ skill: 'Infernal Bloom', rune: 'Fire Core', reason: 'DoT +20%, Burning stacks' });
-      }
-
-      // High Thorn → wants sustain/shields (stay alive to reflect)
-      if (stats.thorn >= 15) {
-        SKILLS.elemControl.forEach(s => { if (s.shield) recs.control.push(s.id); });
-        SKILLS.basicControl.forEach(s => { if (s.hpRecovery) recs.control.push(s.id); });
-        recs.passives.push('flourish');
-        recs.passives.push('arcane_shield');
-        recs.runes.push({ skill: 'Frost Shield', rune: 'Shattered Ice', reason: 'Shield +10%' });
-      }
-
-      // High CD Reduction → wants cooldown-heavy skills
-      if (stats.cdReduction >= 15) {
-        // Recommend skills with impactful cooldowns
-        recs.control.push('gravity_field');
-        recs.ultimate.push('doppelganger');
-        recs.passives.push('conjuration');
-      }
-
-      // High Add Dmg Chance → wants multi-hit (more chances to proc)
-      if (stats.addDmgChance >= 15) {
-        recs.core.push('ice_ray');
-        recs.runes.push({ skill: 'Ice Ray', rune: 'Rimebite', reason: 'Add Dmg +45%, faster hits' });
-        recs.runes.push({ skill: 'Hail', rune: 'Glacial', reason: 'Add Dmg Chance +10%, multi-hit' });
-      }
-
-      // === SELECTION-DRIVEN RECOMMENDATIONS ===
-
-      // If Numb selected, need Shock sources
-      if (hasNumb) {
-        SKILLS.basic.forEach(s => { if (s.status === 'Shock') recs.basic.push(s.id); });
-        SKILLS.elemControl.forEach(s => { if (s.status === 'Shock') recs.control.push(s.id); });
-        recs.runes.push({ skill: 'Lightning Orb', rune: 'Electrolysis', reason: 'Shock source for Numb' });
-        recs.runes.push({ skill: 'Ice Ray', rune: 'Ionization', reason: 'Shock source for Numb' });
-      }
-
-      // Element matching
-      if (coreElement) {
-        SKILLS.basic.forEach(s => { if (s.element === coreElement) recs.basic.push(s.id); });
-        SKILLS.elemControl.forEach(s => { if (s.element === coreElement) recs.control.push(s.id); });
-        SKILLS.ultimate.forEach(s => { if (s.element === coreElement) recs.ultimate.push(s.id); });
-      }
-
-      // Status diversity for Elemental Resonance
-      if (build.passives.some(p => p?.id === 'elemental_resonance') || statuses.length >= 2) {
-        SKILLS.basic.forEach(s => { if (s.status && !statuses.includes(s.status)) recs.basic.push(s.id); });
-        recs.passives.push('elemental_resonance');
-      }
-
-      // Sustain tools if HoH or defensive stats
-      if (stats.hoh > 0 || sustainTools.length < 2) {
-        SKILLS.elemControl.forEach(s => { if (s.shield) recs.control.push(s.id); });
-        SKILLS.basicControl.forEach(s => { if (s.hpRecovery) recs.control.push(s.id); });
-      }
-
-      // If sustain tools present, recommend Flourish
-      if (sustainTools.length >= 1) {
-        recs.passives.push('flourish');
-      }
-
-      // Doppelganger is generally good
-      recs.ultimate.push('doppelganger');
+      });
       
-      // Conjuration is generally useful
-      recs.passives.push('conjuration');
+      // === RUNES THAT WANT WHAT YOU PROVIDE ===
+      RUNES.forEach(rune => {
+        if (rune.wants && rune.wants.length > 0) {
+          const satisfied = rune.wants.every(want => provides.has(want));
+          if (satisfied) {
+            // Check not already selected or recommended
+            const alreadyRecd = recs.runes.some(r => r.skill === rune.skill && r.rune === rune.name);
+            const skill = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate]
+              .filter(Boolean).find(s => s.name === rune.skill);
+            const alreadySelected = skill && build.runes[rune.skill] === rune.name;
+            
+            if (!alreadyRecd && !alreadySelected) {
+              recs.runes.push({ 
+                skill: rune.skill, 
+                rune: rune.name, 
+                reason: `Wants: ${rune.wants.join(', ')} ✓`
+              });
+            }
+          }
+        }
+      });
+      
+      // === SKILLS THAT PROVIDE WHAT RUNES WANT ===
+      const unmet = getUnmetWants(build);
+      const neededTags = [...new Set(unmet.map(u => u.wants))];
+      
+      Object.values(SKILLS).flat().forEach(skill => {
+        const skillProvides = skill.provides || [];
+        const matches = skillProvides.filter(p => neededTags.includes(p));
+        if (matches.length > 0) {
+          const isSelected = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate]
+            .some(s => s?.id === skill.id);
+          if (!isSelected) {
+            const row = Object.entries(SKILLS).find(([k, v]) => v.includes(skill))?.[0];
+            if (row === 'basic' && !recs.basic.includes(skill.id)) recs.basic.push(skill.id);
+            else if (row === 'core' && !recs.core.includes(skill.id)) recs.core.push(skill.id);
+            else if ((row === 'basicControl' || row === 'elemControl') && !recs.control.includes(skill.id)) recs.control.push(skill.id);
+            else if (row === 'ultimate' && !recs.ultimate.includes(skill.id)) recs.ultimate.push(skill.id);
+          }
+        }
+      });
 
       // Dedupe
       Object.keys(recs).forEach(k => {
         if (k === 'runes') {
-          // Dedupe runes by skill+rune combo
           const seen = new Set();
           recs.runes = recs.runes.filter(r => {
             const key = `${r.skill}|${r.rune}`;
@@ -1222,6 +1319,8 @@
         newElement: row['New Element'] || null,
         addsStatus: row['Adds Status'] || null,
         keyStats: row['Key Stats'] || '',
+        provides: (row['Provides'] || '').split(';').map(s => s.trim()).filter(Boolean),
+        wants: (row['Wants'] || '').split(';').map(s => s.trim()).filter(Boolean),
       }));
     }
 
@@ -1349,8 +1448,42 @@
       const statuses = getAllStatuses(build);
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const passives = build.passives.filter(Boolean);
+      const provides = getBuildProvides(build);
 
       let html = `<div class="analysis-title">BUILD ANALYSIS</div>`;
+
+      // Build Identity (from tags)
+      if (provides.size > 0) {
+        const tagGroups = {
+          elements: ['ice', 'fire', 'lightning'],
+          statuses: ['chill', 'burning', 'shock', 'electrocution', 'imprison', 'freeze', 'vulnerable', 'stun', 'frostbite'],
+          style: ['multi-hit', 'burst', 'channel', 'aoe', 'clone', 'summon'],
+          defense: ['sustain', 'shield', 'mobility', 'evasion'],
+          stats: ['crit-chance', 'crit-dmg', 'hoh', 'dot-boost', 'ele-dmg', 'dmg-boost', 'final-dmg', 'cd-reduction', 'mp', 'haste']
+        };
+        
+        const identity = [];
+        const providesArr = [...provides];
+        
+        // Find primary element
+        const elements = providesArr.filter(t => tagGroups.elements.includes(t));
+        if (elements.length === 1) identity.push(elements[0].charAt(0).toUpperCase() + elements[0].slice(1));
+        else if (elements.length > 1) identity.push('Hybrid');
+        
+        // Find style
+        const styles = providesArr.filter(t => tagGroups.style.includes(t));
+        styles.forEach(s => identity.push(s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')));
+        
+        // Find key stats
+        if (provides.has('crit-chance')) identity.push('Crit');
+        if (provides.has('dot-boost') || provides.has('burning')) identity.push('DoT');
+        if (provides.has('sustain') || provides.has('shield')) identity.push('Sustain');
+        if (provides.has('control') || provides.has('imprison') || provides.has('freeze') || provides.has('stun')) identity.push('Control');
+        
+        if (identity.length > 0) {
+          html += `<div class="build-identity"><span class="identity-label">BUILD:</span> <span class="identity-tags">${identity.slice(0, 4).join(' / ')}</span></div>`;
+        }
+      }
 
       // Build summary
       html += `<div class="build-summary">`;
