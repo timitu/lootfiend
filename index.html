@@ -357,26 +357,28 @@
     let RUNES = [];
 
     let PROFILE = {
-      stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 122.8, addDmgChance: 0, finalDmgUp: 45, haste: 0, eleDmg: 0, dot: 0, hoh: 0, thorn: 0, mpRegen: 0, cdReduction: 0 },
+      stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0, dot: 0, eleDmg: 0, finalDmg: 0, evasion: 0 },
       runeUnlocks: {},
       currentBuild: null
     };
 
+    // All character stats - player enters what they see in game
     const STAT_CONFIG = [
-      { key: 'atk', label: 'ATK', default: 2730 },
-      { key: 'def', label: 'DEF', default: 400 },
-      { key: 'hp', label: 'HP', default: 120000 },
+      { key: 'atk', label: 'ATK', default: 2730, flat: true },
+      { key: 'def', label: 'DEF', default: 400, flat: true },
+      { key: 'hp', label: 'HP', default: 120000, flat: true },
       { key: 'crit', label: 'Crit %', default: 4.6 },
-      { key: 'critDmg', label: 'Crit Dmg %', default: 122.8 },
+      { key: 'critDmg', label: 'Crit Dmg %', default: 0 },
       { key: 'addDmgChance', label: 'Add Dmg Chance %', default: 0 },
-      { key: 'finalDmgUp', label: 'Final Dmg↑ %', default: 45 },
+      { key: 'thorn', label: 'Thorn %', default: 0 },
       { key: 'haste', label: 'Haste %', default: 0 },
-      { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
-      { key: 'dot', label: 'DoT %', default: 0 },
-      { key: 'hoh', label: 'HoH %', default: 0 },
-      { key: 'thorn', label: 'Thorn', default: 0 },
-      { key: 'mpRegen', label: 'MP Regen', default: 0 },
+      { key: 'mpRegen', label: 'MP Regen %', default: 0 },
       { key: 'cdReduction', label: 'CD %', default: 0 },
+      { key: 'hoh', label: 'HoH %', default: 0 },
+      { key: 'dot', label: 'DoT %', default: 0 },
+      { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
+      { key: 'finalDmg', label: 'Final Dmg %', default: 0 },
+      { key: 'evasion', label: 'Evasion %', default: 0 },
     ];
 
     const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
@@ -460,18 +462,35 @@
     }
 
     function getBuildStats(build) {
+      // Start with profile stats (what player entered)
       const totals = {
-        critChance: PROFILE.stats.crit, critDmg: PROFILE.stats.critDmg, hoh: PROFILE.stats.hoh,
-        dot: PROFILE.stats.dot, finalDmg: PROFILE.stats.finalDmgUp, finalDmgDown: 0,
-        eleDmg: PROFILE.stats.eleDmg, dmg: 0, addDmg: 0, addDmgChance: PROFILE.stats.addDmgChance, 
-        haste: PROFILE.stats.haste, cdReduction: PROFILE.stats.cdReduction, mpRegen: PROFILE.stats.mpRegen, 
-        shieldStrength: 0, evasion: 0, healingReceived: 0,
-        critVsShocked: 0, burningStacks: 0, vulnerableStacks: 0,
-        // Base stats (not modified by runes typically)
-        atk: PROFILE.stats.atk, def: PROFILE.stats.def, hp: PROFILE.stats.hp, thorn: PROFILE.stats.thorn
+        atk: PROFILE.stats.atk,
+        def: PROFILE.stats.def,
+        hp: PROFILE.stats.hp,
+        critChance: PROFILE.stats.crit,
+        critDmg: PROFILE.stats.critDmg,
+        addDmgChance: PROFILE.stats.addDmgChance,
+        thorn: PROFILE.stats.thorn,
+        haste: PROFILE.stats.haste,
+        mpRegen: PROFILE.stats.mpRegen,
+        cdReduction: PROFILE.stats.cdReduction,
+        hoh: PROFILE.stats.hoh,
+        dot: PROFILE.stats.dot,
+        eleDmg: PROFILE.stats.eleDmg,
+        finalDmg: PROFILE.stats.finalDmg,
+        evasion: PROFILE.stats.evasion,
+        // Rune-only stats (no profile input)
+        finalDmgDown: 0,
+        dmg: 0,
+        addDmg: 0,
+        shieldStrength: 0,
+        healingReceived: 0,
+        critVsShocked: 0,
+        burningStacks: 0,
+        vulnerableStacks: 0
       };
 
-      // Get stats from selected runes
+      // Add bonuses from selected runes
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       skills.forEach(skill => {
         const runeName = build.runes[skill.name];
@@ -656,15 +675,10 @@
       }
 
       // === CRIT BALANCE ===
-      const baseCritDmg = 122.8;
-      const baseCrit = 4.6;
-      const critDmgInvested = stats.critDmg - baseCritDmg;
-      const critChanceInvested = stats.critChance - baseCrit;
-      
-      if (critDmgInvested > 20 && critChanceInvested < 5) {
-        flags.push({ type: 'info', text: `Crit Dmg +${critDmgInvested.toFixed(0)}%, Crit Chance +${critChanceInvested.toFixed(0)}%` });
-      } else if (critChanceInvested > 5 && critDmgInvested > 20) {
-        flags.push({ type: 'good', text: `Crit: +${critChanceInvested.toFixed(0)}% Chance, +${critDmgInvested.toFixed(0)}% Dmg` });
+      if (stats.critDmg > 20 && stats.critChance < 10) {
+        flags.push({ type: 'info', text: `Crit Dmg ${stats.critDmg}% but low Crit ${stats.critChance}%` });
+      } else if (stats.critChance >= 15 && stats.critDmg >= 30) {
+        flags.push({ type: 'good', text: `Crit: ${stats.critChance}% Chance, ${stats.critDmg}% Dmg` });
       }
 
       // === HOH + MULTI-HIT ===
@@ -960,7 +974,7 @@
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`);
         if (!res.ok) throw new Error('Failed');
         const data = parseCSV(await res.text());
-        const map = { 'ATK': 'atk', 'DEF': 'def', 'HP': 'hp', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Add Dmg Chance': 'addDmgChance', 'Final Dmg Up': 'finalDmgUp', 'Haste': 'haste', 'Elemental Dmg': 'eleDmg', 'DoT': 'dot', 'Heal on Hit': 'hoh', 'HoH': 'hoh', 'Thorn': 'thorn', 'MP Regen': 'mpRegen', 'CD': 'cdReduction' };
+        const map = { 'ATK': 'atk', 'DEF': 'def', 'HP': 'hp', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Add Dmg Chance': 'addDmgChance', 'Thorn': 'thorn', 'Haste': 'haste', 'MP Regen': 'mpRegen', 'CD': 'cdReduction', 'HoH': 'hoh', 'Heal on Hit': 'hoh', 'DoT': 'dot', 'Ele Dmg': 'eleDmg', 'Elemental Dmg': 'eleDmg', 'Final Dmg': 'finalDmg', 'Evasion': 'evasion' };
         data.forEach(row => { const k = map[row['Stat']]; if (k) PROFILE.stats[k] = parseFloat(row['Value']) || 0; });
         saveProfile();
         renderProfile();
@@ -1211,23 +1225,26 @@
         });
       }
 
-      // Stat totals
-      html += `<div class="stat-totals"><div class="stat-totals-title">STAT BONUSES</div><div class="stat-totals-grid">`;
+      // Stat totals (Profile + Rune bonuses)
+      html += `<div class="stat-totals"><div class="stat-totals-title">TOTAL STATS</div><div class="stat-totals-grid">`;
       const statDisplay = [
-        { key: 'critChance', label: 'Crit', suffix: '%', threshold: [20, 10] },
-        { key: 'critDmg', label: 'Crit Dmg', suffix: '%', threshold: [150, 100] },
-        { key: 'addDmgChance', label: 'Add Dmg', suffix: '%', threshold: [15, 5] },
-        { key: 'hoh', label: 'HoH', suffix: '%', threshold: [30, 15] },
-        { key: 'dot', label: 'DoT', suffix: '%', threshold: [40, 20] },
-        { key: 'eleDmg', label: 'Ele Dmg', suffix: '%', threshold: [15, 5] },
-        { key: 'dmg', label: 'Dmg', suffix: '%', threshold: [60, 30] },
-        { key: 'cdReduction', label: 'CD', suffix: '%', threshold: [15, 5] },
-        { key: 'mpRegen', label: 'MP Regen', suffix: '%', threshold: [10, 5] },
+        { key: 'critChance', label: 'Crit', suffix: '%' },
+        { key: 'critDmg', label: 'Crit Dmg', suffix: '%' },
+        { key: 'addDmgChance', label: 'Add Dmg', suffix: '%' },
+        { key: 'hoh', label: 'HoH', suffix: '%' },
+        { key: 'dot', label: 'DoT', suffix: '%' },
+        { key: 'eleDmg', label: 'Ele Dmg', suffix: '%' },
+        { key: 'dmg', label: 'Dmg', suffix: '%' },
+        { key: 'finalDmg', label: 'Final Dmg', suffix: '%' },
+        { key: 'finalDmgDown', label: 'Final Dmg↓', suffix: '%' },
+        { key: 'haste', label: 'Haste', suffix: '%' },
+        { key: 'cdReduction', label: 'CD', suffix: '%' },
+        { key: 'mpRegen', label: 'MP Regen', suffix: '%' },
+        { key: 'evasion', label: 'Evasion', suffix: '%' },
       ];
-      statDisplay.forEach(({ key, label, suffix, threshold }) => {
+      statDisplay.forEach(({ key, label, suffix }) => {
         const val = stats[key] || 0;
-        const cls = val >= threshold[0] ? 'high' : val >= threshold[1] ? 'medium' : 'low';
-        if (val > 0) html += `<div class="stat-row"><span class="stat-row-label">${label}</span><span class="stat-row-value ${cls}">${val}${suffix}</span></div>`;
+        if (val > 0) html += `<div class="stat-row"><span class="stat-row-label">${label}</span><span class="stat-row-value">${val}${suffix}</span></div>`;
       });
       html += `</div></div>`;
 
