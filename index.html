@@ -116,8 +116,13 @@
     .analysis-panel { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 40px); overflow-y: auto; }
     .analysis-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; letter-spacing: 1px; text-align: center; }
     .build-identity { background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(147, 51, 234, 0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; text-align: center; }
+    .identity-main { margin-bottom: 4px; }
     .identity-label { font-size: 10px; color: rgba(200, 200, 210, 0.6); letter-spacing: 1px; }
     .identity-tags { font-size: 13px; font-weight: 600; color: #c4b5fd; }
+    .coherence-indicator { font-size: 10px; padding: 2px 8px; border-radius: 4px; display: inline-block; }
+    .coherence-indicator.high { background: rgba(74, 222, 128, 0.2); color: #86efac; }
+    .coherence-indicator.medium { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    .coherence-indicator.low { background: rgba(248, 113, 113, 0.2); color: #fca5a5; }
 
     /* Stat Totals */
     .stat-totals { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
@@ -607,8 +612,9 @@
         (skill.provides || []).forEach(tag => provides.add(tag));
         // Derive from status (Shock -> shock, Burning -> burning, etc.)
         if (skill.status) provides.add(skill.status.toLowerCase());
-        // Derive from element
-        if (skill.element) provides.add(skill.element.toLowerCase());
+        // Derive from EFFECTIVE element (after rune conversion)
+        const effectiveElem = getEffectiveElement(build, skill);
+        if (effectiveElem) provides.add(effectiveElem.toLowerCase());
       });
       
       // Add rune provides (only if unlocked to tier 2+)
@@ -634,9 +640,10 @@
       // Derive additional tags from stats
       const stats = getBuildStats(build);
       if (stats.critChance >= 15) provides.add('crit-chance');
-      if (stats.dot >= 20) provides.add('dot-boost');
+      if (stats.dot >= 10) provides.add('dot-boost');
       if (stats.haste >= 20) provides.add('haste');
       if (stats.hoh >= 15) provides.add('hoh');
+      if (stats.finalDmgDown >= 5) provides.add('sustain');
       
       return provides;
     }
@@ -739,12 +746,16 @@
       const statuses = getAllStatuses(build);
       const passives = build.passives.filter(Boolean);
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      const provides = getBuildProvides(build);
 
-      // === CRIT BALANCE ===
-      if (stats.critDmg > 20 && stats.critChance < 10) {
-        flags.push({ type: 'info', text: `Crit Dmg ${stats.critDmg}% but low Crit ${stats.critChance}%` });
-      } else if (stats.critChance >= 15 && stats.critDmg >= 30) {
-        flags.push({ type: 'good', text: `Crit: ${stats.critChance}% Chance, ${stats.critDmg}% Dmg` });
+      // === CRIT BALANCE (only if build has crit focus) ===
+      const hasCritFocus = provides.has('crit-chance') || provides.has('crit-dmg') || stats.critChance >= 15;
+      if (hasCritFocus) {
+        if (stats.critDmg > 30 && stats.critChance < 10) {
+          flags.push({ type: 'info', text: `Crit Dmg ${stats.critDmg}% but low Crit ${stats.critChance}%` });
+        } else if (stats.critChance >= 15 && stats.critDmg >= 30) {
+          flags.push({ type: 'good', text: `Crit: ${stats.critChance}% Chance, ${stats.critDmg}% Dmg` });
+        }
       }
 
       // === DOT + BURNING ===
@@ -776,7 +787,8 @@
       }
 
       if (hasDemonPact && !hasFlourish) {
-        flags.push({ type: 'info', text: `Demon Pact: ${sustainTools.length} sustain` });
+        const type = sustainTools.length >= 3 ? 'good' : sustainTools.length >= 1 ? 'info' : 'bad';
+        flags.push({ type, text: `Demon Pact: ${sustainTools.length} sustain${sustainTools.length >= 3 ? ' ✓' : ''}` });
       }
 
       // === ELEMENTAL RESONANCE ===
@@ -1177,19 +1189,32 @@
       const rowMap = { 'Basic': 'basic', 'Core': 'core', 'Basic Control': 'basicControl', 'Elemental Control': 'elemControl', 'Ultimate': 'ultimate' };
       data.forEach(row => {
         const rowType = rowMap[row['Row']];
-        if (rowType) SKILLS[rowType].push({
-          id: row['Skill Name'].toLowerCase().replace(/\s+/g, '_'),
-          name: row['Skill Name'],
-          element: row['Element'] || null,
-          atk: parseFloat(row['ATK%']) || 0,
-          status: row['Status Effect'] || null,
-          mpCost: parseInt(row['MP Cost']) || 0,
-          cd: parseInt(row['CD']) || 0,
-          shield: parseFloat(row['Shield %']) || 0,
-          hpRecovery: parseFloat(row['HP Recovery %']) || 0,
-          desc: row['Special'] || `${row['ATK%'] || 0}% ATK`,
-          hitRate: row['Hit Rate'] || 'medium',
-        });
+        if (rowType) {
+          // Build provides from explicit column or derive from element/status
+          let provides = [];
+          if (row['Provides']) {
+            provides = row['Provides'].split(';').map(s => s.trim()).filter(Boolean);
+          } else {
+            // Derive from element and status
+            if (row['Element']) provides.push(row['Element'].toLowerCase());
+            if (row['Status Effect']) provides.push(row['Status Effect'].toLowerCase());
+          }
+          
+          SKILLS[rowType].push({
+            id: row['Skill Name'].toLowerCase().replace(/\s+/g, '_'),
+            name: row['Skill Name'],
+            element: row['Element'] || null,
+            atk: parseFloat(row['ATK%']) || 0,
+            status: row['Status Effect'] || null,
+            mpCost: parseInt(row['MP Cost']) || 0,
+            cd: parseInt(row['CD']) || 0,
+            shield: parseFloat(row['Shield %']) || 0,
+            hpRecovery: parseFloat(row['HP Recovery %']) || 0,
+            desc: row['Special'] || `${row['ATK%'] || 0}% ATK`,
+            hitRate: row['Hit Rate'] || 'medium',
+            provides: provides,
+          });
+        }
       });
     }
 
@@ -1200,6 +1225,8 @@
         desc: row['Description'],
         downside: row['Downside'] === 'TRUE',
         archetype: row['Archetype'] || 'utility',
+        provides: (row['Provides'] || '').split(';').map(s => s.trim()).filter(Boolean),
+        wants: (row['Wants'] || '').split(';').map(s => s.trim()).filter(Boolean),
       }));
     }
 
@@ -1344,40 +1371,53 @@
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const passives = build.passives.filter(Boolean);
       const provides = getBuildProvides(build);
+      const unmet = getUnmetWants(build);
 
       let html = `<div class="analysis-title">BUILD ANALYSIS</div>`;
 
-      // Build Identity (from tags)
-      if (provides.size > 0) {
-        const tagGroups = {
-          elements: ['ice', 'fire', 'lightning'],
-          statuses: ['chill', 'burning', 'shock', 'electrocution', 'imprison', 'freeze', 'vulnerable', 'stun', 'frostbite'],
-          style: ['multi-hit', 'burst', 'channel', 'aoe', 'clone', 'summon'],
-          defense: ['sustain', 'shield', 'mobility', 'evasion'],
-          stats: ['crit-chance', 'crit-dmg', 'hoh', 'dot-boost', 'ele-dmg', 'dmg-boost', 'final-dmg', 'cd-reduction', 'mp', 'haste']
-        };
-        
-        const identity = [];
+      // Build Identity + Coherence
+      if (skills.length > 0) {
         const providesArr = [...provides];
         
-        // Find primary element
-        const elements = providesArr.filter(t => tagGroups.elements.includes(t));
+        // Count elements
+        const elements = providesArr.filter(t => ['ice', 'fire', 'lightning'].includes(t));
+        const hasDoT = provides.has('dot-boost') || provides.has('burning-stacks') || provides.has('burning');
+        const hasCrit = provides.has('crit-chance') || provides.has('crit-dmg');
+        const hasSustain = provides.has('sustain') || provides.has('shield') || provides.has('hoh');
+        const hasControl = provides.has('control') || provides.has('imprison') || provides.has('freeze') || provides.has('stun');
+        const hasClone = provides.has('clone');
+        const hasAoE = provides.has('aoe') || provides.has('multi-hit');
+        
+        // Build identity string
+        const identity = [];
         if (elements.length === 1) identity.push(elements[0].charAt(0).toUpperCase() + elements[0].slice(1));
         else if (elements.length > 1) identity.push('Hybrid');
+        else identity.push('Neutral');
         
-        // Find style
-        const styles = providesArr.filter(t => tagGroups.style.includes(t));
-        styles.forEach(s => identity.push(s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')));
+        if (hasDoT) identity.push('DoT');
+        if (hasCrit) identity.push('Crit');
+        if (hasControl) identity.push('Control');
+        if (hasClone) identity.push('Clone');
+        if (hasAoE && !hasDoT && !hasCrit) identity.push('AoE');
+        if (hasSustain) identity.push('Sustain');
         
-        // Find key stats
-        if (provides.has('crit-chance')) identity.push('Crit');
-        if (provides.has('dot-boost') || provides.has('burning')) identity.push('DoT');
-        if (provides.has('sustain') || provides.has('shield')) identity.push('Sustain');
-        if (provides.has('control') || provides.has('imprison') || provides.has('freeze') || provides.has('stun')) identity.push('Control');
+        // Coherence: how many wants are satisfied?
+        const totalWants = unmet.length + flags.filter(f => f.type === 'good' && f.text.includes('✓')).length;
+        const satisfiedWants = flags.filter(f => f.type === 'good' && f.text.includes('✓')).length;
+        const coherence = totalWants > 0 ? Math.round((satisfiedWants / totalWants) * 100) : 100;
+        const coherenceClass = unmet.length === 0 ? 'high' : unmet.length <= 1 ? 'medium' : 'low';
         
-        if (identity.length > 0) {
-          html += `<div class="build-identity"><span class="identity-label">BUILD:</span> <span class="identity-tags">${identity.slice(0, 4).join(' / ')}</span></div>`;
+        let coherenceHtml = '';
+        if (unmet.length === 0 && skills.length >= 3) {
+          coherenceHtml = '<div class="coherence-indicator high">✓ Synergies aligned</div>';
+        } else if (unmet.length > 0) {
+          coherenceHtml = `<div class="coherence-indicator low">${unmet.length} missing synergy${unmet.length > 1 ? 's' : ''}</div>`;
         }
+        
+        html += `<div class="build-identity">
+          <div class="identity-main"><span class="identity-label">BUILD:</span> <span class="identity-tags">${identity.slice(0, 4).join(' / ')}</span></div>
+          ${coherenceHtml}
+        </div>`;
       }
 
       // Build summary
