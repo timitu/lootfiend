@@ -726,16 +726,25 @@
 
     // ============ PROFILE ============
     function loadProfile() {
-      const saved = localStorage.getItem('lootfiend-profile-v3');
+      // Try current key first, then migrate from old versions
+      let saved = localStorage.getItem('lootfiend-profile');
+      if (!saved) saved = localStorage.getItem('lootfiend-profile-v3');
+      if (!saved) saved = localStorage.getItem('lootfiend-profile-v2');
+      
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          PROFILE = { ...PROFILE, ...parsed };
-          if (PROFILE.currentBuild) {
-            Object.assign(currentBuild, PROFILE.currentBuild);
+          // Merge carefully to preserve all fields
+          if (parsed.stats) PROFILE.stats = { ...PROFILE.stats, ...parsed.stats };
+          if (parsed.runeUnlocks) PROFILE.runeUnlocks = parsed.runeUnlocks;
+          if (parsed.currentBuild) {
+            PROFILE.currentBuild = parsed.currentBuild;
+            Object.assign(currentBuild, parsed.currentBuild);
             restoreBuildReferences(currentBuild);
           }
-        } catch (e) {}
+          // Save to current key if migrated from old
+          saveProfile();
+        } catch (e) { console.error('Failed to load profile:', e); }
       }
     }
 
@@ -761,7 +770,7 @@
         passives: currentBuild.passives.map(p => p?.id || null)
       };
       PROFILE.currentBuild = buildToSave;
-      localStorage.setItem('lootfiend-profile-v3', JSON.stringify(PROFILE));
+      localStorage.setItem('lootfiend-profile', JSON.stringify(PROFILE));
     }
 
     function showSaveIndicator(id) {
@@ -835,6 +844,10 @@
         PROFILE = { stats: {}, runeUnlocks: {}, currentBuild: null };
         STAT_CONFIG.forEach(s => PROFILE.stats[s.key] = s.default);
         Object.keys(currentBuild).forEach(k => currentBuild[k] = k === 'passives' ? [null, null, null] : (k === 'runes' ? {} : null));
+        // Clear all versions of localStorage
+        localStorage.removeItem('lootfiend-profile');
+        localStorage.removeItem('lootfiend-profile-v2');
+        localStorage.removeItem('lootfiend-profile-v3');
         saveProfile();
         renderProfile();
       }
