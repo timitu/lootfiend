@@ -831,7 +831,6 @@
       });
 
       // === SATISFIED WANTS (Tag System) ===
-      const provides = getBuildProvides(build);
       const selectedSkills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       selectedSkills.forEach(skill => {
         const runeName = build.runes[skill.name];
