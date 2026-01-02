@@ -7,146 +7,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
-      color: #e2e8f0;
-      font-family: "Source Sans Pro", system-ui, sans-serif;
-      padding: 20px;
-    }
-    
+    body { min-height: 100vh; background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%); color: #e2e8f0; font-family: "Source Sans Pro", system-ui, sans-serif; padding: 20px; }
     header { text-align: center; margin-bottom: 20px; }
-    
-    h1 {
-      font-family: "Cinzel", serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #60a5fa, #c084fc, #fb923c);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 2px;
-    }
-    
+    h1 { font-family: "Cinzel", serif; font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #c084fc, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
     .subtitle { color: rgba(200, 200, 210, 0.5); font-size: 12px; letter-spacing: 3px; }
-
-    /* Tabs */
     .tab-nav { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
-    
-    .tab-btn {
-      padding: 10px 24px;
-      font-family: "Cinzel", serif;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      background: rgba(30, 30, 40, 0.8);
-      border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 8px;
-      color: rgba(200, 200, 210, 0.6);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
+    .tab-btn { padding: 10px 24px; font-family: "Cinzel", serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; color: rgba(200, 200, 210, 0.6); cursor: pointer; transition: all 0.2s ease; }
     .tab-btn:hover { background: rgba(50, 50, 60, 0.8); }
     .tab-btn.active { background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(192, 132, 252, 0.2)); border-color: #c084fc; color: #e2e8f0; }
-    
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-
-    /* Layout */
-    .builder-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; max-width: 1400px; margin: 0 auto; }
-    .theorycraft-layout { display: grid; grid-template-columns: 280px 1fr 320px; gap: 20px; max-width: 1600px; margin: 0 auto; }
-    
-    @media (max-width: 1200px) { .theorycraft-layout { grid-template-columns: 1fr 320px; } .current-build-sidebar { display: none; } }
+    .builder-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; max-width: 1400px; margin: 0 auto; }
+    .theorycraft-layout { display: grid; grid-template-columns: 260px 1fr 340px; gap: 20px; max-width: 1600px; margin: 0 auto; }
+    @media (max-width: 1200px) { .theorycraft-layout { grid-template-columns: 1fr 340px; } .current-build-sidebar { display: none; } }
     @media (max-width: 900px) { .builder-layout, .theorycraft-layout { grid-template-columns: 1fr; } }
-
-    /* Current Build Sidebar */
-    .current-build-sidebar {
-      background: rgba(20, 20, 30, 0.95);
-      border-radius: 12px;
-      border: 2px solid rgba(74, 222, 128, 0.3);
-      padding: 16px;
-      position: sticky;
-      top: 20px;
-      height: fit-content;
-    }
     
-    .sidebar-title {
-      font-family: "Cinzel", serif;
-      font-size: 12px;
-      color: #86efac;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    
-    .sidebar-build-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-      font-size: 11px;
-      border-bottom: 1px solid rgba(100,100,120,0.1);
-    }
-    
+    .current-build-sidebar { background: rgba(20, 20, 30, 0.95); border-radius: 12px; border: 2px solid rgba(74, 222, 128, 0.3); padding: 16px; position: sticky; top: 20px; height: fit-content; }
+    .sidebar-title { font-family: "Cinzel", serif; font-size: 12px; color: #86efac; letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
+    .sidebar-build-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 11px; border-bottom: 1px solid rgba(100,100,120,0.1); }
     .sidebar-build-item:last-child { border-bottom: none; }
     .sidebar-label { color: rgba(200,200,210,0.4); font-size: 9px; }
     .sidebar-skill { color: #e2e8f0; }
     .sidebar-rune { color: #c084fc; font-size: 10px; }
-    
-    .sidebar-stats {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(100,100,120,0.2);
-    }
-    
-    .sidebar-stat {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      padding: 3px 0;
-    }
-    
+    .sidebar-stats { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(100,100,120,0.2); }
+    .sidebar-stat { display: flex; justify-content: space-between; font-size: 10px; padding: 3px 0; }
     .sidebar-stat-label { color: rgba(200,200,210,0.5); }
     .sidebar-stat-value { color: #fb923c; font-weight: 600; }
-    
-    .no-build-msg {
-      text-align: center;
-      color: rgba(200,200,210,0.4);
-      font-size: 11px;
-      padding: 20px 0;
-    }
+    .no-build-msg { text-align: center; color: rgba(200,200,210,0.4); font-size: 11px; padding: 20px 0; }
 
-    /* Core Section */
-    .core-section {
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 2px solid rgba(192, 132, 252, 0.3);
-      padding: 20px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
+    .core-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 2px solid rgba(192, 132, 252, 0.3); padding: 20px; margin-bottom: 20px; text-align: center; }
     .core-title { font-family: "Cinzel", serif; font-size: 12px; color: rgba(200, 200, 210, 0.5); letter-spacing: 2px; margin-bottom: 12px; }
     .core-grid { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    
-    .core-card {
-      width: 140px;
-      padding: 16px 12px;
-      background: rgba(30, 30, 40, 0.8);
-      border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-    
+    .core-card { width: 140px; padding: 16px 12px; background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; text-align: center; }
     .core-card:hover { transform: translateY(-3px); filter: brightness(1.1); }
     .core-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 25px rgba(251, 146, 60, 0.4); }
     .core-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); }
     .core-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 25px rgba(96, 165, 250, 0.4); }
-    
     .core-icon { font-size: 28px; margin-bottom: 6px; }
     .core-name { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
     .core-name.fire { color: #fdba74; }
@@ -155,23 +51,11 @@
     .core-desc { font-size: 10px; color: rgba(200, 200, 210, 0.5); }
     .core-damage { font-size: 13px; color: #fb923c; font-weight: 700; margin-top: 6px; }
 
-    /* Rune Selector */
     .rune-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
     .rune-section.hidden { display: none; }
     .rune-title { font-size: 10px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 10px; }
     .rune-options { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    
-    .rune-option {
-      padding: 10px 16px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-      min-width: 120px;
-    }
-    
+    .rune-option { padding: 10px 16px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 120px; }
     .rune-option:hover { background: rgba(100, 100, 120, 0.2); }
     .rune-option.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
     .rune-option-name { font-weight: 600; color: #c084fc; font-size: 12px; margin-bottom: 2px; }
@@ -181,139 +65,96 @@
     .rune-element-change.fire { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
     .rune-element-change.lightning { background: rgba(192, 132, 252, 0.2); color: #d8b4fe; }
 
-    /* Build Around Section */
-    .build-around {
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    
+    .build-around { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; margin-bottom: 20px; }
     .build-around-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
     .build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     @media (max-width: 600px) { .build-grid { grid-template-columns: 1fr; } }
-    
     .build-column { display: flex; flex-direction: column; gap: 6px; }
     .column-label { font-size: 9px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; text-align: center; margin-bottom: 4px; }
 
-    /* Skill Cards */
-    .skill-card {
-      background: rgba(30, 30, 40, 0.8);
-      border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 8px;
-      padding: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
-    }
-    
+    .skill-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.2s ease; position: relative; }
     .skill-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
     .skill-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 15px rgba(96, 165, 250, 0.4); }
     .skill-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 15px rgba(251, 146, 60, 0.4); }
     .skill-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
     .skill-card.selected-neutral { background: rgba(148, 163, 184, 0.15); border-color: #94a3b8; box-shadow: 0 0 15px rgba(148, 163, 184, 0.3); }
     .skill-card.recommended { box-shadow: 0 0 12px rgba(74, 222, 128, 0.25); border-color: rgba(74, 222, 128, 0.4); }
-    
     .skill-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
     .skill-name { font-weight: 600; font-size: 12px; font-family: "Cinzel", serif; }
     .skill-name.ice { color: #93c5fd; }
     .skill-name.fire { color: #fdba74; }
     .skill-name.lightning { color: #d8b4fe; }
     .skill-name.neutral { color: #94a3b8; }
-    
     .element-tag { font-size: 8px; padding: 2px 5px; border-radius: 4px; }
     .element-tag.ice { background: rgba(96, 165, 250, 0.15); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.4); }
     .element-tag.fire { background: rgba(251, 146, 60, 0.15); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
     .element-tag.lightning { background: rgba(192, 132, 252, 0.15); color: #d8b4fe; border: 1px solid rgba(192, 132, 252, 0.4); }
-    
     .skill-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
-
-    /* Skill Rune Buttons */
     .skill-rune-selector { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(100, 100, 120, 0.2); }
     .skill-rune-buttons { display: flex; gap: 3px; }
-    .skill-rune-btn {
-      flex: 1;
-      padding: 4px 5px;
-      font-size: 9px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(100, 100, 120, 0.3);
-      border-radius: 4px;
-      color: rgba(200, 200, 210, 0.6);
-      cursor: pointer;
-      font-family: inherit;
-    }
+    .skill-rune-btn { flex: 1; padding: 4px 5px; font-size: 9px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: rgba(200, 200, 210, 0.6); cursor: pointer; font-family: inherit; }
     .skill-rune-btn:hover { background: rgba(100, 100, 120, 0.2); }
     .skill-rune-btn.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #d8b4fe; }
 
-    /* Passives */
-    .passives-section {
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 16px;
-    }
-    
+    .passives-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
     .passives-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
     .passives-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     @media (max-width: 600px) { .passives-grid { grid-template-columns: repeat(2, 1fr); } }
-    
-    .passive-card {
-      background: rgba(30, 30, 40, 0.8);
-      border: 2px solid rgba(100, 100, 120, 0.3);
-      border-radius: 8px;
-      padding: 8px 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
+    .passive-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: all 0.2s ease; }
     .passive-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
     .passive-card.selected { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; box-shadow: 0 0 12px rgba(74, 222, 128, 0.3); }
     .passive-card.selected-danger { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
     .passive-card.recommended { box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); border-color: rgba(74, 222, 128, 0.3); }
-    
     .passive-name { font-weight: 600; font-size: 11px; font-family: "Cinzel", serif; color: #e2e8f0; margin-bottom: 2px; }
     .passive-card.selected .passive-name { color: #86efac; }
     .passive-card.selected-danger .passive-name { color: #fca5a5; }
     .passive-desc { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
 
-    /* Analysis Panel */
-    .analysis-panel {
-      background: rgba(20, 20, 30, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(100, 100, 120, 0.2);
-      padding: 16px;
-      position: sticky;
-      top: 20px;
-      height: fit-content;
-      max-height: calc(100vh - 40px);
-      overflow-y: auto;
-    }
-    
+    .analysis-panel { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; position: sticky; top: 20px; height: fit-content; max-height: calc(100vh - 40px); overflow-y: auto; }
     .analysis-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; letter-spacing: 1px; text-align: center; }
     
+    /* Archetype Badge */
+    .archetype-section { margin-bottom: 16px; text-align: center; }
+    .archetype-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-family: "Cinzel", serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+    .archetype-badge.crit { background: rgba(251, 146, 60, 0.2); color: #fb923c; border: 2px solid rgba(251, 146, 60, 0.4); }
+    .archetype-badge.dot { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 2px solid rgba(239, 68, 68, 0.4); }
+    .archetype-badge.sustain { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 2px solid rgba(74, 222, 128, 0.4); }
+    .archetype-badge.control { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 2px solid rgba(96, 165, 250, 0.4); }
+    .archetype-badge.burst { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 2px solid rgba(192, 132, 252, 0.4); }
+    .archetype-badge.hybrid { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 2px solid rgba(148, 163, 184, 0.4); }
+    .archetype-strength { font-size: 10px; color: rgba(200,200,210,0.6); margin-top: 4px; }
+    .archetype-strength.strong { color: #86efac; }
+    .archetype-strength.moderate { color: #fbbf24; }
+    .archetype-strength.weak { color: #fca5a5; }
+
+    /* Stat Totals */
+    .stat-totals { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+    .stat-totals-title { font-size: 9px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-totals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 12px; }
+    .stat-row { display: flex; justify-content: space-between; font-size: 10px; }
+    .stat-row-label { color: rgba(200,200,210,0.6); }
+    .stat-row-value { font-weight: 600; }
+    .stat-row-value.high { color: #86efac; }
+    .stat-row-value.medium { color: #fbbf24; }
+    .stat-row-value.low { color: rgba(200,200,210,0.5); }
+
     .build-summary { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
     .build-item { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 10px; border-bottom: 1px solid rgba(100,100,120,0.1); }
     .build-item:last-child { border-bottom: none; }
     .build-item-label { color: rgba(200,200,210,0.4); font-size: 9px; }
     .build-item-skill { color: #e2e8f0; }
     .build-item-rune { color: #c084fc; font-size: 9px; }
-    
     .damage-calc { background: rgba(251, 146, 60, 0.1); border: 1px solid rgba(251, 146, 60, 0.3); border-radius: 8px; padding: 10px; margin-bottom: 12px; text-align: center; }
     .damage-calc-title { font-size: 9px; color: rgba(200,200,210,0.5); letter-spacing: 1px; margin-bottom: 2px; }
     .damage-calc-value { font-size: 24px; font-weight: 700; color: #fb923c; }
     .damage-calc-breakdown { font-size: 9px; color: rgba(200,200,210,0.4); margin-top: 2px; }
-    
-    /* Comparison indicator */
     .comparison-indicator { font-size: 11px; margin-top: 4px; }
     .comparison-indicator.better { color: #86efac; }
     .comparison-indicator.worse { color: #fca5a5; }
     .comparison-indicator.same { color: rgba(200,200,210,0.5); }
-    
     .status-section { margin-bottom: 12px; }
     .section-label { font-size: 9px; color: rgba(200,200,210,0.4); letter-spacing: 1px; margin-bottom: 6px; }
     .status-badges { display: flex; gap: 4px; flex-wrap: wrap; }
-    
     .status-badge { padding: 3px 6px; border-radius: 10px; font-size: 9px; font-weight: 600; }
     .status-badge.chill { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
     .status-badge.burning { background: rgba(251, 146, 60, 0.2); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.4); }
@@ -322,86 +163,47 @@
     .status-badge.imprison { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
     .status-badge.freeze { background: rgba(96, 165, 250, 0.3); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.5); }
     .status-badge.vulnerable { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-    
-    .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
-    .quick-stat { background: rgba(0,0,0,0.2); border-radius: 6px; padding: 6px; text-align: center; }
-    .quick-stat-label { font-size: 8px; color: rgba(200,200,210,0.4); }
-    .quick-stat-value { font-size: 14px; font-weight: 700; color: #fb923c; }
-    
-    .element-dots { display: flex; gap: 3px; justify-content: center; margin-top: 2px; }
-    .element-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .element-dot.ice { background: #60a5fa; }
-    .element-dot.fire { background: #fb923c; }
-    .element-dot.lightning { background: #c084fc; }
+    .status-badge.frostbite { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
+    .status-badge.stun { background: rgba(250, 204, 21, 0.2); color: #fbbf24; border: 1px solid rgba(250, 204, 21, 0.4); }
+    .status-badge.robust { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); }
     
     .synergy-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(74, 222, 128, 0.08); border-radius: 6px; font-size: 10px; color: #86efac; border-left: 3px solid #4ade80; }
     .synergy-item.rune { border-left-color: #c084fc; background: rgba(192, 132, 252, 0.08); color: #d8b4fe; }
-    .synergy-item.info { border-left-color: #94a3b8; color: #cbd5e1; }
+    .synergy-item.info { border-left-color: #94a3b8; color: #cbd5e1; background: rgba(148, 163, 184, 0.08); }
+    .synergy-item.crit { border-left-color: #fb923c; background: rgba(251, 146, 60, 0.08); color: #fdba74; }
+    .synergy-item.dot { border-left-color: #f87171; background: rgba(239, 68, 68, 0.08); color: #fca5a5; }
+    .synergy-item.sustain { border-left-color: #4ade80; }
     .conflict-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; font-size: 10px; color: #fca5a5; border-left: 3px solid #ef4444; }
     .tip-item { padding: 6px 8px; margin-bottom: 4px; background: rgba(96, 165, 250, 0.08); border-radius: 6px; font-size: 10px; color: #93c5fd; border-left: 3px solid #60a5fa; }
-    
     .none-text { font-size: 10px; color: rgba(200,200,210,0.4); }
-    
-    /* Save Button */
-    .save-build-btn {
-      width: 100%;
-      padding: 10px;
-      margin-top: 12px;
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      font-family: "Cinzel", serif;
-      letter-spacing: 1px;
-    }
-    
+    .save-build-btn { width: 100%; padding: 10px; margin-top: 12px; background: linear-gradient(135deg, #4ade80, #22c55e); border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 12px; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: 1px; }
     .save-build-btn:hover { filter: brightness(1.1); }
-    .save-build-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    
-    .saved-indicator {
-      text-align: center;
-      font-size: 10px;
-      color: #86efac;
-      margin-top: 6px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .saved-indicator { text-align: center; font-size: 10px; color: #86efac; margin-top: 6px; opacity: 0; transition: opacity 0.3s; }
     .saved-indicator.show { opacity: 1; }
 
-    /* Profile Styles */
     .profile-container { max-width: 1000px; margin: 0 auto; }
     .profile-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; margin-bottom: 20px; }
     .profile-section-title { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; display: flex; align-items: center; gap: 8px; }
-    
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
     .stat-input-group { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; }
     .stat-input-label { font-size: 9px; color: rgba(200, 200, 210, 0.5); margin-bottom: 4px; letter-spacing: 1px; }
     .stat-input { width: 100%; padding: 6px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: #fb923c; font-size: 14px; font-weight: 700; text-align: center; }
     .stat-input:focus { outline: none; border-color: #fb923c; }
-    
     .profile-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .profile-btn { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; }
     .profile-btn.primary { background: linear-gradient(135deg, #60a5fa, #c084fc); color: white; }
     .profile-btn.secondary { background: rgba(100, 100, 120, 0.3); color: #e2e8f0; border: 1px solid rgba(100, 100, 120, 0.3); }
     .profile-btn:hover { filter: brightness(1.1); }
-    
     .save-indicator { font-size: 11px; color: #86efac; margin-left: auto; opacity: 0; transition: opacity 0.3s; }
     .save-indicator.show { opacity: 1; }
-
-    /* Rune Unlocks */
     .rune-skill-section { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(100, 100, 120, 0.15); }
     .rune-skill-section:last-child { border-bottom: none; }
     .rune-skill-name { font-family: "Cinzel", serif; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .skill-row-label { font-size: 8px; padding: 2px 5px; border-radius: 4px; background: rgba(100, 100, 120, 0.2); color: rgba(200, 200, 210, 0.5); }
-    
     .rune-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .rune-card { flex: 1; min-width: 260px; background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(100, 100, 120, 0.15); }
     .rune-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .rune-card-name { font-weight: 600; color: #c084fc; font-size: 12px; }
-    
     .tier-pill { display: flex; gap: 2px; margin-bottom: 8px; }
     .tier-pill-btn { flex: 1; padding: 5px 3px; font-size: 8px; font-weight: 700; border: none; cursor: pointer; transition: all 0.15s ease; letter-spacing: 0.5px; }
     .tier-pill-btn:first-child { border-radius: 5px 0 0 5px; }
@@ -415,7 +217,6 @@
     .tier-pill-btn.orange { background: rgba(251, 146, 60, 0.15); color: rgba(251, 146, 60, 0.5); }
     .tier-pill-btn.orange.active { background: rgba(251, 146, 60, 0.4); color: #fdba74; box-shadow: 0 0 8px rgba(251, 146, 60, 0.3); }
     .tier-pill-btn:hover:not(.active) { filter: brightness(1.3); }
-    
     .rune-effects { display: flex; flex-direction: column; gap: 3px; }
     .rune-effect-row { display: flex; align-items: flex-start; gap: 5px; font-size: 9px; padding: 2px 0; }
     .rune-effect-row.locked { opacity: 0.3; }
@@ -425,8 +226,6 @@
     .tier-badge.yellow { background: rgba(250, 204, 21, 0.2); color: #fbbf24; }
     .tier-badge.orange { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
     .rune-effect-text { flex: 1; color: rgba(200, 200, 210, 0.6); line-height: 1.3; }
-
-    /* Data Tab */
     .config-panel { max-width: 500px; margin: 0 auto; background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
     .config-title { font-family: "Cinzel", serif; font-size: 13px; color: rgba(200, 200, 210, 0.7); letter-spacing: 1px; margin-bottom: 12px; }
     .config-row { margin-bottom: 10px; }
@@ -455,7 +254,6 @@
     <button class="tab-btn" data-tab="data">DATA</button>
   </div>
 
-  <!-- MY BUILD TAB -->
   <div class="tab-content active" id="tab-current">
     <div class="builder-layout">
       <div class="builder-main" id="current-builder"></div>
@@ -463,7 +261,6 @@
     </div>
   </div>
 
-  <!-- THEORYCRAFT TAB -->
   <div class="tab-content" id="tab-theorycraft">
     <div class="theorycraft-layout">
       <div class="current-build-sidebar" id="current-sidebar"></div>
@@ -472,7 +269,6 @@
     </div>
   </div>
 
-  <!-- PROFILE TAB -->
   <div class="tab-content" id="tab-profile">
     <div class="profile-container">
       <div class="profile-section">
@@ -493,7 +289,6 @@
     </div>
   </div>
 
-  <!-- DATA TAB -->
   <div class="tab-content" id="tab-data">
     <div class="config-panel">
       <div class="config-title">📁 GOOGLE SHEETS</div>
@@ -511,14 +306,14 @@
     // ============ DATA ============
     let SKILLS = {
       basic: [
-        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', desc: '60% ATK, Chill' },
-        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', desc: '30% ATK, Burning' },
-        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', desc: '50% ATK, Shock' },
+        { id: 'frost_projectile', name: 'Frost Projectile', element: 'Ice', atk: 60, status: 'Chill', desc: '60% ATK, Chill', hitRate: 'medium' },
+        { id: 'flame_wave', name: 'Flame Wave', element: 'Fire', atk: 30, status: 'Burning', desc: '30% ATK, Burning', hitRate: 'medium' },
+        { id: 'lightning_whip', name: 'Lightning Whip', element: 'Lightning', atk: 50, status: 'Shock', desc: '50% ATK, Shock', hitRate: 'medium' },
       ],
       core: [
-        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', mpCost: 20, desc: '70% ATK, Burning' },
-        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', mpCost: 30, desc: '160% ATK, Shock' },
-        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', mpCost: 40, desc: '70% ATK, Chill' },
+        { id: 'fireball', name: 'Fireball', element: 'Fire', atk: 70, status: 'Burning', mpCost: 20, desc: '70% ATK, Burning', hitRate: 'low' },
+        { id: 'lightning_punch', name: 'Lightning Punch', element: 'Lightning', atk: 160, status: 'Shock', mpCost: 30, desc: '160% ATK, Shock', hitRate: 'low' },
+        { id: 'ice_ray', name: 'Ice Ray', element: 'Ice', atk: 70, status: 'Chill', mpCost: 40, desc: '70% ATK channel, Chill', hitRate: 'high' },
       ],
       basicControl: [
         { id: 'concussion', name: 'Concussion', element: null, atk: 50, cd: 12, desc: 'Knockback + stun' },
@@ -531,22 +326,22 @@
         { id: 'infernal_bloom', name: 'Infernal Bloom', element: 'Fire', atk: 0, cd: 12, desc: 'Fire turret' },
       ],
       ultimate: [
-        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, desc: 'Ice storm' },
+        { id: 'hail', name: 'Hail', element: 'Ice', atk: 50, status: 'Chill', cd: 20, desc: 'Ice storm', hitRate: 'high' },
         { id: 'doppelganger', name: 'Doppelganger', element: null, atk: 0, cd: 35, desc: 'Clone' },
         { id: 'aether_form', name: 'Aether Form', element: null, atk: 0, cd: 40, desc: 'Transform' },
       ],
     };
 
     let PASSIVES = [
-      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% per status' },
-      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30%' },
-      { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen' },
-      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion' },
-      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg >80% HP' },
-      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 MP/HP on kill' },
-      { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg, +30% taken', downside: true },
-      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s' },
-      { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns' },
+      { id: 'elemental_resonance', name: 'Elemental Resonance', desc: '+5% per status', archetype: 'status' },
+      { id: 'life_rewind', name: 'Life Rewind', desc: '100% HP at 30%', archetype: 'sustain' },
+      { id: 'energy_affinity', name: 'Energy Affinity', desc: '+10% MP Regen', archetype: 'utility' },
+      { id: 'tumbler', name: 'Tumbler', desc: '+25% Evasion', archetype: 'sustain' },
+      { id: 'flourish', name: 'Flourish', desc: '+15% Dmg >80% HP', archetype: 'sustain', conditionalDmg: true },
+      { id: 'soul_hunt', name: 'Soul Hunt', desc: '+2 MP/HP on kill', archetype: 'sustain' },
+      { id: 'demon_pact', name: 'Demon Pact', desc: '+30% Dmg, +30% taken', downside: true, archetype: 'burst' },
+      { id: 'arcane_shield', name: 'Arcane Shield', desc: 'Shield after 3s', archetype: 'sustain' },
+      { id: 'conjuration', name: 'Conjuration', desc: '-10% cooldowns', archetype: 'utility' },
     ];
 
     let RUNES = [];
@@ -554,7 +349,7 @@
     let PROFILE = {
       stats: { atk: 2730, crit: 4.6, critDmg: 122.8, finalDmgUp: 45, haste: 0, eleDmg: 0, dot: 0, hoh: 0 },
       runeUnlocks: {},
-      currentBuild: { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] }
+      currentBuild: null
     };
 
     const STAT_CONFIG = [
@@ -568,11 +363,352 @@
       { key: 'hoh', label: 'HoH %', default: 0 },
     ];
 
-    // Two build states
     const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
     const theoryBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
-
     let activeTab = 'current';
+
+    // ============ STAT PARSING ============
+    function parseRuneStats(effectText) {
+      const stats = {
+        critChance: 0, critDmg: 0, hoh: 0, dot: 0, finalDmg: 0, finalDmgDown: 0,
+        eleDmg: 0, dmg: 0, addDmg: 0, addDmgChance: 0, haste: 0, cdReduction: 0,
+        mpRegen: 0, shieldStrength: 0, evasion: 0, healingReceived: 0,
+        // Conditional
+        critVsShocked: 0, critVsElectrocuted: 0,
+        // Burning stacks applied
+        burningStacks: 0, vulnerableStacks: 0
+      };
+
+      if (!effectText) return stats;
+      const text = effectText.toLowerCase();
+
+      // Direct stat bonuses
+      const patterns = [
+        { regex: /crit chance \+(\d+)%/i, key: 'critChance' },
+        { regex: /crit dmg \+(\d+)%/i, key: 'critDmg' },
+        { regex: /crit \+(\d+)%/i, key: 'critChance' },
+        { regex: /hoh \+(\d+)%/i, key: 'hoh' },
+        { regex: /heal on hit \+(\d+)%/i, key: 'hoh' },
+        { regex: /dot \+(\d+)%/i, key: 'dot' },
+        { regex: /final dmg \+(\d+)%/i, key: 'finalDmg' },
+        { regex: /final dmg↓ \+(\d+)%/i, key: 'finalDmgDown' },
+        { regex: /ele dmg \+(\d+)%/i, key: 'eleDmg' },
+        { regex: /elemental dmg \+(\d+)%/i, key: 'eleDmg' },
+        { regex: /dmg \+(\d+)%/i, key: 'dmg' },
+        { regex: /additional damage \+(\d+)%/i, key: 'addDmg' },
+        { regex: /additional damage chance \+(\d+)%/i, key: 'addDmgChance' },
+        { regex: /haste \+(\d+)%/i, key: 'haste' },
+        { regex: /base cd -(\d+)s/i, key: 'cdReduction' },
+        { regex: /mp regen \+(\d+)%/i, key: 'mpRegen' },
+        { regex: /shield strength \+(\d+)%/i, key: 'shieldStrength' },
+        { regex: /shield \+(\d+)%/i, key: 'shieldStrength' },
+        { regex: /evasion \+(\d+)%/i, key: 'evasion' },
+        { regex: /healing received \+(\d+)%/i, key: 'healingReceived' },
+        { regex: /healing \+(\d+)%/i, key: 'healingReceived' },
+      ];
+
+      patterns.forEach(({ regex, key }) => {
+        const match = effectText.match(regex);
+        if (match) stats[key] += parseInt(match[1]);
+      });
+
+      // Conditional: Crit vs Shocked
+      const critVsShocked = effectText.match(/\+(\d+)% crit vs shocked/i);
+      if (critVsShocked) stats.critVsShocked = parseInt(critVsShocked[1]);
+
+      // Burning stacks
+      const burningMatch = effectText.match(/(\d+)\s*burning/i);
+      if (burningMatch) stats.burningStacks = parseInt(burningMatch[1]);
+
+      // Vulnerable stacks
+      const vulnMatch = effectText.match(/(\d+)\s*vulnerable/i);
+      if (vulnMatch) stats.vulnerableStacks = parseInt(vulnMatch[1]);
+
+      return stats;
+    }
+
+    function getRuneStatsAtTier(rune, tierLevel) {
+      const effects = [rune.blueEffect, rune.purpleEffect, rune.orange1Effect, rune.orange2Effect];
+      const combined = {
+        critChance: 0, critDmg: 0, hoh: 0, dot: 0, finalDmg: 0, finalDmgDown: 0,
+        eleDmg: 0, dmg: 0, addDmg: 0, addDmgChance: 0, haste: 0, cdReduction: 0,
+        mpRegen: 0, shieldStrength: 0, evasion: 0, healingReceived: 0,
+        critVsShocked: 0, burningStacks: 0, vulnerableStacks: 0
+      };
+
+      for (let i = 0; i < tierLevel && i < effects.length; i++) {
+        const parsed = parseRuneStats(effects[i]);
+        Object.keys(combined).forEach(k => combined[k] += parsed[k]);
+      }
+      return combined;
+    }
+
+    function getBuildStats(build) {
+      const totals = {
+        critChance: PROFILE.stats.crit, critDmg: PROFILE.stats.critDmg, hoh: PROFILE.stats.hoh,
+        dot: PROFILE.stats.dot, finalDmg: PROFILE.stats.finalDmgUp, finalDmgDown: 0,
+        eleDmg: PROFILE.stats.eleDmg, dmg: 0, addDmg: 0, addDmgChance: 0, haste: PROFILE.stats.haste,
+        cdReduction: 0, mpRegen: 0, shieldStrength: 0, evasion: 0, healingReceived: 0,
+        critVsShocked: 0, burningStacks: 0, vulnerableStacks: 0
+      };
+
+      // Get stats from selected runes
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      skills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          if (rune) {
+            const tierLevel = getRuneTierLevel(skill.name, runeName);
+            const runeStats = getRuneStatsAtTier(rune, tierLevel);
+            Object.keys(totals).forEach(k => { if (runeStats[k]) totals[k] += runeStats[k]; });
+          }
+        }
+      });
+
+      return totals;
+    }
+
+    // ============ ARCHETYPE DETECTION ============
+    function detectArchetype(build) {
+      const stats = getBuildStats(build);
+      const statuses = getAllStatuses(build);
+      const passives = build.passives.filter(Boolean);
+      
+      const scores = {
+        crit: 0,
+        dot: 0,
+        sustain: 0,
+        control: 0,
+        burst: 0
+      };
+
+      // Crit scoring
+      if (stats.critChance >= 20) scores.crit += 3;
+      else if (stats.critChance >= 10) scores.crit += 1;
+      if (stats.critDmg >= 150) scores.crit += 2;
+      if (stats.addDmgChance >= 10) scores.crit += 1;
+      if (stats.critVsShocked > 0 && statuses.includes('Shock')) scores.crit += 2;
+
+      // DoT scoring
+      if (stats.dot >= 20) scores.dot += 2;
+      if (stats.burningStacks >= 3) scores.dot += 2;
+      if (stats.eleDmg >= 10) scores.dot += 1;
+      if (statuses.includes('Burning')) scores.dot += 1;
+
+      // Sustain scoring
+      if (stats.hoh >= 30) scores.sustain += 2;
+      if (stats.finalDmgDown >= 5) scores.sustain += 1;
+      if (stats.shieldStrength > 0 || build.elemControl?.shield) scores.sustain += 1;
+      if (passives.some(p => p.id === 'flourish')) scores.sustain += 1;
+      if (passives.some(p => p.id === 'life_rewind')) scores.sustain += 1;
+      if (build.basicControl?.hpRecovery) scores.sustain += 1;
+
+      // Control scoring
+      const ccStatuses = ['Imprison', 'Freeze', 'Stun', 'Vulnerable'];
+      ccStatuses.forEach(cc => { if (statuses.includes(cc)) scores.control += 1; });
+      if (stats.vulnerableStacks >= 3) scores.control += 1;
+
+      // Burst scoring
+      if (stats.dmg >= 30) scores.burst += 1;
+      if (stats.addDmg >= 30) scores.burst += 1;
+      if (stats.finalDmg >= 50) scores.burst += 1;
+      if (passives.some(p => p.id === 'demon_pact')) scores.burst += 2;
+
+      // Find top archetype
+      const maxScore = Math.max(...Object.values(scores));
+      if (maxScore < 2) return { type: 'hybrid', score: maxScore, strength: 'weak' };
+
+      const topTypes = Object.entries(scores).filter(([_, s]) => s === maxScore).map(([t]) => t);
+      const type = topTypes.length > 1 ? 'hybrid' : topTypes[0];
+      const strength = maxScore >= 5 ? 'strong' : maxScore >= 3 ? 'moderate' : 'weak';
+
+      return { type, score: maxScore, strength, scores };
+    }
+
+    function getAllStatuses(build) {
+      const statuses = new Set();
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      
+      skills.forEach(skill => {
+        if (skill.status) statuses.add(skill.status);
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          if (rune?.addsStatus && getRuneTierLevel(skill.name, runeName) >= 2) {
+            rune.addsStatus.split(',').forEach(s => statuses.add(s.trim()));
+          }
+        }
+      });
+      return Array.from(statuses);
+    }
+
+    // ============ SMART SYNERGIES ============
+    function getSmartSynergies(build) {
+      const synergies = [];
+      const conflicts = [];
+      const tips = [];
+      const stats = getBuildStats(build);
+      const statuses = getAllStatuses(build);
+      const archetype = detectArchetype(build);
+      const passives = build.passives.filter(Boolean);
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+
+      // === CRIT SYNERGIES ===
+      if (stats.critVsShocked > 0) {
+        if (statuses.includes('Shock')) {
+          synergies.push({ text: `Numb + Shock: +${stats.critVsShocked}% Crit vs Shocked enemies`, type: 'crit' });
+        } else {
+          tips.push(`Numb gives +${stats.critVsShocked}% Crit vs Shocked — add Shock sources!`);
+        }
+      }
+
+      if (archetype.type === 'crit') {
+        if (stats.critChance >= 20) {
+          synergies.push({ text: `Crit build: ${stats.critChance.toFixed(1)}% Crit Chance — solid`, type: 'crit' });
+        } else {
+          tips.push(`Crit build with only ${stats.critChance.toFixed(1)}% Crit — needs more sources`);
+        }
+      }
+
+      // === DOT SYNERGIES ===
+      if (archetype.type === 'dot') {
+        if (stats.dot >= 20 && stats.burningStacks >= 3) {
+          synergies.push({ text: `DoT build: ${stats.dot}% DoT + ${stats.burningStacks} Burning stacks — strong`, type: 'dot' });
+        } else if (stats.dot >= 20) {
+          tips.push(`DoT% is high but need more Burning stack sources`);
+        }
+      }
+
+      if (stats.burningStacks >= 5 && stats.eleDmg > 0) {
+        synergies.push({ text: `Burning stacks + Ele Dmg: DoT scales with both`, type: 'dot' });
+      }
+
+      // === SUSTAIN SYNERGIES ===
+      const hasFlourish = passives.some(p => p.id === 'flourish');
+      const hasDemonPact = passives.some(p => p.id === 'demon_pact');
+      const hasShield = build.elemControl?.shield || passives.some(p => p.id === 'arcane_shield');
+      const hasHoH = stats.hoh >= 30;
+      const hasHighHitRate = skills.some(s => s.hitRate === 'high');
+
+      if (hasFlourish) {
+        if (hasShield || stats.finalDmgDown >= 5) {
+          synergies.push({ text: `Flourish + defense: Easier to stay above 80% HP`, type: 'sustain' });
+        }
+        if (hasDemonPact) {
+          conflicts.push(`Demon Pact + Flourish: +30% damage taken breaks Flourish uptime`);
+        }
+      }
+
+      if (hasHoH && hasHighHitRate) {
+        synergies.push({ text: `HoH ${stats.hoh}% + multi-hit skill: Great sustain`, type: 'sustain' });
+      } else if (hasHoH && !hasHighHitRate) {
+        tips.push(`HoH ${stats.hoh}% but no multi-hit skills — consider Ice Ray or Hail`);
+      }
+
+      if (hasDemonPact && !hasShield && !hasHoH && !build.basicControl?.hpRecovery) {
+        conflicts.push(`Demon Pact with no sustain tools — very risky`);
+      }
+
+      // === ELEMENTAL RESONANCE ===
+      const hasElemRes = passives.some(p => p.id === 'elemental_resonance');
+      if (hasElemRes) {
+        if (statuses.length >= 3) {
+          synergies.push({ text: `Elemental Resonance: +${statuses.length * 5}% dmg (${statuses.length} statuses!)`, type: '' });
+        } else if (statuses.length === 2) {
+          synergies.push({ text: `Elemental Resonance: +${statuses.length * 5}% dmg (${statuses.length} statuses)`, type: 'info' });
+        } else {
+          tips.push(`Elemental Resonance but only ${statuses.length} status — add more for value`);
+        }
+      }
+
+      // === VULNERABLE SYNERGIES ===
+      if (stats.vulnerableStacks >= 5) {
+        synergies.push({ text: `Vulnerable stacking: ${stats.vulnerableStacks}+ stacks = massive damage amp`, type: '' });
+      }
+
+      // === DOPPELGANGER ===
+      if (build.ultimate?.id === 'doppelganger' && build.basic) {
+        const basicRune = build.runes[build.basic.name];
+        synergies.push({ text: `Doppelganger clones ${build.basic.name}`, type: 'info' });
+        if (basicRune) {
+          const rune = RUNES.find(r => r.skill === build.basic.name && r.name === basicRune);
+          if (rune) {
+            synergies.push({ text: `Clone inherits ${basicRune} — doubles your status/proc output`, type: 'rune' });
+            if (rune.addsStatus) {
+              synergies.push({ text: `Clone also applies ${rune.addsStatus}!`, type: 'rune' });
+            }
+          }
+        }
+      }
+
+      // === ELEMENT CHANGES ===
+      skills.forEach(skill => {
+        const runeName = build.runes[skill.name];
+        if (runeName) {
+          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+          const tier = getRuneTierLevel(skill.name, runeName);
+          if (rune?.newElement && tier >= 2) {
+            synergies.push({ text: `${runeName}: ${skill.name} → ${rune.newElement}`, type: 'rune' });
+          }
+        }
+      });
+
+      return { synergies, conflicts, tips, archetype, stats };
+    }
+
+    // ============ SMART RECOMMENDATIONS ============
+    function getSmartRecommendations(build) {
+      const recs = { basic: [], control: [], ultimate: [], passives: [] };
+      if (!build.core) return recs;
+
+      const stats = getBuildStats(build);
+      const statuses = getAllStatuses(build);
+      const archetype = detectArchetype(build);
+      const coreElement = getEffectiveElement(build, build.core);
+
+      // Basic recommendations
+      SKILLS.basic.forEach(s => {
+        // Element match
+        if (s.element === coreElement) recs.basic.push(s.id);
+        // Status diversity for Elem Res
+        if (s.status && !statuses.includes(s.status)) recs.basic.push(s.id);
+        // Crit build wants Shock sources
+        if (archetype.type === 'crit' && stats.critVsShocked > 0 && s.status === 'Shock') recs.basic.push(s.id);
+      });
+
+      // Control recommendations
+      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
+        // Sustain tools if needed
+        if (archetype.type === 'sustain' && (s.shield || s.hpRecovery)) recs.control.push(s.id);
+        // Element match
+        if (s.element === coreElement) recs.control.push(s.id);
+        // Shock source for crit builds
+        if (archetype.type === 'crit' && stats.critVsShocked > 0 && s.status === 'Shock') recs.control.push(s.id);
+      });
+
+      // Ultimate recommendations
+      SKILLS.ultimate.forEach(s => {
+        if (s.id === 'doppelganger') recs.ultimate.push(s.id); // Always good
+        if (s.element === coreElement) recs.ultimate.push(s.id);
+        // HoH wants multi-hit
+        if (stats.hoh >= 30 && s.hitRate === 'high') recs.ultimate.push(s.id);
+      });
+
+      // Passive recommendations
+      if (statuses.length >= 2) recs.passives.push('elemental_resonance');
+      if (archetype.type === 'sustain' || stats.hoh >= 30 || stats.finalDmgDown >= 5) {
+        recs.passives.push('flourish');
+      }
+      if (archetype.type !== 'sustain' && stats.hoh < 30) {
+        recs.passives.push('demon_pact'); // Glass cannon option
+      }
+      recs.passives.push('conjuration'); // Always useful
+
+      // Dedupe
+      Object.keys(recs).forEach(k => recs[k] = [...new Set(recs[k])]);
+      return recs;
+    }
 
     // ============ TABS ============
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -590,12 +726,11 @@
 
     // ============ PROFILE ============
     function loadProfile() {
-      const saved = localStorage.getItem('lootfiend-profile-v2');
+      const saved = localStorage.getItem('lootfiend-profile-v3');
       if (saved) {
-        try { 
+        try {
           const parsed = JSON.parse(saved);
           PROFILE = { ...PROFILE, ...parsed };
-          // Restore current build
           if (PROFILE.currentBuild) {
             Object.assign(currentBuild, PROFILE.currentBuild);
             restoreBuildReferences(currentBuild);
@@ -605,24 +740,17 @@
     }
 
     function restoreBuildReferences(build) {
-      // Restore skill object references from IDs
-      if (build.core && typeof build.core === 'string') {
-        build.core = SKILLS.core.find(s => s.id === build.core) || null;
-      }
+      if (build.core && typeof build.core === 'string') build.core = SKILLS.core.find(s => s.id === build.core) || null;
       ['basic', 'basicControl', 'elemControl', 'ultimate'].forEach(key => {
         if (build[key] && typeof build[key] === 'string') {
-          const allSkills = [...(SKILLS[key] || []), ...SKILLS.basicControl, ...SKILLS.elemControl, ...SKILLS.ultimate, ...SKILLS.basic];
-          build[key] = allSkills.find(s => s.id === build[key]) || null;
+          const all = [...(SKILLS[key] || []), ...SKILLS.basicControl, ...SKILLS.elemControl, ...SKILLS.ultimate, ...SKILLS.basic];
+          build[key] = all.find(s => s.id === build[key]) || null;
         }
       });
-      build.passives = (build.passives || [null, null, null]).map(p => {
-        if (p && typeof p === 'string') return PASSIVES.find(ps => ps.id === p) || null;
-        return p;
-      });
+      build.passives = (build.passives || [null, null, null]).map(p => typeof p === 'string' ? PASSIVES.find(ps => ps.id === p) || null : p);
     }
 
     function saveProfile() {
-      // Store IDs instead of full objects
       const buildToSave = {
         core: currentBuild.core?.id || null,
         basic: currentBuild.basic?.id || null,
@@ -633,7 +761,7 @@
         passives: currentBuild.passives.map(p => p?.id || null)
       };
       PROFILE.currentBuild = buildToSave;
-      localStorage.setItem('lootfiend-profile-v2', JSON.stringify(PROFILE));
+      localStorage.setItem('lootfiend-profile-v3', JSON.stringify(PROFILE));
     }
 
     function showSaveIndicator(id) {
@@ -655,7 +783,6 @@
       const container = document.getElementById('rune-unlocks');
       const skillRunes = {};
       RUNES.forEach(r => { if (!skillRunes[r.skill]) skillRunes[r.skill] = []; skillRunes[r.skill].push(r); });
-
       const skillRows = {};
       Object.entries(SKILLS).forEach(([row, skills]) => skills.forEach(s => skillRows[s.name] = row));
       const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Ctrl', elemControl: 'Elem', ultimate: 'Ult' };
@@ -671,10 +798,7 @@
     function renderRuneCard(skillName, rune) {
       const key = `${skillName}|${rune.name}`;
       const tierLevel = PROFILE.runeUnlocks[key] ?? 1;
-
-      if (rune.blueEffect === 'Locked') {
-        return `<div class="rune-card" style="opacity: 0.4;"><div class="rune-card-name">${rune.name}</div><div style="font-size:9px;color:rgba(200,200,210,0.3);">LOCKED</div></div>`;
-      }
+      if (rune.blueEffect === 'Locked') return `<div class="rune-card" style="opacity:0.4;"><div class="rune-card-name">${rune.name}</div><div style="font-size:9px;color:rgba(200,200,210,0.3);">LOCKED</div></div>`;
 
       const tiers = [
         { key: 'blue', label: 'BLU', effect: rune.blueEffect },
@@ -718,7 +842,7 @@
 
     async function loadStatsFromSheet() {
       const sheetId = localStorage.getItem('lootfiend-sheet-id');
-      if (!sheetId) { alert('Set Sheet ID in Data tab first'); return; }
+      if (!sheetId) { alert('Set Sheet ID first'); return; }
       try {
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`);
         if (!res.ok) throw new Error('Failed');
@@ -797,6 +921,7 @@
           shield: parseFloat(row['Shield %']) || 0,
           hpRecovery: parseFloat(row['HP Recovery %']) || 0,
           desc: row['Special'] || `${row['ATK%'] || 0}% ATK`,
+          hitRate: row['Hit Rate'] || 'medium',
         });
       });
     }
@@ -807,6 +932,7 @@
         name: row['Passive Name'],
         desc: row['Description'],
         downside: row['Downside'] === 'TRUE',
+        archetype: row['Archetype'] || 'utility',
       }));
     }
 
@@ -828,7 +954,7 @@
     function getRuneTierLevel(skill, rune) { return PROFILE.runeUnlocks[`${skill}|${rune}`] ?? 1; }
     function getRunesForSkill(name) { return RUNES.filter(r => r.skill === name && r.blueEffect !== 'Locked' && getRuneTierLevel(name, r.name) >= 1); }
     function getSelectedRune(build, skill) { const name = build.runes[skill]; return name ? RUNES.find(r => r.skill === skill && r.name === name) : null; }
-    
+
     function getEffectiveElement(build, skill) {
       if (!skill) return null;
       const rune = getSelectedRune(build, skill.name);
@@ -836,96 +962,16 @@
       return (rune.newElement && getRuneTierLevel(skill.name, rune.name) >= 2) ? rune.newElement : skill.element;
     }
 
-    function getEffectiveStatuses(build, skill) {
-      if (!skill) return [];
-      const statuses = skill.status ? [skill.status] : [];
-      const rune = getSelectedRune(build, skill.name);
-      if (rune?.addsStatus && getRuneTierLevel(skill.name, rune.name) >= 2) {
-        rune.addsStatus.split(',').forEach(s => { if (s.trim() && !statuses.includes(s.trim())) statuses.push(s.trim()); });
-      }
-      return statuses;
-    }
-
     function calcDamage(skill) {
       if (!skill?.atk) return 0;
       return Math.round(PROFILE.stats.atk * (skill.atk / 100) * (1 + PROFILE.stats.finalDmgUp / 100));
     }
 
-    function analyzeBuild(build) {
-      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
-      const passives = build.passives.filter(Boolean);
-
-      const statuses = new Set();
-      skills.forEach(s => getEffectiveStatuses(build, s).forEach(st => statuses.add(st)));
-
-      const elements = new Set();
-      skills.forEach(s => { const el = getEffectiveElement(build, s); if (el) elements.add(el); });
-
-      let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
-      let mult = 1;
-      if (passives.some(p => p.id === 'flourish')) mult += 0.15;
-      if (passives.some(p => p.id === 'demon_pact')) mult += 0.30;
-      if (passives.some(p => p.id === 'elemental_resonance')) mult += statuses.size * 0.05;
-      totalDmg = Math.round(totalDmg * mult);
-
-      const totalAtk = skills.reduce((sum, s) => sum + (s.atk || 0), 0);
-
-      const synergies = [];
-      const conflicts = [];
-      const tips = [];
-
-      if (passives.some(p => p.id === 'elemental_resonance')) {
-        if (statuses.size >= 2) synergies.push({ text: `Elem Resonance: +${statuses.size * 5}% (${statuses.size} statuses)`, type: statuses.size >= 3 ? '' : 'info' });
-      }
-
-      skills.forEach(s => {
-        const rune = getSelectedRune(build, s.name);
-        if (rune) {
-          const tier = getRuneTierLevel(s.name, rune.name);
-          if (rune.newElement && tier >= 2) synergies.push({ text: `${rune.name}: ${s.name} → ${rune.newElement}`, type: 'rune' });
-          if (rune.addsStatus && tier >= 2) synergies.push({ text: `${rune.name}: +${rune.addsStatus}`, type: 'rune' });
-        }
-      });
-
-      if (build.ultimate?.id === 'doppelganger' && build.basic) {
-        synergies.push({ text: `Doppel clones ${build.basic.name}`, type: 'info' });
-        const rune = getSelectedRune(build, build.basic.name);
-        if (rune) synergies.push({ text: `Clone gets ${rune.name}!`, type: 'rune' });
-      }
-
-      const hasFlourish = passives.some(p => p.id === 'flourish');
-      const hasDemonPact = passives.some(p => p.id === 'demon_pact');
-      const hasShield = skills.some(s => s.shield) || passives.some(p => p.id === 'arcane_shield');
-
-      if (hasFlourish && hasShield) synergies.push({ text: 'Flourish + Shield: HP upkeep', type: '' });
-      if (hasFlourish && hasDemonPact) conflicts.push('Demon Pact + Flourish conflict');
-      if (hasDemonPact && !hasShield && !skills.some(s => s.hpRecovery)) conflicts.push('Demon Pact no sustain');
-
-      return { statuses: Array.from(statuses), elements: Array.from(elements), totalDmg, totalAtk, mult, synergies, conflicts, tips, hasShield };
-    }
-
-    function getRecommendations(build) {
-      const recs = { basic: [], control: [], ultimate: [], passives: [] };
-      if (!build.core) return recs;
-
-      const coreEl = getEffectiveElement(build, build.core);
-      const coreSt = getEffectiveStatuses(build, build.core);
-
-      SKILLS.basic.forEach(s => { if (s.element === coreEl || (s.status && !coreSt.includes(s.status))) recs.basic.push(s.id); });
-      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => { if (s.element === coreEl || s.shield || s.hpRecovery) recs.control.push(s.id); });
-      SKILLS.ultimate.forEach(s => { if (s.id === 'doppelganger' || s.element === coreEl) recs.ultimate.push(s.id); });
-      if (coreSt.length > 0) recs.passives.push('elemental_resonance');
-      recs.passives.push('flourish', 'conjuration');
-
-      return recs;
-    }
-
-    // ============ RENDER BUILDER ============
+    // ============ RENDER ============
     function renderBuilder(build, containerId, analysisId, mode) {
       const container = document.getElementById(containerId);
-      const recs = getRecommendations(build);
+      const recs = getSmartRecommendations(build);
 
-      // Core Section
       let html = `<div class="core-section"><div class="core-title">🎯 CHOOSE YOUR CORE</div><div class="core-grid">`;
       SKILLS.core.forEach(skill => {
         const isSelected = build.core?.id === skill.id;
@@ -940,7 +986,6 @@
       });
       html += `</div>`;
 
-      // Core Runes
       if (build.core) {
         const runes = getRunesForSkill(build.core.name);
         if (runes.length) {
@@ -960,7 +1005,6 @@
       }
       html += `</div>`;
 
-      // Build Around
       html += `<div class="build-around"><div class="build-around-title">⬇️ BUILD AROUND IT</div><div class="build-grid">`;
       html += `<div class="build-column"><div class="column-label">BASIC</div>`;
       SKILLS.basic.forEach(s => { html += renderSkillCard(build, s, 'basic', recs.basic.includes(s.id), mode); });
@@ -977,7 +1021,6 @@
       SKILLS.ultimate.forEach(s => { html += renderSkillCard(build, s, 'ultimate', recs.ultimate.includes(s.id), mode); });
       html += `</div></div></div>`;
 
-      // Passives
       html += `<div class="passives-section"><div class="passives-title">PASSIVES (3)</div><div class="passives-grid">`;
       PASSIVES.forEach(p => {
         const isSelected = build.passives.some(bp => bp?.id === p.id);
@@ -990,8 +1033,6 @@
       html += `</div></div>`;
 
       container.innerHTML = html;
-
-      // Analysis
       renderAnalysis(build, analysisId, mode);
     }
 
@@ -1023,11 +1064,42 @@
     }
 
     function renderAnalysis(build, containerId, mode) {
-      const analysis = analyzeBuild(build);
       const container = document.getElementById(containerId);
+      const { synergies, conflicts, tips, archetype, stats } = getSmartSynergies(build);
+      const statuses = getAllStatuses(build);
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      const passives = build.passives.filter(Boolean);
+
+      let html = `<div class="analysis-title">BUILD ANALYSIS</div>`;
+
+      // Archetype badge
+      if (build.core) {
+        const archetypeLabels = { crit: '⚔️ CRIT', dot: '🔥 DOT', sustain: '💚 SUSTAIN', control: '🧊 CONTROL', burst: '💥 BURST', hybrid: '⚖️ HYBRID' };
+        html += `<div class="archetype-section">
+          <div class="archetype-badge ${archetype.type}">${archetypeLabels[archetype.type] || 'HYBRID'}</div>
+          <div class="archetype-strength ${archetype.strength}">${archetype.strength.toUpperCase()}</div>
+        </div>`;
+      }
+
+      // Stat totals
+      html += `<div class="stat-totals"><div class="stat-totals-title">RUNE STAT BONUSES</div><div class="stat-totals-grid">`;
+      const statDisplay = [
+        { key: 'critChance', label: 'Crit', suffix: '%', threshold: [20, 10] },
+        { key: 'critDmg', label: 'Crit Dmg', suffix: '%', threshold: [150, 100] },
+        { key: 'hoh', label: 'HoH', suffix: '%', threshold: [30, 15] },
+        { key: 'dot', label: 'DoT', suffix: '%', threshold: [40, 20] },
+        { key: 'eleDmg', label: 'Ele Dmg', suffix: '%', threshold: [15, 5] },
+        { key: 'dmg', label: 'Dmg', suffix: '%', threshold: [60, 30] },
+      ];
+      statDisplay.forEach(({ key, label, suffix, threshold }) => {
+        const val = stats[key] || 0;
+        const cls = val >= threshold[0] ? 'high' : val >= threshold[1] ? 'medium' : 'low';
+        if (val > 0) html += `<div class="stat-row"><span class="stat-row-label">${label}</span><span class="stat-row-value ${cls}">${val}${suffix}</span></div>`;
+      });
+      html += `</div></div>`;
 
       // Build summary
-      let html = `<div class="analysis-title">BUILD ANALYSIS</div><div class="build-summary">`;
+      html += `<div class="build-summary">`;
       [{ l: 'CORE', k: 'core' }, { l: 'BASIC', k: 'basic' }, { l: 'CTRL', k: 'basicControl' }, { l: 'ELEM', k: 'elemControl' }, { l: 'ULT', k: 'ultimate' }].forEach(({ l, k }) => {
         const skill = build[k];
         if (skill) {
@@ -1035,47 +1107,55 @@
           html += `<div class="build-item"><span class="build-item-label">${l}</span><span class="build-item-skill">${skill.name}</span>${rune ? `<span class="build-item-rune">${rune.name}</span>` : ''}</div>`;
         }
       });
-      const passiveNames = build.passives.filter(Boolean).map(p => p.name);
-      if (passiveNames.length) html += `<div class="build-item"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:9px;">${passiveNames.join(', ')}</span></div>`;
+      if (passives.length) html += `<div class="build-item"><span class="build-item-label">PASSIVES</span><span style="color:#86efac;font-size:9px;">${passives.map(p => p.name).join(', ')}</span></div>`;
       html += `</div>`;
 
       // Damage
-      html += `<div class="damage-calc"><div class="damage-calc-title">TOTAL DAMAGE</div><div class="damage-calc-value">${analysis.totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${analysis.mult.toFixed(2)} mult</div>`;
-      
-      // Comparison for theorycraft
+      let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
+      let mult = 1 + (stats.dmg / 100);
+      if (passives.some(p => p.id === 'flourish')) mult += 0.15;
+      if (passives.some(p => p.id === 'demon_pact')) mult += 0.30;
+      if (passives.some(p => p.id === 'elemental_resonance')) mult += statuses.length * 0.05;
+      totalDmg = Math.round(totalDmg * mult);
+
+      html += `<div class="damage-calc"><div class="damage-calc-title">TOTAL DAMAGE</div><div class="damage-calc-value">${totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${mult.toFixed(2)} mult</div>`;
       if (mode === 'theory') {
-        const currentAnalysis = analyzeBuild(currentBuild);
-        const diff = analysis.totalDmg - currentAnalysis.totalDmg;
+        const currentAnalysis = getSmartSynergies(currentBuild);
+        const currentSkills = [currentBuild.core, currentBuild.basic, currentBuild.basicControl, currentBuild.elemControl, currentBuild.ultimate].filter(Boolean);
+        let currentDmg = currentSkills.reduce((sum, s) => sum + calcDamage(s), 0);
+        let currentMult = 1 + (currentAnalysis.stats.dmg / 100);
+        if (currentBuild.passives.some(p => p?.id === 'flourish')) currentMult += 0.15;
+        if (currentBuild.passives.some(p => p?.id === 'demon_pact')) currentMult += 0.30;
+        if (currentBuild.passives.some(p => p?.id === 'elemental_resonance')) currentMult += getAllStatuses(currentBuild).length * 0.05;
+        currentDmg = Math.round(currentDmg * currentMult);
+        const diff = totalDmg - currentDmg;
         if (diff > 0) html += `<div class="comparison-indicator better">▲ ${diff.toLocaleString()} vs current</div>`;
         else if (diff < 0) html += `<div class="comparison-indicator worse">▼ ${Math.abs(diff).toLocaleString()} vs current</div>`;
-        else html += `<div class="comparison-indicator same">= same as current</div>`;
+        else html += `<div class="comparison-indicator same">= same</div>`;
       }
       html += `</div>`;
 
       // Status
       html += `<div class="status-section"><div class="section-label">STATUS EFFECTS</div><div class="status-badges">`;
-      html += analysis.statuses.length ? analysis.statuses.map(s => `<span class="status-badge ${s.toLowerCase()}">${s}</span>`).join('') : '<span class="none-text">None</span>';
+      html += statuses.length ? statuses.map(s => `<span class="status-badge ${s.toLowerCase().replace(/\s+/g, '')}">${s}</span>`).join('') : '<span class="none-text">None</span>';
       html += `</div></div>`;
 
-      // Quick stats
-      html += `<div class="quick-stats"><div class="quick-stat"><div class="quick-stat-label">ATK%</div><div class="quick-stat-value">${analysis.totalAtk}%</div></div>`;
-      html += `<div class="quick-stat"><div class="quick-stat-label">ELEMENTS</div><div class="element-dots">`;
-      html += analysis.elements.length ? analysis.elements.map(e => `<span class="element-dot ${e.toLowerCase()}"></span>`).join('') : '<span class="none-text">—</span>';
-      html += `</div></div></div>`;
-
       // Synergies
-      if (analysis.synergies.length) {
+      if (synergies.length) {
         html += `<div class="section-label">✨ SYNERGIES</div>`;
-        analysis.synergies.forEach(s => { html += `<div class="synergy-item ${s.type}">${s.text}</div>`; });
+        synergies.forEach(s => { html += `<div class="synergy-item ${s.type}">${s.text}</div>`; });
       }
-      if (analysis.conflicts.length) {
+      if (conflicts.length) {
         html += `<div class="section-label">⚠️ CONFLICTS</div>`;
-        analysis.conflicts.forEach(c => { html += `<div class="conflict-item">${c}</div>`; });
+        conflicts.forEach(c => { html += `<div class="conflict-item">${c}</div>`; });
+      }
+      if (tips.length) {
+        html += `<div class="section-label">💡 TIPS</div>`;
+        tips.forEach(t => { html += `<div class="tip-item">${t}</div>`; });
       }
 
-      // Save button for current build
       if (mode === 'current') {
-        html += `<button class="save-build-btn" onclick="saveCurrentBuild()">💾 SAVE BUILD</button><div class="saved-indicator" id="build-saved">✓ Build Saved!</div>`;
+        html += `<button class="save-build-btn" onclick="saveCurrentBuild()">💾 SAVE BUILD</button><div class="saved-indicator" id="build-saved">✓ Saved!</div>`;
       }
 
       container.innerHTML = html;
@@ -1096,10 +1176,7 @@
       renderCurrentBuild();
     }
 
-    function currentSelectCoreRune(name) {
-      if (currentBuild.core) currentBuild.runes[currentBuild.core.name] = name;
-      renderCurrentBuild();
-    }
+    function currentSelectCoreRune(name) { if (currentBuild.core) currentBuild.runes[currentBuild.core.name] = name; renderCurrentBuild(); }
 
     function currentSelectSkill(row, id) {
       const skills = row === 'basicControl' || row === 'elemControl' ? [...SKILLS.basicControl, ...SKILLS.elemControl] : SKILLS[row];
@@ -1117,10 +1194,7 @@
       renderCurrentBuild();
     }
 
-    function currentSelectSkillRune(skill, rune) {
-      currentBuild.runes[skill] = rune;
-      renderCurrentBuild();
-    }
+    function currentSelectSkillRune(skill, rune) { currentBuild.runes[skill] = rune; renderCurrentBuild(); }
 
     function currentSelectPassive(id) {
       const passive = PASSIVES.find(p => p.id === id);
@@ -1149,7 +1223,8 @@
 
     function renderCurrentSidebar() {
       const container = document.getElementById('current-sidebar');
-      const analysis = analyzeBuild(currentBuild);
+      const { stats, archetype } = getSmartSynergies(currentBuild);
+      const statuses = getAllStatuses(currentBuild);
 
       let html = `<div class="sidebar-title">📌 CURRENT BUILD</div>`;
 
@@ -1164,10 +1239,18 @@
           }
         });
 
+        const skills = [currentBuild.core, currentBuild.basic, currentBuild.basicControl, currentBuild.elemControl, currentBuild.ultimate].filter(Boolean);
+        let dmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
+        let mult = 1 + (stats.dmg / 100);
+        if (currentBuild.passives.some(p => p?.id === 'flourish')) mult += 0.15;
+        if (currentBuild.passives.some(p => p?.id === 'demon_pact')) mult += 0.30;
+        if (currentBuild.passives.some(p => p?.id === 'elemental_resonance')) mult += statuses.length * 0.05;
+        dmg = Math.round(dmg * mult);
+
         html += `<div class="sidebar-stats">`;
-        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Damage</span><span class="sidebar-stat-value">${analysis.totalDmg.toLocaleString()}</span></div>`;
-        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">ATK%</span><span class="sidebar-stat-value">${analysis.totalAtk}%</span></div>`;
-        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Statuses</span><span class="sidebar-stat-value">${analysis.statuses.length}</span></div>`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Type</span><span class="sidebar-stat-value">${archetype.type.toUpperCase()}</span></div>`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Damage</span><span class="sidebar-stat-value">${dmg.toLocaleString()}</span></div>`;
+        html += `<div class="sidebar-stat"><span class="sidebar-stat-label">Statuses</span><span class="sidebar-stat-value">${statuses.length}</span></div>`;
         html += `</div>`;
       }
 
@@ -1184,10 +1267,7 @@
       renderTheorycraft();
     }
 
-    function theorySelectCoreRune(name) {
-      if (theoryBuild.core) theoryBuild.runes[theoryBuild.core.name] = name;
-      renderTheorycraft();
-    }
+    function theorySelectCoreRune(name) { if (theoryBuild.core) theoryBuild.runes[theoryBuild.core.name] = name; renderTheorycraft(); }
 
     function theorySelectSkill(row, id) {
       const skills = row === 'basicControl' || row === 'elemControl' ? [...SKILLS.basicControl, ...SKILLS.elemControl] : SKILLS[row];
@@ -1205,10 +1285,7 @@
       renderTheorycraft();
     }
 
-    function theorySelectSkillRune(skill, rune) {
-      theoryBuild.runes[skill] = rune;
-      renderTheorycraft();
-    }
+    function theorySelectSkillRune(skill, rune) { theoryBuild.runes[skill] = rune; renderTheorycraft(); }
 
     function theorySelectPassive(id) {
       const passive = PASSIVES.find(p => p.id === id);
