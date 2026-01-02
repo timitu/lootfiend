@@ -43,6 +43,7 @@
     .core-card.selected-fire { background: rgba(251, 146, 60, 0.15); border-color: #fb923c; box-shadow: 0 0 25px rgba(251, 146, 60, 0.4); }
     .core-card.selected-lightning { background: rgba(192, 132, 252, 0.15); border-color: #c084fc; box-shadow: 0 0 25px rgba(192, 132, 252, 0.4); }
     .core-card.selected-ice { background: rgba(96, 165, 250, 0.15); border-color: #60a5fa; box-shadow: 0 0 25px rgba(96, 165, 250, 0.4); }
+    .core-card.recommended { box-shadow: 0 0 12px rgba(74, 222, 128, 0.25); border-color: rgba(74, 222, 128, 0.4); }
     .core-icon { font-size: 28px; margin-bottom: 6px; }
     .core-name { font-family: "Cinzel", serif; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
     .core-name.fire { color: #fdba74; }
@@ -58,6 +59,7 @@
     .rune-option { padding: 10px 16px; background: rgba(0, 0, 0, 0.3); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; cursor: pointer; transition: all 0.2s ease; text-align: center; min-width: 120px; }
     .rune-option:hover { background: rgba(100, 100, 120, 0.2); }
     .rune-option.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
+    .rune-option.recommended { border-color: rgba(74, 222, 128, 0.5); box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
     .rune-option-name { font-weight: 600; color: #c084fc; font-size: 12px; margin-bottom: 2px; }
     .rune-option-effect { font-size: 9px; color: rgba(200, 200, 210, 0.5); }
     .rune-element-change { display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-top: 4px; }
@@ -95,6 +97,7 @@
     .skill-rune-btn { flex: 1; padding: 4px 5px; font-size: 9px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(100, 100, 120, 0.3); border-radius: 4px; color: rgba(200, 200, 210, 0.6); cursor: pointer; font-family: inherit; }
     .skill-rune-btn:hover { background: rgba(100, 100, 120, 0.2); }
     .skill-rune-btn.selected { background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #d8b4fe; }
+    .skill-rune-btn.recommended { border-color: rgba(74, 222, 128, 0.5); box-shadow: 0 0 6px rgba(74, 222, 128, 0.2); }
 
     .passives-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
     .passives-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
@@ -190,6 +193,18 @@
     .save-build-btn:hover { filter: brightness(1.1); }
     .reset-build-btn { width: 100%; padding: 8px; margin-top: 8px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; color: #fca5a5; font-weight: 600; font-size: 11px; cursor: pointer; font-family: "Cinzel", serif; letter-spacing: 1px; }
     .reset-build-btn:hover { background: rgba(239, 68, 68, 0.3); }
+
+    .zenith-pool { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 10px; background: rgba(250, 204, 21, 0.1); border-radius: 8px; border: 1px solid rgba(250, 204, 21, 0.2); }
+    .zenith-pool-label { font-size: 11px; color: #fde047; font-weight: 600; }
+    .zenith-pool-input { width: 60px; padding: 6px 8px; background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 4px; color: #fde047; font-size: 12px; text-align: center; }
+    .zenith-remaining { font-size: 11px; color: rgba(200,200,210,0.6); margin-left: auto; }
+    .zenith-remaining.over { color: #f87171; }
+    .zenith-remaining.ok { color: #4ade80; }
+    .zenith-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .zenith-input-group { background: rgba(40, 40, 50, 0.6); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .zenith-input-label { font-size: 9px; color: rgba(200,200,210,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+    .zenith-input { width: 100%; padding: 6px; background: rgba(30, 30, 40, 0.8); border: 1px solid rgba(200, 200, 210, 0.15); border-radius: 4px; color: white; font-size: 12px; text-align: center; }
+    .zenith-input:focus { border-color: rgba(250, 204, 21, 0.5); outline: none; }
     .saved-indicator { text-align: center; font-size: 10px; color: #86efac; margin-top: 6px; opacity: 0; transition: opacity 0.3s; }
     .saved-indicator.show { opacity: 1; }
 
@@ -284,6 +299,15 @@
   <div class="tab-content" id="tab-profile">
     <div class="profile-container">
       <div class="profile-section">
+        <div class="profile-section-title">⭐ ZENITH POINTS <span class="save-indicator" id="zenith-saved">✓ Saved</span></div>
+        <div class="zenith-pool">
+          <span class="zenith-pool-label">Total Pool:</span>
+          <input type="number" class="zenith-pool-input" id="zenith-pool" value="140" onchange="updateZenithPool(this.value)">
+          <span class="zenith-remaining" id="zenith-remaining">140 remaining</span>
+        </div>
+        <div class="zenith-grid" id="zenith-inputs"></div>
+      </div>
+      <div class="profile-section">
         <div class="profile-section-title">📊 CHARACTER STATS <span class="save-indicator" id="stats-saved">✓ Saved</span></div>
         <div class="stats-grid" id="stats-inputs"></div>
         <div class="profile-actions" style="margin-top: 12px;">
@@ -360,6 +384,7 @@
 
     let PROFILE = {
       stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0, dot: 0, eleDmg: 0, finalDmg: 0, evasion: 0 },
+      zenith: { pool: 140, atk: 0, def: 0, hp: 0, crit: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0 },
       runeUnlocks: {},
       currentBuild: null
     };
@@ -381,6 +406,20 @@
       { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
       { key: 'finalDmg', label: 'Final Dmg %', default: 0 },
       { key: 'evasion', label: 'Evasion %', default: 0 },
+    ];
+
+    // Zenith stats - point allocation system
+    const ZENITH_CONFIG = [
+      { key: 'atk', label: 'ATK', max: null },
+      { key: 'def', label: 'DEF', max: null },
+      { key: 'hp', label: 'HP', max: null },
+      { key: 'crit', label: 'Crit %', max: 50 },
+      { key: 'addDmgChance', label: 'Add Dmg %', max: 50 },
+      { key: 'thorn', label: 'Thorn %', max: 50 },
+      { key: 'haste', label: 'Haste %', max: 50 },
+      { key: 'mpRegen', label: 'MP Regen %', max: 50 },
+      { key: 'cdReduction', label: 'CD %', max: 50 },
+      { key: 'hoh', label: 'HoH %', max: 50 },
     ];
 
     const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
@@ -464,19 +503,19 @@
     }
 
     function getBuildStats(build) {
-      // Start with profile stats (what player entered)
+      // Start with profile stats + zenith bonuses
       const totals = {
-        atk: PROFILE.stats.atk,
-        def: PROFILE.stats.def,
-        hp: PROFILE.stats.hp,
-        critChance: PROFILE.stats.crit,
+        atk: PROFILE.stats.atk + (PROFILE.zenith.atk || 0),
+        def: PROFILE.stats.def + (PROFILE.zenith.def || 0),
+        hp: PROFILE.stats.hp + (PROFILE.zenith.hp || 0),
+        critChance: PROFILE.stats.crit + (PROFILE.zenith.crit || 0),
         critDmg: PROFILE.stats.critDmg,
-        addDmgChance: PROFILE.stats.addDmgChance,
-        thorn: PROFILE.stats.thorn,
-        haste: PROFILE.stats.haste,
-        mpRegen: PROFILE.stats.mpRegen,
-        cdReduction: PROFILE.stats.cdReduction,
-        hoh: PROFILE.stats.hoh,
+        addDmgChance: PROFILE.stats.addDmgChance + (PROFILE.zenith.addDmgChance || 0),
+        thorn: PROFILE.stats.thorn + (PROFILE.zenith.thorn || 0),
+        haste: PROFILE.stats.haste + (PROFILE.zenith.haste || 0),
+        mpRegen: PROFILE.stats.mpRegen + (PROFILE.zenith.mpRegen || 0),
+        cdReduction: PROFILE.stats.cdReduction + (PROFILE.zenith.cdReduction || 0),
+        hoh: PROFILE.stats.hoh + (PROFILE.zenith.hoh || 0),
         dot: PROFILE.stats.dot,
         eleDmg: PROFILE.stats.eleDmg,
         finalDmg: PROFILE.stats.finalDmg,
@@ -761,56 +800,136 @@
       return { flags, stats };
     }
 
-    // ============ SMART RECOMMENDATIONS (Relationship-Based) ============
+    // ============ SMART RECOMMENDATIONS (Stat-Driven) ============
     function getSmartRecommendations(build) {
-      const recs = { basic: [], control: [], ultimate: [], passives: [] };
-      if (!build.core) return recs;
-
+      const recs = { basic: [], core: [], control: [], ultimate: [], passives: [], runes: [] };
       const stats = getBuildStats(build);
       const statuses = getAllStatuses(build);
-      const coreElement = getEffectiveElement(build, build.core);
+      const coreElement = build.core ? getEffectiveElement(build, build.core) : null;
       const hasNumb = hasNumbRune(build);
       const sustainTools = countSustainTools(build);
       const multiHitSkills = countMultiHitSkills(build);
 
-      // Basic recommendations
-      SKILLS.basic.forEach(s => {
-        // Element match
-        if (s.element === coreElement) recs.basic.push(s.id);
-        // Status diversity
-        if (s.status && !statuses.includes(s.status)) recs.basic.push(s.id);
-        // If Numb selected, recommend Shock sources
-        if (hasNumb && s.status === 'Shock') recs.basic.push(s.id);
-      });
+      // === STAT-DRIVEN RECOMMENDATIONS ===
+      
+      // High Haste → wants multi-hit skills (more attacks = more value from haste)
+      if (stats.haste >= 20) {
+        recs.core.push('ice_ray'); // channel = lots of hits
+        SKILLS.ultimate.forEach(s => { if (s.hitRate === 'high') recs.ultimate.push(s.id); });
+      }
 
-      // Control recommendations
-      [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
-        // If you have HoH but no sustain, recommend sustain tools
-        if (stats.hoh > 0 && sustainTools.length < 2 && (s.shield || s.hpRecovery)) recs.control.push(s.id);
-        // Element match
-        if (s.element === coreElement) recs.control.push(s.id);
-        // If Numb selected, recommend Shock sources
-        if (hasNumb && s.status === 'Shock') recs.control.push(s.id);
-      });
+      // High Crit → wants crit-dmg runes, shock sources for Numb
+      if (stats.critChance >= 15) {
+        recs.core.push('lightning_punch'); // High single-hit, benefits from crit
+        recs.core.push('fireball'); // Good crit runes
+        // Recommend crit-boosting runes
+        recs.runes.push({ skill: 'Fireball', rune: 'Pyroblast', reason: 'Crit Dmg +45%' });
+        recs.runes.push({ skill: 'Fireball', rune: 'Jolt', reason: 'Crit +10%' });
+        recs.runes.push({ skill: 'Lightning Punch', rune: 'Thunder Punch', reason: 'Crit +5%, Add Dmg +15%' });
+        // If no Numb yet, suggest it
+        if (!hasNumb) {
+          recs.runes.push({ skill: 'Lightning Whip', rune: 'Numb', reason: '+20% Crit vs Shocked' });
+        }
+      }
 
-      // Ultimate recommendations
-      SKILLS.ultimate.forEach(s => {
-        if (s.id === 'doppelganger') recs.ultimate.push(s.id); // Clone is always valuable
-        if (s.element === coreElement) recs.ultimate.push(s.id);
-        // If HoH but no multi-hit, recommend multi-hit ultimates
-        if (stats.hoh > 0 && multiHitSkills.length === 0 && s.hitRate === 'high') recs.ultimate.push(s.id);
-      });
+      // High HoH → wants multi-hit skills
+      if (stats.hoh >= 15) {
+        recs.core.push('ice_ray'); // Multi-hit channel
+        recs.ultimate.push('hail'); // Multi-hit storm
+        recs.runes.push({ skill: 'Hail', rune: 'Glacial', reason: 'HoH +30%, multi-hit' });
+        recs.runes.push({ skill: 'Ice Ray', rune: 'Rimebite', reason: 'Faster ticks = more HoH procs' });
+        recs.runes.push({ skill: 'Fireball', rune: 'Iceflame', reason: 'HoH +30%, multi-hit shards' });
+      }
 
-      // Passive recommendations
-      // Elemental Resonance if multiple statuses
-      if (statuses.length >= 2) recs.passives.push('elemental_resonance');
-      // Flourish if you have sustain tools
-      if (sustainTools.length >= 1) recs.passives.push('flourish');
+      // High DoT → wants burning-stack sources
+      if (stats.dot >= 20) {
+        recs.core.push('fireball'); // Fire core for burning
+        recs.runes.push({ skill: 'Lightning Punch', rune: 'Flame Bow', reason: '20 Burning stacks' });
+        recs.runes.push({ skill: 'Hail', rune: 'Skyfire', reason: '8+ Burning stacks' });
+        recs.runes.push({ skill: 'Doppelganger', rune: 'Ember', reason: '20 Burning on death' });
+        recs.runes.push({ skill: 'Infernal Bloom', rune: 'Fire Core', reason: 'DoT +20%, Burning stacks' });
+      }
+
+      // High Thorn → wants sustain/shields (stay alive to reflect)
+      if (stats.thorn >= 15) {
+        SKILLS.elemControl.forEach(s => { if (s.shield) recs.control.push(s.id); });
+        SKILLS.basicControl.forEach(s => { if (s.hpRecovery) recs.control.push(s.id); });
+        recs.passives.push('flourish');
+        recs.passives.push('arcane_shield');
+        recs.runes.push({ skill: 'Frost Shield', rune: 'Shattered Ice', reason: 'Shield +10%' });
+      }
+
+      // High CD Reduction → wants cooldown-heavy skills
+      if (stats.cdReduction >= 15) {
+        // Recommend skills with impactful cooldowns
+        recs.control.push('gravity_field');
+        recs.ultimate.push('doppelganger');
+        recs.passives.push('conjuration');
+      }
+
+      // High Add Dmg Chance → wants multi-hit (more chances to proc)
+      if (stats.addDmgChance >= 15) {
+        recs.core.push('ice_ray');
+        recs.runes.push({ skill: 'Ice Ray', rune: 'Rimebite', reason: 'Add Dmg +45%, faster hits' });
+        recs.runes.push({ skill: 'Hail', rune: 'Glacial', reason: 'Add Dmg Chance +10%, multi-hit' });
+      }
+
+      // === SELECTION-DRIVEN RECOMMENDATIONS ===
+
+      // If Numb selected, need Shock sources
+      if (hasNumb) {
+        SKILLS.basic.forEach(s => { if (s.status === 'Shock') recs.basic.push(s.id); });
+        SKILLS.elemControl.forEach(s => { if (s.status === 'Shock') recs.control.push(s.id); });
+        recs.runes.push({ skill: 'Lightning Orb', rune: 'Electrolysis', reason: 'Shock source for Numb' });
+        recs.runes.push({ skill: 'Ice Ray', rune: 'Ionization', reason: 'Shock source for Numb' });
+      }
+
+      // Element matching
+      if (coreElement) {
+        SKILLS.basic.forEach(s => { if (s.element === coreElement) recs.basic.push(s.id); });
+        SKILLS.elemControl.forEach(s => { if (s.element === coreElement) recs.control.push(s.id); });
+        SKILLS.ultimate.forEach(s => { if (s.element === coreElement) recs.ultimate.push(s.id); });
+      }
+
+      // Status diversity for Elemental Resonance
+      if (build.passives.some(p => p?.id === 'elemental_resonance') || statuses.length >= 2) {
+        SKILLS.basic.forEach(s => { if (s.status && !statuses.includes(s.status)) recs.basic.push(s.id); });
+        recs.passives.push('elemental_resonance');
+      }
+
+      // Sustain tools if HoH or defensive stats
+      if (stats.hoh > 0 || sustainTools.length < 2) {
+        SKILLS.elemControl.forEach(s => { if (s.shield) recs.control.push(s.id); });
+        SKILLS.basicControl.forEach(s => { if (s.hpRecovery) recs.control.push(s.id); });
+      }
+
+      // If sustain tools present, recommend Flourish
+      if (sustainTools.length >= 1) {
+        recs.passives.push('flourish');
+      }
+
+      // Doppelganger is generally good
+      recs.ultimate.push('doppelganger');
+      
       // Conjuration is generally useful
       recs.passives.push('conjuration');
 
       // Dedupe
-      Object.keys(recs).forEach(k => recs[k] = [...new Set(recs[k])]);
+      Object.keys(recs).forEach(k => {
+        if (k === 'runes') {
+          // Dedupe runes by skill+rune combo
+          const seen = new Set();
+          recs.runes = recs.runes.filter(r => {
+            const key = `${r.skill}|${r.rune}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+        } else {
+          recs[k] = [...new Set(recs[k])];
+        }
+      });
+      
       return recs;
     }
 
@@ -840,6 +959,7 @@
           const parsed = JSON.parse(saved);
           // Merge carefully to preserve all fields
           if (parsed.stats) PROFILE.stats = { ...PROFILE.stats, ...parsed.stats };
+          if (parsed.zenith) PROFILE.zenith = { ...PROFILE.zenith, ...parsed.zenith };
           if (parsed.runeUnlocks) PROFILE.runeUnlocks = parsed.runeUnlocks;
           if (parsed.currentBuild) {
             PROFILE.currentBuild = parsed.currentBuild;
@@ -883,6 +1003,17 @@
     }
 
     function renderProfile() {
+      // Zenith section
+      document.getElementById('zenith-pool').value = PROFILE.zenith.pool;
+      document.getElementById('zenith-inputs').innerHTML = ZENITH_CONFIG.map(stat => `
+        <div class="zenith-input-group">
+          <div class="zenith-input-label">${stat.label}${stat.max ? ` <span style="opacity:0.5">(max ${stat.max})</span>` : ''}</div>
+          <input type="number" class="zenith-input" value="${PROFILE.zenith[stat.key] || 0}" onchange="updateZenith('${stat.key}', this.value, ${stat.max || 'null'})" min="0"${stat.max ? ` max="${stat.max}"` : ''}>
+        </div>
+      `).join('');
+      updateZenithRemaining();
+
+      // Stats section
       document.getElementById('stats-inputs').innerHTML = STAT_CONFIG.map(stat => `
         <div class="stat-input-group">
           <div class="stat-input-label">${stat.label}</div>
@@ -890,6 +1021,32 @@
         </div>
       `).join('');
       renderRuneUnlocks();
+    }
+
+    function updateZenithPool(value) {
+      PROFILE.zenith.pool = parseInt(value) || 0;
+      updateZenithRemaining();
+      saveProfile();
+      showSaveIndicator('zenith-saved');
+    }
+
+    function updateZenith(key, value, max) {
+      let val = parseInt(value) || 0;
+      if (max && val > max) val = max;
+      if (val < 0) val = 0;
+      PROFILE.zenith[key] = val;
+      updateZenithRemaining();
+      saveProfile();
+      showSaveIndicator('zenith-saved');
+      renderProfile();
+    }
+
+    function updateZenithRemaining() {
+      const spent = ZENITH_CONFIG.reduce((sum, s) => sum + (PROFILE.zenith[s.key] || 0), 0);
+      const remaining = PROFILE.zenith.pool - spent;
+      const el = document.getElementById('zenith-remaining');
+      el.textContent = `${remaining} remaining`;
+      el.className = 'zenith-remaining ' + (remaining < 0 ? 'over' : remaining === 0 ? 'ok' : '');
     }
 
     function renderRuneUnlocks() {
@@ -945,8 +1102,9 @@
 
     function resetProfile() {
       if (confirm('Reset all?')) {
-        PROFILE = { stats: {}, runeUnlocks: {}, currentBuild: null };
+        PROFILE = { stats: {}, zenith: { pool: 140 }, runeUnlocks: {}, currentBuild: null };
         STAT_CONFIG.forEach(s => PROFILE.stats[s.key] = s.default);
+        ZENITH_CONFIG.forEach(s => PROFILE.zenith[s.key] = 0);
         Object.keys(currentBuild).forEach(k => currentBuild[k] = k === 'passives' ? [null, null, null] : (k === 'runes' ? {} : null));
         // Clear all versions of localStorage
         localStorage.removeItem('lootfiend-profile');
@@ -1092,9 +1250,10 @@
       let html = `<div class="core-section"><div class="core-title">🎯 CHOOSE YOUR CORE</div><div class="core-grid">`;
       SKILLS.core.forEach(skill => {
         const isSelected = build.core?.id === skill.id;
+        const isRec = recs.core.includes(skill.id) && !isSelected;
         const el = skill.element?.toLowerCase() || 'neutral';
         const dmg = calcDamage(skill);
-        html += `<div class="core-card ${isSelected ? 'selected-' + el : ''}" onclick="${mode}SelectCore('${skill.id}')">
+        html += `<div class="core-card ${isSelected ? 'selected-' + el : ''} ${isRec ? 'recommended' : ''}" onclick="${mode}SelectCore('${skill.id}')">
           <div class="core-icon">${skill.element === 'Fire' ? '🔥' : skill.element === 'Lightning' ? '⚡' : '❄️'}</div>
           <div class="core-name ${el}">${skill.name}</div>
           <div class="core-desc">${skill.desc}</div>
@@ -1111,7 +1270,9 @@
           runes.forEach(r => {
             const tier = getRuneTierLevel(build.core.name, r.name);
             const tierLabels = ['', 'B', 'P', 'Y', 'O'];
-            html += `<div class="rune-option ${selectedRune === r.name ? 'selected' : ''}" onclick="${mode}SelectCoreRune('${r.name}')">
+            const runeRec = recs.runes.find(rec => rec.skill === build.core.name && rec.rune === r.name);
+            const isRec = runeRec && selectedRune !== r.name;
+            html += `<div class="rune-option ${selectedRune === r.name ? 'selected' : ''} ${isRec ? 'recommended' : ''}" onclick="${mode}SelectCoreRune('${r.name}')" title="${runeRec ? runeRec.reason : ''}">
               <div class="rune-option-name">${r.name} <span style="opacity:0.5;font-size:9px;">${tierLabels[tier]}</span></div>
               <div class="rune-option-effect">${r.keyStats}</div>
               ${r.newElement && tier >= 2 ? `<div class="rune-element-change ${r.newElement.toLowerCase()}">→ ${r.newElement}</div>` : ''}
@@ -1124,18 +1285,18 @@
 
       html += `<div class="build-around"><div class="build-around-title">⬇️ BUILD AROUND IT</div><div class="build-grid">`;
       html += `<div class="build-column"><div class="column-label">BASIC</div>`;
-      SKILLS.basic.forEach(s => { html += renderSkillCard(build, s, 'basic', recs.basic.includes(s.id), mode); });
+      SKILLS.basic.forEach(s => { html += renderSkillCard(build, s, 'basic', recs.basic.includes(s.id), mode, recs.runes); });
       html += `</div>`;
 
       html += `<div class="build-column"><div class="column-label">CONTROLS</div>`;
       [...SKILLS.basicControl, ...SKILLS.elemControl].forEach(s => {
         const row = SKILLS.basicControl.find(sk => sk.id === s.id) ? 'basicControl' : 'elemControl';
-        html += renderSkillCard(build, s, row, recs.control.includes(s.id), mode);
+        html += renderSkillCard(build, s, row, recs.control.includes(s.id), mode, recs.runes);
       });
       html += `</div>`;
 
       html += `<div class="build-column"><div class="column-label">ULTIMATE</div>`;
-      SKILLS.ultimate.forEach(s => { html += renderSkillCard(build, s, 'ultimate', recs.ultimate.includes(s.id), mode); });
+      SKILLS.ultimate.forEach(s => { html += renderSkillCard(build, s, 'ultimate', recs.ultimate.includes(s.id), mode, recs.runes); });
       html += `</div></div></div>`;
 
       html += `<div class="passives-section"><div class="passives-title">PASSIVES (3)</div><div class="passives-grid">`;
@@ -1153,7 +1314,7 @@
       renderAnalysis(build, analysisId, mode);
     }
 
-    function renderSkillCard(build, skill, row, recommended, mode) {
+    function renderSkillCard(build, skill, row, recommended, mode, runeRecs = []) {
       const isSelected = build[row]?.id === skill.id;
       const el = getEffectiveElement(build, skill)?.toLowerCase() || 'neutral';
       const runes = getRunesForSkill(skill.name);
@@ -1165,7 +1326,9 @@
         runes.forEach(r => {
           const tier = getRuneTierLevel(skill.name, r.name);
           const labels = ['', 'B', 'P', 'Y', 'O'];
-          runeHtml += `<button class="skill-rune-btn ${selectedRune?.name === r.name ? 'selected' : ''}" onclick="event.stopPropagation(); ${mode}SelectSkillRune('${skill.name}', '${r.name}')">${r.name} ${labels[tier]}</button>`;
+          const runeRec = runeRecs.find(rec => rec.skill === skill.name && rec.rune === r.name);
+          const isRec = runeRec && selectedRune?.name !== r.name;
+          runeHtml += `<button class="skill-rune-btn ${selectedRune?.name === r.name ? 'selected' : ''} ${isRec ? 'recommended' : ''}" onclick="event.stopPropagation(); ${mode}SelectSkillRune('${skill.name}', '${r.name}')" title="${runeRec ? runeRec.reason : ''}">${r.name} ${labels[tier]}</button>`;
         });
         runeHtml += `</div></div>`;
       }
