@@ -118,20 +118,6 @@
     .build-identity { background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(147, 51, 234, 0.4); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; text-align: center; }
     .identity-label { font-size: 10px; color: rgba(200, 200, 210, 0.6); letter-spacing: 1px; }
     .identity-tags { font-size: 13px; font-weight: 600; color: #c4b5fd; }
-    
-    /* Archetype Badge */
-    .archetype-section { margin-bottom: 16px; text-align: center; }
-    .archetype-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-family: "Cinzel", serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
-    .archetype-badge.crit { background: rgba(251, 146, 60, 0.2); color: #fb923c; border: 2px solid rgba(251, 146, 60, 0.4); }
-    .archetype-badge.dot { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 2px solid rgba(239, 68, 68, 0.4); }
-    .archetype-badge.sustain { background: rgba(74, 222, 128, 0.2); color: #4ade80; border: 2px solid rgba(74, 222, 128, 0.4); }
-    .archetype-badge.control { background: rgba(96, 165, 250, 0.2); color: #60a5fa; border: 2px solid rgba(96, 165, 250, 0.4); }
-    .archetype-badge.burst { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 2px solid rgba(192, 132, 252, 0.4); }
-    .archetype-badge.hybrid { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 2px solid rgba(148, 163, 184, 0.4); }
-    .archetype-strength { font-size: 10px; color: rgba(200,200,210,0.6); margin-top: 4px; }
-    .archetype-strength.strong { color: #86efac; }
-    .archetype-strength.moderate { color: #fbbf24; }
-    .archetype-strength.weak { color: #fca5a5; }
 
     /* Stat Totals */
     .stat-totals { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; }
@@ -551,63 +537,6 @@
       return totals;
     }
 
-    // ============ ARCHETYPE DETECTION ============
-    function detectArchetype(build) {
-      const stats = getBuildStats(build);
-      const statuses = getAllStatuses(build);
-      const passives = build.passives.filter(Boolean);
-      
-      const scores = {
-        crit: 0,
-        dot: 0,
-        sustain: 0,
-        control: 0,
-        burst: 0
-      };
-
-      // Crit scoring
-      if (stats.critChance >= 20) scores.crit += 3;
-      else if (stats.critChance >= 10) scores.crit += 1;
-      if (stats.critDmg >= 150) scores.crit += 2;
-      if (stats.addDmgChance >= 10) scores.crit += 1;
-      if (stats.critVsShocked > 0 && statuses.includes('Shock')) scores.crit += 2;
-
-      // DoT scoring
-      if (stats.dot >= 20) scores.dot += 2;
-      if (stats.burningStacks >= 3) scores.dot += 2;
-      if (stats.eleDmg >= 10) scores.dot += 1;
-      if (statuses.includes('Burning')) scores.dot += 1;
-
-      // Sustain scoring
-      if (stats.hoh >= 30) scores.sustain += 2;
-      if (stats.finalDmgDown >= 5) scores.sustain += 1;
-      if (stats.shieldStrength > 0 || build.elemControl?.shield) scores.sustain += 1;
-      if (passives.some(p => p.id === 'flourish')) scores.sustain += 1;
-      if (passives.some(p => p.id === 'life_rewind')) scores.sustain += 1;
-      if (build.basicControl?.hpRecovery) scores.sustain += 1;
-
-      // Control scoring
-      const ccStatuses = ['Imprison', 'Freeze', 'Stun', 'Vulnerable'];
-      ccStatuses.forEach(cc => { if (statuses.includes(cc)) scores.control += 1; });
-      if (stats.vulnerableStacks >= 3) scores.control += 1;
-
-      // Burst scoring
-      if (stats.dmg >= 30) scores.burst += 1;
-      if (stats.addDmg >= 30) scores.burst += 1;
-      if (stats.finalDmg >= 50) scores.burst += 1;
-      if (passives.some(p => p.id === 'demon_pact')) scores.burst += 2;
-
-      // Find top archetype
-      const maxScore = Math.max(...Object.values(scores));
-      if (maxScore < 2) return { type: 'hybrid', score: maxScore, strength: 'weak' };
-
-      const topTypes = Object.entries(scores).filter(([_, s]) => s === maxScore).map(([t]) => t);
-      const type = topTypes.length > 1 ? 'hybrid' : topTypes[0];
-      const strength = maxScore >= 5 ? 'strong' : maxScore >= 3 ? 'moderate' : 'weak';
-
-      return { type, score: maxScore, strength, scores };
-    }
-
     function getAllStatuses(build) {
       const statuses = new Set();
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
@@ -626,24 +555,6 @@
     }
 
     // ============ BUILD FLAGS (Relationship-Based) ============
-    
-    function countShockSources(build) {
-      let count = 0;
-      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
-      
-      skills.forEach(skill => {
-        if (skill.status === 'Shock') count++;
-        const runeName = build.runes[skill.name];
-        if (runeName) {
-          const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
-          const tier = getRuneTierLevel(skill.name, runeName);
-          if (tier >= 2 && rune?.addsStatus) {
-            if (rune.addsStatus.includes('Shock') || rune.addsStatus.includes('Electrocution')) count++;
-          }
-        }
-      });
-      return count;
-    }
 
     function countBurningStackSources(build) {
       let sources = [];
@@ -667,17 +578,6 @@
       return sources;
     }
 
-    function countMultiHitSkills(build) {
-      const multiHit = [];
-      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
-      
-      skills.forEach(skill => {
-        if (skill.hitRate === 'high') multiHit.push(skill.name);
-        if (skill.id === 'doppelganger' && build.basic) multiHit.push('Doppelganger');
-      });
-      return multiHit;
-    }
-
     function countSustainTools(build) {
       const tools = [];
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
@@ -697,18 +597,18 @@
       return tools;
     }
 
-    function hasNumbRune(build) {
-      return build.runes['Lightning Whip'] === 'Numb' && getRuneTierLevel('Lightning Whip', 'Numb') >= 2;
-    }
-
     // ============ TAG SYSTEM ============
     function getBuildProvides(build) {
       const provides = new Set();
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       
-      // Add skill provides
+      // Add skill provides + implicit provides from status/element
       skills.forEach(skill => {
         (skill.provides || []).forEach(tag => provides.add(tag));
+        // Derive from status (Shock -> shock, Burning -> burning, etc.)
+        if (skill.status) provides.add(skill.status.toLowerCase());
+        // Derive from element
+        if (skill.element) provides.add(skill.element.toLowerCase());
       });
       
       // Add rune provides (only if unlocked to tier 2+)
@@ -718,6 +618,10 @@
           const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
           if (rune && getRuneTierLevel(skill.name, runeName) >= 2) {
             (rune.provides || []).forEach(tag => provides.add(tag));
+            // Also add status from rune
+            if (rune.addsStatus) {
+              rune.addsStatus.split(',').map(s => s.trim().toLowerCase()).forEach(s => provides.add(s));
+            }
           }
         }
       });
@@ -732,6 +636,7 @@
       if (stats.critChance >= 15) provides.add('crit-chance');
       if (stats.dot >= 20) provides.add('dot-boost');
       if (stats.haste >= 20) provides.add('haste');
+      if (stats.hoh >= 15) provides.add('hoh');
       
       return provides;
     }
@@ -834,16 +739,6 @@
       const statuses = getAllStatuses(build);
       const passives = build.passives.filter(Boolean);
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
-
-      // === NUMB + SHOCK ===
-      if (hasNumbRune(build)) {
-        const shockSources = countShockSources(build);
-        if (shockSources === 0) {
-          flags.push({ type: 'bad', text: `Numb: 0 Shock sources` });
-        } else {
-          flags.push({ type: 'good', text: `Numb: ${shockSources} Shock source${shockSources > 1 ? 's' : ''}` });
-        }
-      }
 
       // === CRIT BALANCE ===
       if (stats.critDmg > 20 && stats.critChance < 10) {
