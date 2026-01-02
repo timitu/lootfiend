@@ -347,20 +347,26 @@
     let RUNES = [];
 
     let PROFILE = {
-      stats: { atk: 2730, crit: 4.6, critDmg: 122.8, finalDmgUp: 45, haste: 0, eleDmg: 0, dot: 0, hoh: 0 },
+      stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 122.8, addDmgChance: 0, finalDmgUp: 45, haste: 0, eleDmg: 0, dot: 0, hoh: 0, thorn: 0, mpRegen: 0, cdReduction: 0 },
       runeUnlocks: {},
       currentBuild: null
     };
 
     const STAT_CONFIG = [
       { key: 'atk', label: 'ATK', default: 2730 },
+      { key: 'def', label: 'DEF', default: 400 },
+      { key: 'hp', label: 'HP', default: 120000 },
       { key: 'crit', label: 'Crit %', default: 4.6 },
       { key: 'critDmg', label: 'Crit Dmg %', default: 122.8 },
+      { key: 'addDmgChance', label: 'Add Dmg Chance %', default: 0 },
       { key: 'finalDmgUp', label: 'Final Dmg↑ %', default: 45 },
       { key: 'haste', label: 'Haste %', default: 0 },
       { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
       { key: 'dot', label: 'DoT %', default: 0 },
       { key: 'hoh', label: 'HoH %', default: 0 },
+      { key: 'thorn', label: 'Thorn', default: 0 },
+      { key: 'mpRegen', label: 'MP Regen', default: 0 },
+      { key: 'cdReduction', label: 'CD %', default: 0 },
     ];
 
     const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
@@ -447,9 +453,12 @@
       const totals = {
         critChance: PROFILE.stats.crit, critDmg: PROFILE.stats.critDmg, hoh: PROFILE.stats.hoh,
         dot: PROFILE.stats.dot, finalDmg: PROFILE.stats.finalDmgUp, finalDmgDown: 0,
-        eleDmg: PROFILE.stats.eleDmg, dmg: 0, addDmg: 0, addDmgChance: 0, haste: PROFILE.stats.haste,
-        cdReduction: 0, mpRegen: 0, shieldStrength: 0, evasion: 0, healingReceived: 0,
-        critVsShocked: 0, burningStacks: 0, vulnerableStacks: 0
+        eleDmg: PROFILE.stats.eleDmg, dmg: 0, addDmg: 0, addDmgChance: PROFILE.stats.addDmgChance, 
+        haste: PROFILE.stats.haste, cdReduction: PROFILE.stats.cdReduction, mpRegen: PROFILE.stats.mpRegen, 
+        shieldStrength: 0, evasion: 0, healingReceived: 0,
+        critVsShocked: 0, burningStacks: 0, vulnerableStacks: 0,
+        // Base stats (not modified by runes typically)
+        atk: PROFILE.stats.atk, def: PROFILE.stats.def, hp: PROFILE.stats.hp, thorn: PROFILE.stats.thorn
       };
 
       // Get stats from selected runes
@@ -860,7 +869,7 @@
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=CharacterStats`);
         if (!res.ok) throw new Error('Failed');
         const data = parseCSV(await res.text());
-        const map = { 'ATK': 'atk', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Final Dmg Up': 'finalDmgUp', 'Haste': 'haste', 'Elemental Dmg': 'eleDmg', 'DoT': 'dot', 'Heal on Hit': 'hoh' };
+        const map = { 'ATK': 'atk', 'DEF': 'def', 'HP': 'hp', 'Crit': 'crit', 'Crit Dmg': 'critDmg', 'Add Dmg Chance': 'addDmgChance', 'Final Dmg Up': 'finalDmgUp', 'Haste': 'haste', 'Elemental Dmg': 'eleDmg', 'DoT': 'dot', 'Heal on Hit': 'hoh', 'HoH': 'hoh', 'Thorn': 'thorn', 'MP Regen': 'mpRegen', 'CD': 'cdReduction' };
         data.forEach(row => { const k = map[row['Stat']]; if (k) PROFILE.stats[k] = parseFloat(row['Value']) || 0; });
         saveProfile();
         renderProfile();
@@ -1099,10 +1108,13 @@
       const statDisplay = [
         { key: 'critChance', label: 'Crit', suffix: '%', threshold: [20, 10] },
         { key: 'critDmg', label: 'Crit Dmg', suffix: '%', threshold: [150, 100] },
+        { key: 'addDmgChance', label: 'Add Dmg', suffix: '%', threshold: [15, 5] },
         { key: 'hoh', label: 'HoH', suffix: '%', threshold: [30, 15] },
         { key: 'dot', label: 'DoT', suffix: '%', threshold: [40, 20] },
         { key: 'eleDmg', label: 'Ele Dmg', suffix: '%', threshold: [15, 5] },
         { key: 'dmg', label: 'Dmg', suffix: '%', threshold: [60, 30] },
+        { key: 'cdReduction', label: 'CD', suffix: '%', threshold: [15, 5] },
+        { key: 'mpRegen', label: 'MP Regen', suffix: '%', threshold: [10, 5] },
       ];
       statDisplay.forEach(({ key, label, suffix, threshold }) => {
         const val = stats[key] || 0;
