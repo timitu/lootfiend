@@ -942,29 +942,6 @@
     }
 
     // Soft synergy rules - stats that benefit from other stats
-    const SYNERGY_RULES = {
-      'hoh': ['multi-hit'],           // HoH benefits from more hits
-      'dot': ['burning'],             // DoT% needs burning to scale
-      'crit-dmg': ['crit'],           // Crit Dmg useless without crit chance
-      'add-dmg': ['multi-hit'],       // Additional damage needs hit opportunities
-    };
-
-    function checkSoftSynergies(build) {
-      const issues = [];
-      const provides = getBuildProvides(build);
-      const stats = getBuildStats(build);
-      
-      // Check each rule (lowered thresholds)
-      if (stats.hoh >= 10 && !provides.has('multi-hit')) {
-        issues.push({ type: 'tip', text: `HoH ${stats.hoh}% — add multi-hit skills` });
-      }
-      if (stats.addDmgChance >= 10 && !provides.has('multi-hit')) {
-        issues.push({ type: 'tip', text: `Add Dmg ${stats.addDmgChance}% — add multi-hit skills` });
-      }
-      
-      return issues;
-    }
-
     function getCoherenceIssues(build) {
       const issues = [];
       const provides = getBuildProvides(build);
@@ -980,69 +957,22 @@
         if (elem) elements.add(elem.toLowerCase());
       });
       
-      if (elements.size >= 3) {
-        issues.push({ type: 'unfocused', text: '3 elements — unfocused' });
-      }
-      
-      // Check archetype spread - having too many without focus
-      const hasDoT = provides.has('dot-boost') || provides.has('burning-stacks');
-      const hasCrit = provides.has('crit-chance') || provides.has('crit-dmg') || stats.critChance >= 15;
-      const hasControl = provides.has('control') || provides.has('imprison') || provides.has('freeze');
-      const hasBurst = provides.has('burst') || stats.finalDmg >= 10;
-      const hasSustain = provides.has('sustain') || provides.has('shield') || stats.hoh >= 15;
-      
-      const archetypes = [hasDoT, hasCrit, hasControl, hasBurst].filter(Boolean).length;
-      if (archetypes >= 3 && skills.length >= 4) {
-        issues.push({ type: 'unfocused', text: 'Too many archetypes — pick a focus' });
-      }
-      
-      // Check for skills without runes selected
-      const skillsWithoutRunes = skills.filter(s => {
-        const availableRunes = RUNES.filter(r => r.skill === s.name && r.blueEffect !== 'Locked');
-        return availableRunes.length > 0 && !build.runes[s.name];
-      });
-      if (skillsWithoutRunes.length >= 2) {
-        issues.push({ type: 'weak', text: `${skillsWithoutRunes.length} skills without runes` });
-      }
-      
-      // Passive issues
-      const hasFlourish = passives.some(p => p.id === 'flourish');
-      const hasDemonPact = passives.some(p => p.id === 'demon_pact');
+      // 3 elements without Elem Res = spreading Ele Dmg thin for no benefit
       const hasElemRes = passives.some(p => p.id === 'elemental_resonance');
-      const sustainTools = countSustainTools(build);
-      
-      if (hasFlourish && sustainTools.length === 0) {
-        issues.push({ type: 'conflict', text: 'Flourish without sustain' });
-      }
-      if (hasDemonPact && sustainTools.length === 0) {
-        issues.push({ type: 'conflict', text: 'Demon Pact without sustain' });
-      }
-      if (hasFlourish && hasDemonPact && sustainTools.length < 2) {
-        issues.push({ type: 'conflict', text: 'Flourish + Demon Pact risky' });
-      }
-      if (hasElemRes && statuses.length <= 1) {
-        issues.push({ type: 'weak', text: `Elemental Resonance: only ${statuses.length} status` });
+      if (elements.size >= 3 && !hasElemRes) {
+        issues.push({ type: 'unfocused', text: '3 elements without Elemental Resonance' });
       }
       
-      // Check for Crit Dmg without Crit Chance (common mistake)
-      if (stats.critDmg >= 20 && stats.critChance < 10) {
-        issues.push({ type: 'conflict', text: `Crit Dmg ${stats.critDmg}% but ${stats.critChance}% Crit` });
+      // Crit Dmg without Crit Chance = wasted stat (this is math)
+      if (stats.critDmg >= 30 && stats.critChance < 10) {
+        issues.push({ type: 'conflict', text: `Crit Dmg ${stats.critDmg}% but only ${stats.critChance}% Crit` });
       }
       
-      // Check for DoT% without Burning
-      if (stats.dot >= 10 && !statuses.includes('Burning') && !provides.has('burning')) {
-        issues.push({ type: 'conflict', text: `DoT +${stats.dot}% but no Burning` });
-      }
-      
-      // Unmet wants (strict prerequisites)
+      // Unmet wants (strict prerequisites - runes that need specific statuses)
       const unmet = getUnmetWants(build);
       unmet.forEach(u => {
         issues.push({ type: 'missing', text: `${u.source}: needs ${u.wants}` });
       });
-      
-      // Soft synergies (tips)
-      const softIssues = checkSoftSynergies(build);
-      issues.push(...softIssues);
       
       return issues;
     }
