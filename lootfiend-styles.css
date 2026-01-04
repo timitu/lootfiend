@@ -105,7 +105,7 @@ h1 { font-family: "Cinzel", serif; font-size: 2.2rem; font-weight: 700; backgrou
 .identity-group-name.burst { color: #c084fc; }
 .identity-group-name.utility { color: #94a3b8; }
 .identity-cards { display: flex; flex-wrap: wrap; gap: 8px; }
-.identity-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: all 0.2s ease; min-width: 160px; flex: 0 0 auto; }
+.identity-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: all 0.2s ease; }
 .identity-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
 .identity-card.selected { border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.15); }
 .identity-card.row-taken { opacity: 0.4; }
@@ -123,6 +123,9 @@ h1 { font-family: "Cinzel", serif; font-size: 2.2rem; font-weight: 700; backgrou
 .identity-card-tag.lightning { background: rgba(192, 132, 252, 0.2); color: #d8b4fe; }
 .identity-card-tag.status { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
 .identity-card-tag.stat { background: rgba(74, 222, 128, 0.15); color: #86efac; }
+.identity-columns { display: flex; gap: 12px; flex-wrap: wrap; }
+.identity-column { display: flex; flex-direction: column; gap: 6px; min-width: 140px; flex: 1; max-width: 180px; }
+.identity-column-label { font-size: 10px; color: rgba(200, 200, 210, 0.5); letter-spacing: 1px; text-align: center; padding-bottom: 4px; border-bottom: 1px solid rgba(100, 100, 120, 0.2); margin-bottom: 2px; font-weight: 600; }
 
 .passives-section { background: rgba(20, 20, 30, 0.9); border-radius: 12px; border: 1px solid rgba(100, 100, 120, 0.2); padding: 16px; }
 .passives-title { font-family: "Cinzel", serif; font-size: 11px; color: rgba(200, 200, 210, 0.4); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }

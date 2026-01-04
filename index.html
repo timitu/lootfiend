@@ -1097,42 +1097,45 @@
       if (build.elemControl) filledRows.elemControl = build.elemControl.id;
       if (build.ultimate) filledRows.ultimate = build.ultimate.id;
       
-      // Row order: Basic → Core → Control → Ultimate
-      const rowOrder = ['basic', 'core', 'basicControl', 'elemControl', 'ultimate'];
-      const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Ctrl', elemControl: 'Elem', ultimate: 'Ult' };
+      // Column definitions: Basic, Core, Control (combined), Ultimate
+      const columns = [
+        { key: 'basic', label: 'Basic', rows: ['basic'] },
+        { key: 'core', label: 'Core', rows: ['core'] },
+        { key: 'control', label: 'Control', rows: ['basicControl', 'elemControl'] },
+        { key: 'ultimate', label: 'Ult', rows: ['ultimate'] }
+      ];
       
       let html = `<div class="identity-view">`;
       
       Object.entries(groups).forEach(([identity, group]) => {
         if (group.combos.length === 0) return;
         
-        // Sort combos by row order
-        const sortedCombos = [...group.combos].sort((a, b) => {
-          return rowOrder.indexOf(a.row) - rowOrder.indexOf(b.row);
+        // Group combos by column
+        const byColumn = {};
+        columns.forEach(col => {
+          byColumn[col.key] = group.combos.filter(c => col.rows.includes(c.row));
         });
         
-        // Group by row
-        const byRow = {};
-        sortedCombos.forEach(combo => {
-          if (!byRow[combo.row]) byRow[combo.row] = [];
-          byRow[combo.row].push(combo);
-        });
+        // Skip if no combos in any column
+        const hasContent = columns.some(col => byColumn[col.key].length > 0);
+        if (!hasContent) return;
         
         html += `<div class="identity-group">
           <div class="identity-group-header">
             <span class="identity-group-icon">${group.icon}</span>
             <span class="identity-group-name ${identity}">${group.name}</span>
           </div>
-          <div class="identity-columns">`; 
+          <div class="identity-columns">`;
         
-        // Render each row as a column
-        rowOrder.forEach(row => {
-          if (!byRow[row] || byRow[row].length === 0) return;
+        // Render each column
+        columns.forEach(col => {
+          const colCombos = byColumn[col.key];
+          if (colCombos.length === 0) return; // Skip empty columns
           
           html += `<div class="identity-column">
-            <div class="identity-column-label">${rowLabels[row]}</div>`;
+            <div class="identity-column-label">${col.label}</div>`;
           
-          byRow[row].forEach(combo => {
+          colCombos.forEach(combo => {
             const isSelected = combo.rune 
               ? (build[combo.row]?.id === combo.skill.id && build.runes[combo.skill.name] === combo.rune.name)
               : (build[combo.row]?.id === combo.skill.id && !build.runes[combo.skill.name]);
@@ -1162,10 +1165,6 @@
                 keyTags.push({ type: 'status', text: s.trim() });
               });
             }
-            if (combo.rune?.keyStats) {
-              const statMatch = combo.rune.keyStats.match(/([A-Za-z\s↓↑]+)\s*\+?\d+%?/);
-              if (statMatch) keyTags.push({ type: 'stat', text: statMatch[1].trim().substring(0, 12) });
-            }
             
             html += `<div class="identity-card ${isSelected ? 'selected' : ''} ${rowTaken && !sameSkillDiffRune ? 'row-taken' : ''} ${isRec && !isSelected ? 'recommended' : ''}" 
                          onclick="${mode}SelectCombo('${combo.row}', '${combo.skill.id}', ${combo.rune ? `'${combo.rune.name}'` : 'null'})">
@@ -1174,7 +1173,7 @@
                 <span class="identity-card-skill">${skillName}</span>
               </div>
               <div class="identity-card-tags">
-                ${keyTags.slice(0, 3).map(t => `<span class="identity-card-tag ${t.type}">${t.text}</span>`).join('')}
+                ${keyTags.slice(0, 2).map(t => `<span class="identity-card-tag ${t.type}">${t.text}</span>`).join('')}
               </div>
             </div>`;
           });
