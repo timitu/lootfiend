@@ -941,9 +941,142 @@
       return (rune.newElement && getRuneTierLevel(skill.name, rune.name) >= 2) ? rune.newElement : skill.element;
     }
 
-    function calcDamage(skill) {
+    // Soft synergy rules - stats that benefit from other stats
+    const SYNERGY_RULES = {
+      'hoh': ['multi-hit'],           // HoH benefits from more hits
+      'dot': ['burning'],             // DoT% needs burning to scale
+      'crit-dmg': ['crit'],           // Crit Dmg useless without crit chance
+      'add-dmg': ['multi-hit'],       // Additional damage needs hit opportunities
+    };
+
+    function checkSoftSynergies(build) {
+      const issues = [];
+      const provides = getBuildProvides(build);
+      const stats = getBuildStats(build);
+      
+      // Check each rule (lowered thresholds)
+      if (stats.hoh >= 10 && !provides.has('multi-hit')) {
+        issues.push({ type: 'tip', text: `HoH ${stats.hoh}% — add multi-hit skills` });
+      }
+      if (stats.addDmgChance >= 10 && !provides.has('multi-hit')) {
+        issues.push({ type: 'tip', text: `Add Dmg ${stats.addDmgChance}% — add multi-hit skills` });
+      }
+      
+      return issues;
+    }
+
+    function getCoherenceIssues(build) {
+      const issues = [];
+      const provides = getBuildProvides(build);
+      const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
+      const passives = build.passives.filter(Boolean);
+      const statuses = getAllStatuses(build);
+      const stats = getBuildStats(build);
+      
+      // Count unique elements (after rune conversion)
+      const elements = new Set();
+      skills.forEach(skill => {
+        const elem = getEffectiveElement(build, skill);
+        if (elem) elements.add(elem.toLowerCase());
+      });
+      
+      if (elements.size >= 3) {
+        issues.push({ type: 'unfocused', text: '3 elements — unfocused' });
+      }
+      
+      // Check archetype spread - having too many without focus
+      const hasDoT = provides.has('dot-boost') || provides.has('burning-stacks');
+      const hasCrit = provides.has('crit-chance') || provides.has('crit-dmg') || stats.critChance >= 15;
+      const hasControl = provides.has('control') || provides.has('imprison') || provides.has('freeze');
+      const hasBurst = provides.has('burst') || stats.finalDmg >= 10;
+      const hasSustain = provides.has('sustain') || provides.has('shield') || stats.hoh >= 15;
+      
+      const archetypes = [hasDoT, hasCrit, hasControl, hasBurst].filter(Boolean).length;
+      if (archetypes >= 3 && skills.length >= 4) {
+        issues.push({ type: 'unfocused', text: 'Too many archetypes — pick a focus' });
+      }
+      
+      // Check for skills without runes selected
+      const skillsWithoutRunes = skills.filter(s => {
+        const availableRunes = RUNES.filter(r => r.skill === s.name && r.blueEffect !== 'Locked');
+        return availableRunes.length > 0 && !build.runes[s.name];
+      });
+      if (skillsWithoutRunes.length >= 2) {
+        issues.push({ type: 'weak', text: `${skillsWithoutRunes.length} skills without runes` });
+      }
+      
+      // Passive issues
+      const hasFlourish = passives.some(p => p.id === 'flourish');
+      const hasDemonPact = passives.some(p => p.id === 'demon_pact');
+      const hasElemRes = passives.some(p => p.id === 'elemental_resonance');
+      const sustainTools = countSustainTools(build);
+      
+      if (hasFlourish && sustainTools.length === 0) {
+        issues.push({ type: 'conflict', text: 'Flourish without sustain' });
+      }
+      if (hasDemonPact && sustainTools.length === 0) {
+        issues.push({ type: 'conflict', text: 'Demon Pact without sustain' });
+      }
+      if (hasFlourish && hasDemonPact && sustainTools.length < 2) {
+        issues.push({ type: 'conflict', text: 'Flourish + Demon Pact risky' });
+      }
+      if (hasElemRes && statuses.length <= 1) {
+        issues.push({ type: 'weak', text: `Elemental Resonance: only ${statuses.length} status` });
+      }
+      
+      // Check for Crit Dmg without Crit Chance (common mistake)
+      if (stats.critDmg >= 20 && stats.critChance < 10) {
+        issues.push({ type: 'conflict', text: `Crit Dmg ${stats.critDmg}% but ${stats.critChance}% Crit` });
+      }
+      
+      // Check for DoT% without Burning
+      if (stats.dot >= 10 && !statuses.includes('Burning') && !provides.has('burning')) {
+        issues.push({ type: 'conflict', text: `DoT +${stats.dot}% but no Burning` });
+      }
+      
+      // Unmet wants (strict prerequisites)
+      const unmet = getUnmetWants(build);
+      unmet.forEach(u => {
+        issues.push({ type: 'missing', text: `${u.source}: needs ${u.wants}` });
+      });
+      
+      // Soft synergies (tips)
+      const softIssues = checkSoftSynergies(build);
+      issues.push(...softIssues);
+      
+      return issues;
+    }
+
+    function calcDamage(skill, build, stats) {
       if (!skill?.atk) return 0;
-      return Math.round(PROFILE.stats.atk * (skill.atk / 100) * (1 + PROFILE.stats.finalDmgUp / 100));
+      
+      let base = PROFILE.stats.atk * (skill.atk / 100);
+      
+      // Crit average: base × (1 + critChance × critDmg)
+      const critMult = 1 + (stats.critChance / 100) * (stats.critDmg / 100);
+      base *= critMult;
+      
+      // Elemental damage (if skill has element)
+      const effectiveElem = getEffectiveElement(build, skill);
+      if (effectiveElem) {
+        base *= 1 + (stats.eleDmg / 100);
+      }
+      
+      // Rune Dmg% bonus for this skill
+      const runeName = build.runes[skill.name];
+      if (runeName) {
+        const rune = RUNES.find(r => r.skill === skill.name && r.name === runeName);
+        if (rune) {
+          const tierLevel = getRuneTierLevel(skill.name, runeName);
+          const runeStats = getRuneStatsAtTier(rune, tierLevel);
+          base *= 1 + (runeStats.dmg / 100);
+        }
+      }
+      
+      // Final Dmg
+      base *= 1 + (stats.finalDmg / 100);
+      
+      return Math.round(base);
     }
 
     // ============ IDENTITY GROUPING ============
@@ -1198,7 +1331,7 @@
       const skills = [build.core, build.basic, build.basicControl, build.elemControl, build.ultimate].filter(Boolean);
       const passives = build.passives.filter(Boolean);
       const provides = getBuildProvides(build);
-      const unmet = getUnmetWants(build);
+      const coherenceIssues = getCoherenceIssues(build);
 
       let html = `<div class="analysis-title">BUILD ANALYSIS</div>`;
 
@@ -1228,17 +1361,17 @@
         if (hasAoE && !hasDoT && !hasCrit) identity.push('AoE');
         if (hasSustain) identity.push('Sustain');
         
-        // Coherence: how many wants are satisfied?
-        const totalWants = unmet.length + flags.filter(f => f.type === 'good' && f.text.includes('✓')).length;
-        const satisfiedWants = flags.filter(f => f.type === 'good' && f.text.includes('✓')).length;
-        const coherence = totalWants > 0 ? Math.round((satisfiedWants / totalWants) * 100) : 100;
-        const coherenceClass = unmet.length === 0 ? 'high' : unmet.length <= 1 ? 'medium' : 'low';
+        // Coherence based on issues
+        const severeIssues = coherenceIssues.filter(i => ['missing', 'conflict', 'unfocused'].includes(i.type));
+        const minorIssues = coherenceIssues.filter(i => ['weak', 'tip'].includes(i.type));
         
         let coherenceHtml = '';
-        if (unmet.length === 0 && skills.length >= 3) {
+        if (severeIssues.length > 0) {
+          coherenceHtml = `<div class="coherence-indicator low">${severeIssues.length} issue${severeIssues.length > 1 ? 's' : ''}</div>`;
+        } else if (minorIssues.length > 0) {
+          coherenceHtml = `<div class="coherence-indicator medium">${minorIssues.length} tip${minorIssues.length > 1 ? 's' : ''}</div>`;
+        } else if (skills.length >= 3) {
           coherenceHtml = '<div class="coherence-indicator high">✓ Synergies aligned</div>';
-        } else if (unmet.length > 0) {
-          coherenceHtml = `<div class="coherence-indicator low">${unmet.length} missing synergy${unmet.length > 1 ? 's' : ''}</div>`;
         }
         
         html += `<div class="build-identity">
@@ -1264,9 +1397,19 @@
       html += statuses.length ? statuses.map(s => `<span class="status-badge ${s.toLowerCase().replace(/\s+/g, '')}">${s}</span>`).join('') : '<span class="none-text">None</span>';
       html += `</div></div>`;
 
-      // Flags
-      if (flags.length) {
+      // Coherence issues + Flags
+      const allIssues = [...coherenceIssues];
+      if (allIssues.length > 0 || flags.length > 0) {
         html += `<div class="section-label">BUILD FLAGS</div>`;
+        
+        // Coherence issues first (most important)
+        const issueIcons = { missing: '⚠', conflict: '⚠', unfocused: '⚠', weak: '💡', tip: '💡' };
+        const issueTypes = { missing: 'bad', conflict: 'bad', unfocused: 'bad', weak: 'info', tip: 'info' };
+        allIssues.forEach(issue => {
+          html += `<div class="flag-item ${issueTypes[issue.type]}"><span class="flag-icon">${issueIcons[issue.type]}</span><span>${issue.text}</span></div>`;
+        });
+        
+        // Then regular flags
         const icons = { good: '▲', bad: '▼', info: '💡' };
         flags.forEach(f => {
           html += `<div class="flag-item ${f.type}"><span class="flag-icon">${icons[f.type]}</span><span>${f.text}</span></div>`;
@@ -1297,19 +1440,19 @@
       html += `</div></div>`;
 
       // Damage
-      let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
-      let mult = 1 + (stats.dmg / 100);
+      let totalDmg = skills.reduce((sum, s) => sum + calcDamage(s, build, stats), 0);
+      let mult = 1;
       if (passives.some(p => p.id === 'flourish')) mult += 0.15;
       if (passives.some(p => p.id === 'demon_pact')) mult += 0.30;
       if (passives.some(p => p.id === 'elemental_resonance')) mult += statuses.length * 0.05;
       totalDmg = Math.round(totalDmg * mult);
 
-      html += `<div class="damage-calc"><div class="damage-calc-title">TOTAL DAMAGE</div><div class="damage-calc-value">${totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${mult.toFixed(2)} mult</div>`;
+      html += `<div class="damage-calc"><div class="damage-calc-title">DAMAGE POTENTIAL</div><div class="damage-calc-value">${totalDmg.toLocaleString()}</div><div class="damage-calc-breakdown">×${mult.toFixed(2)} passive mult</div>`;
       if (mode === 'theory') {
         const currentFlags = getBuildFlags(currentBuild);
         const currentSkills = [currentBuild.core, currentBuild.basic, currentBuild.basicControl, currentBuild.elemControl, currentBuild.ultimate].filter(Boolean);
-        let currentDmg = currentSkills.reduce((sum, s) => sum + calcDamage(s), 0);
-        let currentMult = 1 + (currentFlags.stats.dmg / 100);
+        let currentDmg = currentSkills.reduce((sum, s) => sum + calcDamage(s, currentBuild, currentFlags.stats), 0);
+        let currentMult = 1;
         if (currentBuild.passives.some(p => p?.id === 'flourish')) currentMult += 0.15;
         if (currentBuild.passives.some(p => p?.id === 'demon_pact')) currentMult += 0.30;
         if (currentBuild.passives.some(p => p?.id === 'elemental_resonance')) currentMult += getAllStatuses(currentBuild).length * 0.05;
@@ -1433,8 +1576,8 @@
         });
 
         const skills = [currentBuild.core, currentBuild.basic, currentBuild.basicControl, currentBuild.elemControl, currentBuild.ultimate].filter(Boolean);
-        let dmg = skills.reduce((sum, s) => sum + calcDamage(s), 0);
-        let mult = 1 + (stats.dmg / 100);
+        let dmg = skills.reduce((sum, s) => sum + calcDamage(s, currentBuild, stats), 0);
+        let mult = 1;
         if (currentBuild.passives.some(p => p?.id === 'flourish')) mult += 0.15;
         if (currentBuild.passives.some(p => p?.id === 'demon_pact')) mult += 0.30;
         if (currentBuild.passives.some(p => p?.id === 'elemental_resonance')) mult += statuses.length * 0.05;
