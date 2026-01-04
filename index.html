@@ -1123,15 +1123,14 @@
             <span class="identity-group-icon">${group.icon}</span>
             <span class="identity-group-name ${identity}">${group.name}</span>
           </div>
-          <div class="identity-cards-container">`;
+          <div class="identity-columns">`; 
         
-        // Render each row that has combos
+        // Render each row as a column
         rowOrder.forEach(row => {
           if (!byRow[row] || byRow[row].length === 0) return;
           
-          html += `<div class="identity-row">
-            <div class="identity-row-label">${rowLabels[row]}</div>
-            <div class="identity-cards">`;
+          html += `<div class="identity-column">
+            <div class="identity-column-label">${rowLabels[row]}</div>`;
           
           byRow[row].forEach(combo => {
             const isSelected = combo.rune 
@@ -1180,7 +1179,7 @@
             </div>`;
           });
           
-          html += `</div></div>`;
+          html += `</div>`;
         });
         
         html += `</div></div>`;
