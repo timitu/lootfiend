@@ -38,15 +38,6 @@
   <div class="tab-content" id="tab-profile">
     <div class="profile-container">
       <div class="profile-section">
-        <div class="profile-section-title">⭐ ZENITH POINTS <span class="save-indicator" id="zenith-saved">✓ Saved</span></div>
-        <div class="zenith-pool">
-          <span class="zenith-pool-label">Total Pool:</span>
-          <input type="number" class="zenith-pool-input" id="zenith-pool" value="140" onchange="updateZenithPool(this.value)">
-          <span class="zenith-remaining" id="zenith-remaining">140 remaining</span>
-        </div>
-        <div class="zenith-grid" id="zenith-inputs"></div>
-      </div>
-      <div class="profile-section">
         <div class="profile-section-title">📊 CHARACTER STATS <span class="save-indicator" id="stats-saved">✓ Saved</span></div>
         <div class="stats-grid" id="stats-inputs"></div>
         <div class="profile-actions" style="margin-top: 12px;">
@@ -165,7 +156,6 @@
 
     let PROFILE = {
       stats: { atk: 2730, def: 400, hp: 120000, crit: 4.6, critDmg: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0, dot: 0, eleDmg: 0, finalDmg: 0, evasion: 0 },
-      zenith: { pool: 140, atk: 0, def: 0, hp: 0, crit: 0, addDmgChance: 0, thorn: 0, haste: 0, mpRegen: 0, cdReduction: 0, hoh: 0 },
       runeUnlocks: {},
       currentBuild: null
     };
@@ -187,20 +177,6 @@
       { key: 'eleDmg', label: 'Ele Dmg %', default: 0 },
       { key: 'finalDmg', label: 'Final Dmg %', default: 0 },
       { key: 'evasion', label: 'Evasion %', default: 0 },
-    ];
-
-    // Zenith stats - point allocation system
-    const ZENITH_CONFIG = [
-      { key: 'atk', label: 'ATK', max: null },
-      { key: 'def', label: 'DEF', max: null },
-      { key: 'hp', label: 'HP', max: null },
-      { key: 'crit', label: 'Crit %', max: 50 },
-      { key: 'addDmgChance', label: 'Add Dmg %', max: 50 },
-      { key: 'thorn', label: 'Thorn %', max: 50 },
-      { key: 'haste', label: 'Haste %', max: 50 },
-      { key: 'mpRegen', label: 'MP Regen %', max: 50 },
-      { key: 'cdReduction', label: 'CD %', max: 50 },
-      { key: 'hoh', label: 'HoH %', max: 50 },
     ];
 
     const currentBuild = { core: null, basic: null, basicControl: null, elemControl: null, ultimate: null, runes: {}, passives: [null, null, null] };
@@ -284,19 +260,19 @@
     }
 
     function getBuildStats(build) {
-      // Start with profile stats + zenith bonuses
+      // Start with profile stats
       const totals = {
-        atk: PROFILE.stats.atk + (PROFILE.zenith.atk || 0),
-        def: PROFILE.stats.def + (PROFILE.zenith.def || 0),
-        hp: PROFILE.stats.hp + (PROFILE.zenith.hp || 0),
-        critChance: PROFILE.stats.crit + (PROFILE.zenith.crit || 0),
+        atk: PROFILE.stats.atk,
+        def: PROFILE.stats.def,
+        hp: PROFILE.stats.hp,
+        critChance: PROFILE.stats.crit,
         critDmg: PROFILE.stats.critDmg,
-        addDmgChance: PROFILE.stats.addDmgChance + (PROFILE.zenith.addDmgChance || 0),
-        thorn: PROFILE.stats.thorn + (PROFILE.zenith.thorn || 0),
-        haste: PROFILE.stats.haste + (PROFILE.zenith.haste || 0),
-        mpRegen: PROFILE.stats.mpRegen + (PROFILE.zenith.mpRegen || 0),
-        cdReduction: PROFILE.stats.cdReduction + (PROFILE.zenith.cdReduction || 0),
-        hoh: PROFILE.stats.hoh + (PROFILE.zenith.hoh || 0),
+        addDmgChance: PROFILE.stats.addDmgChance,
+        thorn: PROFILE.stats.thorn,
+        haste: PROFILE.stats.haste,
+        mpRegen: PROFILE.stats.mpRegen,
+        cdReduction: PROFILE.stats.cdReduction,
+        hoh: PROFILE.stats.hoh,
         dot: PROFILE.stats.dot,
         eleDmg: PROFILE.stats.eleDmg,
         finalDmg: PROFILE.stats.finalDmg,
@@ -749,7 +725,6 @@
           const parsed = JSON.parse(saved);
           // Merge carefully to preserve all fields
           if (parsed.stats) PROFILE.stats = { ...PROFILE.stats, ...parsed.stats };
-          if (parsed.zenith) PROFILE.zenith = { ...PROFILE.zenith, ...parsed.zenith };
           if (parsed.runeUnlocks) PROFILE.runeUnlocks = parsed.runeUnlocks;
           if (parsed.currentBuild) {
             PROFILE.currentBuild = parsed.currentBuild;
@@ -793,16 +768,6 @@
     }
 
     function renderProfile() {
-      // Zenith section
-      document.getElementById('zenith-pool').value = PROFILE.zenith.pool;
-      document.getElementById('zenith-inputs').innerHTML = ZENITH_CONFIG.map(stat => `
-        <div class="zenith-input-group">
-          <div class="zenith-input-label">${stat.label}${stat.max ? ` <span style="opacity:0.5">(max ${stat.max})</span>` : ''}</div>
-          <input type="number" class="zenith-input" value="${PROFILE.zenith[stat.key] || 0}" onchange="updateZenith('${stat.key}', this.value, ${stat.max || 'null'})" min="0"${stat.max ? ` max="${stat.max}"` : ''}>
-        </div>
-      `).join('');
-      updateZenithRemaining();
-
       // Stats section
       document.getElementById('stats-inputs').innerHTML = STAT_CONFIG.map(stat => `
         <div class="stat-input-group">
@@ -811,32 +776,6 @@
         </div>
       `).join('');
       renderRuneUnlocks();
-    }
-
-    function updateZenithPool(value) {
-      PROFILE.zenith.pool = parseInt(value) || 0;
-      updateZenithRemaining();
-      saveProfile();
-      showSaveIndicator('zenith-saved');
-    }
-
-    function updateZenith(key, value, max) {
-      let val = parseInt(value) || 0;
-      if (max && val > max) val = max;
-      if (val < 0) val = 0;
-      PROFILE.zenith[key] = val;
-      updateZenithRemaining();
-      saveProfile();
-      showSaveIndicator('zenith-saved');
-      renderProfile();
-    }
-
-    function updateZenithRemaining() {
-      const spent = ZENITH_CONFIG.reduce((sum, s) => sum + (PROFILE.zenith[s.key] || 0), 0);
-      const remaining = PROFILE.zenith.pool - spent;
-      const el = document.getElementById('zenith-remaining');
-      el.textContent = `${remaining} remaining`;
-      el.className = 'zenith-remaining ' + (remaining < 0 ? 'over' : remaining === 0 ? 'ok' : '');
     }
 
     function renderRuneUnlocks() {
@@ -892,9 +831,8 @@
 
     function resetProfile() {
       if (confirm('Reset all?')) {
-        PROFILE = { stats: {}, zenith: { pool: 140 }, runeUnlocks: {}, currentBuild: null };
+        PROFILE = { stats: {}, runeUnlocks: {}, currentBuild: null };
         STAT_CONFIG.forEach(s => PROFILE.stats[s.key] = s.default);
-        ZENITH_CONFIG.forEach(s => PROFILE.zenith[s.key] = 0);
         Object.keys(currentBuild).forEach(k => currentBuild[k] = k === 'passives' ? [null, null, null] : (k === 'runes' ? {} : null));
         // Clear all versions of localStorage
         localStorage.removeItem('lootfiend-profile');
@@ -1159,64 +1097,90 @@
       if (build.elemControl) filledRows.elemControl = build.elemControl.id;
       if (build.ultimate) filledRows.ultimate = build.ultimate.id;
       
+      // Row order: Basic → Core → Control → Ultimate
+      const rowOrder = ['basic', 'core', 'basicControl', 'elemControl', 'ultimate'];
+      const rowLabels = { basic: 'Basic', core: 'Core', basicControl: 'Ctrl', elemControl: 'Elem', ultimate: 'Ult' };
+      
       let html = `<div class="identity-view">`;
       
       Object.entries(groups).forEach(([identity, group]) => {
         if (group.combos.length === 0) return;
+        
+        // Sort combos by row order
+        const sortedCombos = [...group.combos].sort((a, b) => {
+          return rowOrder.indexOf(a.row) - rowOrder.indexOf(b.row);
+        });
+        
+        // Group by row
+        const byRow = {};
+        sortedCombos.forEach(combo => {
+          if (!byRow[combo.row]) byRow[combo.row] = [];
+          byRow[combo.row].push(combo);
+        });
         
         html += `<div class="identity-group">
           <div class="identity-group-header">
             <span class="identity-group-icon">${group.icon}</span>
             <span class="identity-group-name ${identity}">${group.name}</span>
           </div>
-          <div class="identity-cards">`;
+          <div class="identity-cards-container">`;
         
-        group.combos.forEach(combo => {
-          const isSelected = combo.rune 
-            ? (build[combo.row]?.id === combo.skill.id && build.runes[combo.skill.name] === combo.rune.name)
-            : (build[combo.row]?.id === combo.skill.id && !build.runes[combo.skill.name]);
+        // Render each row that has combos
+        rowOrder.forEach(row => {
+          if (!byRow[row] || byRow[row].length === 0) return;
           
-          const rowTaken = filledRows[combo.row] && filledRows[combo.row] !== combo.skill.id;
-          const sameSkillDiffRune = build[combo.row]?.id === combo.skill.id && combo.rune && build.runes[combo.skill.name] !== combo.rune.name;
+          html += `<div class="identity-row">
+            <div class="identity-row-label">${rowLabels[row]}</div>
+            <div class="identity-cards">`;
           
-          // Check if recommended
-          const isRec = combo.rune 
-            ? recs.runes.some(r => r.skill === combo.skill.name && r.rune === combo.rune.name)
-            : false;
+          byRow[row].forEach(combo => {
+            const isSelected = combo.rune 
+              ? (build[combo.row]?.id === combo.skill.id && build.runes[combo.skill.name] === combo.rune.name)
+              : (build[combo.row]?.id === combo.skill.id && !build.runes[combo.skill.name]);
+            
+            const rowTaken = filledRows[combo.row] && filledRows[combo.row] !== combo.skill.id;
+            const sameSkillDiffRune = build[combo.row]?.id === combo.skill.id && combo.rune && build.runes[combo.skill.name] !== combo.rune.name;
+            
+            // Check if recommended
+            const isRec = combo.rune 
+              ? recs.runes.some(r => r.skill === combo.skill.name && r.rune === combo.rune.name)
+              : false;
+            
+            const displayName = combo.rune ? combo.rune.name : combo.skill.name;
+            const skillName = combo.rune ? `(${combo.skill.name})` : '';
+            
+            // Get element for coloring
+            let element = combo.skill.element?.toLowerCase() || '';
+            if (combo.rune?.newElement && getRuneTierLevel(combo.skill.name, combo.rune.name) >= 2) {
+              element = combo.rune.newElement.toLowerCase();
+            }
+            
+            // Key tags to show
+            const keyTags = [];
+            if (element) keyTags.push({ type: element, text: element.charAt(0).toUpperCase() + element.slice(1) });
+            if (combo.rune?.addsStatus) {
+              combo.rune.addsStatus.split(',').slice(0, 2).forEach(s => {
+                keyTags.push({ type: 'status', text: s.trim() });
+              });
+            }
+            if (combo.rune?.keyStats) {
+              const statMatch = combo.rune.keyStats.match(/([A-Za-z\s↓↑]+)\s*\+?\d+%?/);
+              if (statMatch) keyTags.push({ type: 'stat', text: statMatch[1].trim().substring(0, 12) });
+            }
+            
+            html += `<div class="identity-card ${isSelected ? 'selected' : ''} ${rowTaken && !sameSkillDiffRune ? 'row-taken' : ''} ${isRec && !isSelected ? 'recommended' : ''}" 
+                         onclick="${mode}SelectCombo('${combo.row}', '${combo.skill.id}', ${combo.rune ? `'${combo.rune.name}'` : 'null'})">
+              <div class="identity-card-main">
+                <span class="identity-card-rune">${displayName}</span>
+                <span class="identity-card-skill">${skillName}</span>
+              </div>
+              <div class="identity-card-tags">
+                ${keyTags.slice(0, 3).map(t => `<span class="identity-card-tag ${t.type}">${t.text}</span>`).join('')}
+              </div>
+            </div>`;
+          });
           
-          const displayName = combo.rune ? combo.rune.name : combo.skill.name;
-          const skillName = combo.rune ? `(${combo.skill.name})` : '';
-          
-          // Get element for coloring
-          let element = combo.skill.element?.toLowerCase() || '';
-          if (combo.rune?.newElement && getRuneTierLevel(combo.skill.name, combo.rune.name) >= 2) {
-            element = combo.rune.newElement.toLowerCase();
-          }
-          
-          // Key tags to show
-          const keyTags = [];
-          if (element) keyTags.push({ type: element, text: element.charAt(0).toUpperCase() + element.slice(1) });
-          if (combo.rune?.addsStatus) {
-            combo.rune.addsStatus.split(',').slice(0, 2).forEach(s => {
-              keyTags.push({ type: 'status', text: s.trim() });
-            });
-          }
-          if (combo.rune?.keyStats) {
-            const statMatch = combo.rune.keyStats.match(/([A-Za-z\s↓↑]+)\s*\+?\d+%?/);
-            if (statMatch) keyTags.push({ type: 'stat', text: statMatch[1].trim().substring(0, 12) });
-          }
-          
-          html += `<div class="identity-card ${isSelected ? 'selected' : ''} ${rowTaken && !sameSkillDiffRune ? 'row-taken' : ''} ${isRec && !isSelected ? 'recommended' : ''}" 
-                       onclick="${mode}SelectCombo('${combo.row}', '${combo.skill.id}', ${combo.rune ? `'${combo.rune.name}'` : 'null'})">
-            <div class="identity-card-main">
-              <span class="identity-card-rune">${displayName}</span>
-              <span class="identity-card-skill">${skillName}</span>
-              <span class="identity-card-row">${combo.rowLabel}</span>
-            </div>
-            <div class="identity-card-tags">
-              ${keyTags.slice(0, 3).map(t => `<span class="identity-card-tag ${t.type}">${t.text}</span>`).join('')}
-            </div>
-          </div>`;
+          html += `</div></div>`;
         });
         
         html += `</div></div>`;
