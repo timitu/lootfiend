@@ -107,6 +107,14 @@ h1 { font-family: "Cinzel", serif; font-size: 2.2rem; font-weight: 700; backgrou
 .identity-cards { display: flex; flex-wrap: wrap; gap: 8px; }
 .identity-card { background: rgba(30, 30, 40, 0.8); border: 2px solid rgba(100, 100, 120, 0.3); border-radius: 8px; padding: 8px 10px; cursor: pointer; transition: all 0.2s ease; }
 .identity-card:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.identity-card.tier-blue { background: rgba(96, 165, 250, 0.12); border-color: rgba(96, 165, 250, 0.4); }
+.identity-card.tier-purple { background: rgba(192, 132, 252, 0.12); border-color: rgba(192, 132, 252, 0.4); }
+.identity-card.tier-yellow { background: rgba(250, 204, 21, 0.12); border-color: rgba(250, 204, 21, 0.4); }
+.identity-card.tier-orange { background: rgba(251, 146, 60, 0.15); border-color: rgba(251, 146, 60, 0.5); }
+.identity-card.tier-blue .identity-card-rune { color: #93c5fd; }
+.identity-card.tier-purple .identity-card-rune { color: #d8b4fe; }
+.identity-card.tier-yellow .identity-card-rune { color: #fde047; }
+.identity-card.tier-orange .identity-card-rune { color: #fdba74; }
 .identity-card.selected { border-color: #c084fc; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); background: rgba(192, 132, 252, 0.15); }
 .identity-card.row-taken { opacity: 0.4; }
 .identity-card.row-taken:hover { opacity: 0.7; }
