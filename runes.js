@@ -107,7 +107,7 @@ let RUNES = [
     addsStatus: 'Chill, Burning',
     keyStats: 'HoH +30%, Add Dmg +30%',
     provides: ['ice', 'chill', 'burning', 'hoh', 'add-dmg', 'multi-hit', 'sustain'],
-    wants: []
+    wants: ['control']
   },
   {
     skill: 'Fireball',
@@ -174,7 +174,7 @@ let RUNES = [
     addsStatus: 'Electrocution',
     keyStats: 'Crit Chance +5%, Add Dmg Chance +15%',
     provides: ['lightning', 'electrocution', 'crit', 'add-dmg'],
-    wants: []
+    wants: ['electrocution']
   },
 
   // --- Ice Ray ---
